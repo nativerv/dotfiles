@@ -6,7 +6,9 @@ alias neofetch="neofetch \
 
 alias clr="clear"
 alias nv="nvim"
+
 alias update="source ~/.bash_profile"
+alias nvplug="nvim +PlugInstall"
 
 alias ll='ls -alF'
 alias la='ls -A'

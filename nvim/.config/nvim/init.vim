@@ -1,32 +1,126 @@
-" Specify a directory for plugins
-call plug#begin('~/.nvim/plugged')
+""" Plugins 
 
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'scrooloose/nerdtree'
+call plug#begin('~/.nvim/plugged')      " Specify a directory for plugins
+
 "Plug 'tsony-tsonev/nerdtree-git-plugin'
-Plug 'Xuyuanp/nerdtree-git-plugin'
-Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
-Plug 'ryanoasis/vim-devicons'
-Plug 'airblade/vim-gitgutter'
-Plug 'ctrlpvim/ctrlp.vim' " fuzzy find files
-Plug 'scrooloose/nerdcommenter'
 "Plug 'prettier/vim-prettier', { 'do': 'yarn install' }
 
+" Text edit
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'scrooloose/nerdcommenter'
+Plug 'tpope/vim-surround'
+
+" Text navigation
+Plug 'mg979/vim-visual-multi', {'branch': 'master'}
+Plug 'bkad/CamelCaseMotion'
+
+" File navigation
+Plug 'Xuyuanp/nerdtree-git-plugin'
+Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
+Plug 'scrooloose/nerdtree'
+Plug 'ctrlpvim/ctrlp.vim' " fuzzy find files
 Plug 'christoomey/vim-tmux-navigator'
 
+" Color schemes
+Plug 'pprovost/vim-ps1'
+Plug 'HerringtonDarkholme/yats.vim' " TS Syntax
 Plug 'morhetz/gruvbox'
 
-Plug 'HerringtonDarkholme/yats.vim' " TS Syntax
+" Visuals
+Plug 'ryanoasis/vim-devicons'
+Plug 'airblade/vim-gitgutter'
 
-" Initialize plugin system
 call plug#end()
 
+""" Settings 
+
+" outer world 
 set mouse=a
+set clipboard=unnamedplus
+
+" inner world
+set relativenumber
+set smarttab
+set cindent
+set tabstop=2
+set shiftwidth=2
+set expandtab         " always uses spaces instead of tab characters
+
+" from readme
+" if hidden is not set, TextEdit might fail.
+set hidden " Some servers have issues with backup files, see #649 set nobackup set nowritebackup " Better display for messages set cmdheight=2 " You will have bad experience for diagnostic messages when it's default 4000.
+set updatetime=300
+
+" don't give |ins-completion-menu| messages.
+set shortmess+=c
+
+" always show signcolumns
+set signcolumn=yes
+
+colorscheme gruvbox
+
+
+""" Remaps 
 
 inoremap jk <ESC>
-nmap <C-n> :NERDTreeToggle<CR>
-vmap ++ <plug>NERDCommenterToggle
-nmap ++ <plug>NERDCommenterToggle
+
+" gb's
+let g:VM_maps = {}
+let g:VM_maps['Find Under']         = 'gb'           " replace C-n
+let g:VM_maps['Find Subword Under'] = 'gb'           " replace C-n visual
+
+nmap <C-b> :NERDTreeToggle<CR>
+
+vmap <C-_> <plug>NERDCommenterToggle
+nmap <C-_> <plug>NERDCommenterToggle
+
+" Alt-Move lines
+nnoremap <A-j> :m .+1<CR>==
+nnoremap <A-k> :m .-2<CR>==
+inoremap <A-j> <Esc>:m .+1<CR>==gi
+inoremap <A-k> <Esc>:m .-2<CR>==gi
+vnoremap <A-j> :m '>+1<CR>gv=gv
+vnoremap <A-k> :m '<-2<CR>gv=gv
+
+nnoremap <A-J> :t .<CR>==
+nnoremap <A-K> :t .-1<CR>==
+inoremap <A-J> <Esc>:t .<CR>==gi
+inoremap <A-K> <Esc>:t .-1<CR>==gi
+vnoremap <A-J> :t '><CR>gv=gv
+vnoremap <A-K> :t '<-1<CR>gv=gv
+
+" Ctrl+P
+let g:ctrlp_user_command = ['.git/', 'git --git-dir=%s/.git ls-files -oc --exclude-standard']
+
+" j/k will move virtual lines (lines that wrap)
+noremap <silent> <expr> j (v:count == 0 ? 'gj' : 'j')
+noremap <silent> <expr> k (v:count == 0 ? 'gk' : 'k')
+
+" Use tab for trigger completion with characters ahead and navigate.
+" Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+" Using CocList
+" Show all diagnostics
+nnoremap <silent> <space>a  :<C-u>CocList diagnostics<cr>
+" Manage extensions
+nnoremap <silent> <space>e  :<C-u>CocList extensions<cr>
+" Show commands
+nnoremap <silent> <space>c  :<C-u>CocList commands<cr>
+" Find symbol of current document
+nnoremap <silent> <space>o  :<C-u>CocList outline<cr>
+" Search workspace symbols
+nnoremap <silent> <space>s  :<C-u>CocList -I symbols<cr>
+" Do default action for next item.
+nnoremap <silent> <space>j  :<C-u>CocNext<CR>
+" Do default action for previous item.
+nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
+" Resume latest coc list
+nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
 
 " open NERDTree automatically
 "autocmd StdinReadPre * let s:std_in=1
@@ -46,10 +140,11 @@ let g:NERDTreeGitStatusWithFlags = 1
     "\ "Ignored"   : "#808080"   
     "\ }                         
 
-
 let g:NERDTreeIgnore = ['^node_modules$']
 
-" vim-prettier
+
+""" vim-prettier formatOnSave
+
 "let g:prettier#quickfix_enabled = 0
 "let g:prettier#quickfix_auto_focus = 0
 " prettier command for coc
@@ -58,24 +153,6 @@ command! -nargs=0 Prettier :CocCommand prettier.formatFile
 "let g:prettier#autoformat = 0
 "autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.graphql,*.md,*.vue,*.yaml,*.html PrettierAsync
 
-
-" ctrlp
-let g:ctrlp_user_command = ['.git/', 'git --git-dir=%s/.git ls-files -oc --exclude-standard']
-
-" j/k will move virtual lines (lines that wrap)
-noremap <silent> <expr> j (v:count == 0 ? 'gj' : 'j')
-noremap <silent> <expr> k (v:count == 0 ? 'gk' : 'k')
-
-set relativenumber
-
-set smarttab
-set cindent
-set tabstop=2
-set shiftwidth=2
-" always uses spaces instead of tab characters
-set expandtab
-
-colorscheme gruvbox
 
 " sync open file with NERDTree
 " " Check if NERDTree is open or active
@@ -104,24 +181,7 @@ let g:coc_global_extensions = [
   \ 'coc-prettier', 
   \ 'coc-json', 
   \ ]
-" from readme
-" if hidden is not set, TextEdit might fail.
-set hidden " Some servers have issues with backup files, see #649 set nobackup set nowritebackup " Better display for messages set cmdheight=2 " You will have bad experience for diagnostic messages when it's default 4000.
-set updatetime=300
 
-" don't give |ins-completion-menu| messages.
-set shortmess+=c
-
-" always show signcolumns
-set signcolumn=yes
-
-" Use tab for trigger completion with characters ahead and navigate.
-" Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
-inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
 function! s:check_back_space() abort
   let col = col('.') - 1
@@ -207,20 +267,3 @@ command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organize
 " Add status line support, for integration with other plugin, checkout `:h coc-status`
 set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
 
-" Using CocList
-" Show all diagnostics
-nnoremap <silent> <space>a  :<C-u>CocList diagnostics<cr>
-" Manage extensions
-nnoremap <silent> <space>e  :<C-u>CocList extensions<cr>
-" Show commands
-nnoremap <silent> <space>c  :<C-u>CocList commands<cr>
-" Find symbol of current document
-nnoremap <silent> <space>o  :<C-u>CocList outline<cr>
-" Search workspace symbols
-nnoremap <silent> <space>s  :<C-u>CocList -I symbols<cr>
-" Do default action for next item.
-nnoremap <silent> <space>j  :<C-u>CocNext<CR>
-" Do default action for previous item.
-nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
-" Resume latest coc list
-nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
