@@ -119,7 +119,10 @@ export NVM_DIR="$HOME/.nvm"
 # ---------------------------------------------------
 # Custom settings 
 
-[[ $TERM != "screen" ]] && exec tmux;
+if [[ $TERM != "screen" ]]; then
+  export TERM="xterm-256color";
+  tmux;
+fi
 
 set -o vi;
 

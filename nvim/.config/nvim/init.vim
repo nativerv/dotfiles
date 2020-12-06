@@ -25,6 +25,7 @@ Plug 'christoomey/vim-tmux-navigator'
 Plug 'pprovost/vim-ps1'
 Plug 'HerringtonDarkholme/yats.vim' " TS Syntax
 Plug 'morhetz/gruvbox'
+Plug 'joshdick/onedark.vim'
 
 " Visuals
 Plug 'ryanoasis/vim-devicons'
@@ -39,12 +40,16 @@ set mouse=a
 set clipboard=unnamedplus
 
 " inner world
+set termguicolors
 set relativenumber
 set smarttab
 set cindent
 set tabstop=2
 set shiftwidth=2
 set expandtab         " always uses spaces instead of tab characters
+
+" plugins world
+let NERDSpaceDelims=1
 
 " from readme
 " if hidden is not set, TextEdit might fail.
@@ -59,7 +64,8 @@ set signcolumn=yes
 
 autocmd FileType * set formatoptions-=o
 
-colorscheme gruvbox
+" colorscheme gruvbox
+colorscheme onedark
 
 " Add status line support, for integration with other plugin, checkout `:h coc-status`
 set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
