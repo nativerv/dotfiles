@@ -120,8 +120,18 @@ export NVM_DIR="$HOME/.nvm"
 # Custom settings 
 
 if [[ $TERM != "screen" ]]; then
-  export TERM="xterm-256color";
-  tmux;
+  export TERM="xterm-256color"
+
+  tmux has-session -t main
+
+  if [ $? != 0 ]
+  then
+    tmux new-session -s main
+  fi
+
+  tmux attach -t main  
+
+  clear
 fi
 
 set -o vi;

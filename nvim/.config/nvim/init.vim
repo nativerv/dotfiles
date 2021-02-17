@@ -13,6 +13,7 @@ Plug 'tpope/vim-surround'
 " Text navigation
 Plug 'mg979/vim-visual-multi', {'branch': 'master'}
 Plug 'bkad/CamelCaseMotion'
+Plug 'easymotion/vim-easymotion'
 
 " File navigation
 Plug 'Xuyuanp/nerdtree-git-plugin'
@@ -73,17 +74,39 @@ set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
 
 """ Remaps 
 
+" Leader
+let g:mapleader = " "
+
+" Esc
 inoremap jk <ESC>
 
-let g:VM_leader = '\'
+" CamelCaseMotion
+let g:camelcasemotion_key = '<leader>'
 
 " gb's
 let g:VM_maps = {}
 let g:VM_maps['Find Under']         = 'gb'           " replace C-n
 let g:VM_maps['Find Subword Under'] = 'gb'           " replace C-n visual
 
+" Explorer pane
 nmap <C-b> :NERDTreeToggle<CR>
 
+" nmap <leader>f <plug>(easymotion-prefix)
+
+" <Leader>f{char} to move to {char}
+map  <Leader>f <Plug>(easymotion-bd-f)
+nmap <Leader>f <Plug>(easymotion-overwin-f)
+
+" s{char}{char} to move to {char}{char}
+nmap s <Plug>(easymotion-overwin-f2)
+
+" Move to line
+map <Leader>L <Plug>(easymotion-bd-jk)
+nmap <Leader>L <Plug>(easymotion-overwin-line)
+
+" Move to word
+map  <Leader>w <Plug>(easymotion-bd-w)
+nmap <Leader>w <Plug>(easymotion-overwin-w)
 " Comments
 vmap <C-_> <plug>NERDCommenterToggle
 nmap <C-_> <plug>NERDCommenterToggle
@@ -96,6 +119,7 @@ inoremap <A-k> <Esc>:m .-2<CR>==gi
 vnoremap <A-j> :m '>+1<CR>gv=gv
 vnoremap <A-k> :m '<-2<CR>gv=gv
 
+" Alt-Dublicate lines
 nnoremap <A-J> :t .<CR>==
 nnoremap <A-K> :t .-1<CR>==
 inoremap <A-J> <Esc>:t .<CR>==gi
@@ -151,7 +175,7 @@ nmap <silent> ]g <Plug>(coc-diagnostic-next)
 
 " Remap keys for gotos
 nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gt <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
 
@@ -183,6 +207,9 @@ nmap <F2> <Plug>(coc-rename)
 " Remap for format selected region
 xmap <leader>f <Plug>(coc-format-selected)
 nmap <leader>f <Plug>(coc-format-selected)
+
+" Clear search highlight
+nmap <silent> <C-n> :noh<CR>
 
 " open NERDTree automatically
 "autocmd StdinReadPre * let s:std_in=1
