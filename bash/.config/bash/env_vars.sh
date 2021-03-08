@@ -7,7 +7,7 @@ HISTSIZE=1000
 HISTFILESIZE=2000
 
 # Set nvim as default editor
-if [-x /usr/bin/nvim]; then
+if [ -x /usr/bin/nvim ]; then
   EDITOR=/usr/bin/nvim
   VISUAL=/usr/bin/nvim
 fi
