@@ -12,5 +12,5 @@ WARNING: not all packages belong to `$HOME` directory!
 git clone https://github.com/nativerv/dotfiles.git
 cd dotfiles
 stow -t ~/ bash git htop neofetch npm nvim tmux 
-stow -t /usr/local/share keymaps
+stow -t /usr/local/share/kbd/keymaps keymaps
 ```
