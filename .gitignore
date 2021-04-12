@@ -8,3 +8,6 @@ coc/.config/coc/list-location-history.json
 coc/.config/coc/list-symbols-history.json
 coc/.config/coc/memos.json
 yarn/.config/yarn/link
+configstore/.config/configstore/nodemon.json
+configstore/.config/configstore/update-notifier-nodemon.json
+configstore/.config/configstore/update-notifier-npm.json
