@@ -1,0 +1,10 @@
+**/node_modules
+
+coc/.config/coc/commands
+coc/.config/coc/list-commands-history.json
+coc/.config/coc/list-diagnostics-history.json
+coc/.config/coc/list-extensions-history.json
+coc/.config/coc/list-location-history.json
+coc/.config/coc/list-symbols-history.json
+coc/.config/coc/memos.json
+yarn/.config/yarn/link

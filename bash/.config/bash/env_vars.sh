@@ -7,9 +7,10 @@ HISTSIZE=1000
 HISTFILESIZE=2000
 
 # Set nvim as default editor
-if [ -x /usr/bin/nvim ]; then
-  EDITOR=/usr/bin/nvim
-  VISUAL=/usr/bin/nvim
+if [ -x /usr/bin/nvim ]
+then
+  export EDITOR=/usr/bin/nvim
+  export VISUAL=/usr/bin/nvim
 fi
 
 # uncomment for a colored prompt, if the terminal has the capability; turned
