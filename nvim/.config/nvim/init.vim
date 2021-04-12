@@ -15,12 +15,17 @@ Plug 'mg979/vim-visual-multi', {'branch': 'master'}
 Plug 'bkad/CamelCaseMotion'
 Plug 'easymotion/vim-easymotion'
 
+" Syntax
+Plug 'kevinoid/vim-jsonc'
+
 " File navigation
 Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 Plug 'scrooloose/nerdtree'
 Plug 'ctrlpvim/ctrlp.vim' " fuzzy find files
 Plug 'christoomey/vim-tmux-navigator'
+Plug 'rbgrouleff/bclose.vim'
+Plug 'francoiscabrol/ranger.vim'
 
 " Color schemes
 Plug 'pprovost/vim-ps1'
@@ -31,10 +36,17 @@ Plug 'joshdick/onedark.vim'
 " Visuals
 Plug 'ryanoasis/vim-devicons'
 Plug 'airblade/vim-gitgutter'
+Plug 'ap/vim-css-color'
+
+" Other
+Plug 'metakirby5/codi.vim'
 
 call plug#end()
 
 """ Settings 
+
+" Ranger
+let g:ranger_map_keys = 0
 
 " outer world 
 set mouse=a
@@ -74,11 +86,17 @@ set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
 
 """ Remaps 
 
+" Ranger
+map <silent> <leader>v :Ranger<CR>
+
+" Easymotion
+" map <silent> <space> <leader><leader><leader>bdw
+
 " Leader
 let g:mapleader = " "
 
 " Esc
-inoremap jk <ESC>
+" inoremap jk <ESC>
 
 " CamelCaseMotion
 let g:camelcasemotion_key = '<leader>'
@@ -129,7 +147,14 @@ vnoremap <A-K> :t '<-1<CR>gv=gv
 
 " Ctrl+P
 let g:ctrlp_user_command = ['.git/', 'git --git-dir=%s/.git ls-files -oc --exclude-standard']
-
+let g:ctrlp_custom_ignore = 'node_modules\|DS_Store\|git'
+" let g:ctrlp_custom_ignore = 'node_modules'
+" let g:ctrlp_custom_ignore = {
+  " \ 'dir':  '\v[\/]\.(git|hg|svn)$',
+  " \ 'node_modules': 'node_modules',
+  " \ 'file': '\v\.(exe|so|dll)$',
+  " \ 'link': 'some_bad_symbolic_links',
+  " \ }
 " j/k will move virtual lines (lines that wrap)
 noremap <silent> <expr> j (v:count == 0 ? 'gj' : 'j')
 noremap <silent> <expr> k (v:count == 0 ? 'gk' : 'k')
@@ -144,21 +169,21 @@ inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
 " Using CocList
 " Show all diagnostics
-nnoremap <silent> <space>a  :<C-u>CocList diagnostics<cr>
-" Manage extensions
-nnoremap <silent> <space>e  :<C-u>CocList extensions<cr>
-" Show commands
-nnoremap <silent> <space>c  :<C-u>CocList commands<cr>
-" Find symbol of current document
-nnoremap <silent> <space>o  :<C-u>CocList outline<cr>
-" Search workspace symbols
-nnoremap <silent> <space>s  :<C-u>CocList -I symbols<cr>
-" Do default action for next item.
-nnoremap <silent> <space>j  :<C-u>CocNext<CR>
-" Do default action for previous item.
-nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
-" Resume latest coc list
-nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
+" nnoremap <silent> <space>a  :<C-u>CocList diagnostics<cr>
+" " Manage extensions
+" nnoremap <silent> <space>e  :<C-u>CocList extensions<cr>
+" " Show commands
+" nnoremap <silent> <space>c  :<C-u>CocList commands<cr>
+" " Find symbol of current document
+" nnoremap <silent> <space>o  :<C-u>CocList outline<cr>
+" " Search workspace symbols
+" nnoremap <silent> <space>s  :<C-u>CocList -I symbols<cr>
+" " Do default action for next item.
+" nnoremap <silent> <space>j  :<C-u>CocNext<CR>
+" " Do default action for previous item.
+" nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
+" " Resume latest coc list
+" nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
 
 " Use <c-space> to trigger completion.
 inoremap <silent><expr> <c-space> coc#refresh()
