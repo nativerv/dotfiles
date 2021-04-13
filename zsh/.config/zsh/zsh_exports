@@ -1,0 +1,25 @@
+#!/bin/sh
+# XDG stuff~
+# Taken from https://wiki.archlinux.org/index.php/XDG_Base_Directory
+XDG_CONFIG_HOME=$HOME/.config
+XDG_CACHE_HOME=$HOME/.cache
+XDG_DATA_HOME=$HOME/.local/share
+XDG_DATA_DIRS=/usr/local/share:/usr/share
+XDG_CONFIG_DIRS=/etc/xdg
+
+# Shell history stuff
+HISTFILE=$XDG_CONFIG_HOME/zsh/.zhistory
+HISTSIZE=1000000
+SAVEHIST=1000000
+
+# Exports
+export PATH="$HOME/.local/bin":$PATH
+export MANPAGER='nvim +Man!'
+export MANWIDTH=999
+export PATH=$HOME/.cargo/bin:$PATH
+export PATH=$HOME/.local/share/go/bin:$PATH
+export GOPATH=$HOME/.local/share/go
+export PATH=$HOME/.miniconda/bin:$PATH
+#eval "$(fnm env)"
+#eval "$(zoxide init zsh)"
+#eval "`pip completion --zsh`"

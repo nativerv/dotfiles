@@ -1,0 +1,52 @@
+alias neofetch="neofetch \
+	--line_wrap off \
+	--bold on \
+	--uptime_shorthand on"
+
+# Shorthands for various commands
+alias clr="clear"
+alias cls="clear"
+alias nv="nvim"
+
+# Aliases for updating environments
+alias refreshenv="source ~/.zshenv"
+alias zsh-update-plugins="find "$ZDOTDIR/plugins" -type d -exec test -e '{}/.git' ';' -print0 | xargs -I {} -0 git -C {} pull -q"
+alias nvplug="nvim +PlugInstall"
+
+# Colorize ls output and add shorthands for options
+alias ls='ls --color=auto'
+alias ll='ls -alF'
+alias la='ls -A'
+alias l='ls -CF'
+
+# Colorize grep output (good for log files)
+alias grep='grep --color=auto'
+alias egrep='egrep --color=auto'
+alias fgrep='fgrep --color=auto'
+
+# Confirm before overwriting something
+alias cp="cp -i"
+alias mv='mv -i'
+alias rm='rm -i'
+
+# Unsafe rm (no confirm)
+alias rmunsafe='rm'
+
+# Get top process eating memory
+alias psmem='ps auxf | sort -nr -k 4 | head -5'
+
+# Get top process eating cpu ##
+alias pscpu='ps auxf | sort -nr -k 3 | head -5'
+
+# systemd
+alias list_systemctl="systemctl list-unit-files --state=enabled"
+
+# Add an "alert" alias for long running commands.  Use like so:
+#   sleep 10; alert
+alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+
+# function mov(){
+  # mkdir -p $2;
+  # mv $1 $2;
+# }
+

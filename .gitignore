@@ -11,3 +11,6 @@ yarn/.config/yarn/link
 configstore/.config/configstore/nodemon.json
 configstore/.config/configstore/update-notifier-nodemon.json
 configstore/.config/configstore/update-notifier-npm.json
+zsh/.config/zsh/plugins
+zsh/.config/zsh/.zcompdump
+zsh/.config/zsh/.zhistory
