@@ -1,35 +1,51 @@
 #!/bin/sh
-# XDG stuff~
+
+#### XDG stuff ====================================
+
 # Taken from https://wiki.archlinux.org/index.php/XDG_Base_Directory
 XDG_CONFIG_HOME=$HOME/.config
 XDG_CACHE_HOME=$HOME/.cache
 XDG_DATA_HOME=$HOME/.local/share
 XDG_DATA_DIRS=/usr/local/share:/usr/share
 XDG_CONFIG_DIRS=/etc/xdg
+ 
+### Shell history stuff ===========================
 
-# Shell history stuff
 HISTFILE=$XDG_CONFIG_HOME/zsh/.zhistory
 HISTSIZE=1000000
 SAVEHIST=1000000
 
-# Exports
+### Path stuff ====================================
+# Add binaries from HOME
 export PATH="$HOME/.local/bin":$PATH
-export MANPAGER='nvim +Man!'
+# Make nvim open man pages 
+[ -x /bin/nvim ] && export MANPAGER='nvim +Man!'
 export MANWIDTH=999
+# Add Rust modules 
 export PATH=$HOME/.cargo/bin:$PATH
+# Add GO modules
 export PATH=$HOME/.local/share/go/bin:$PATH
-export GOPATH=$HOME/.local/share/go
+#Add miniconda
 export PATH=$HOME/.miniconda/bin:$PATH
 
+### Systemwide stuff ==============================
+
+# Default EDITOR
+[ -x /usr/bin/nvim ] && export EDITOR=/usr/bin/nvim
+
+### Language-specific stuff =======================
+
+# Setup GO
+export GOPATH=$HOME/.local/share/go
+
+# Setup NVM
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
-# set PATH so it includes nvm
-# if [ -d "$HOME/.local/bin" ] ; then
-    # export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
-    # [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
-# fi
+# Setup PyEnv
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
 
 #eval "$(fnm env)"
 #eval "$(zoxide init zsh)"
