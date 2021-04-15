@@ -12,6 +12,8 @@ zsh_add_file "zsh_vim_mode"
 zsh_add_file "zsh_keybindings"
 zsh_add_file "zsh_plugins"
 
+zmodload zsh/zprof
+
 # FZF
 #source /usr/share/fzf/key-bindings.zsh
 #source /usr/share/fzf/completion.zsh
