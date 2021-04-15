@@ -9,8 +9,19 @@ bindkey -M menuselect '^l' vi-forward-char
 bindkey -M menuselect '^j' vi-down-line-or-history
 bindkey -v '^?' backward-delete-char
 
+# Scroll through autosuggestions in normal mode
 bindkey -M vicmd "k" up-line-or-beginning-search
 bindkey -M vicmd "j" down-line-or-beginning-search
+
+# Enable vim-surround in zsh
+autoload -Uz surround
+zle -N delete-surround surround
+zle -N add-surround surround
+zle -N change-surround surround
+bindkey -a cs change-surround
+bindkey -a ds delete-surround
+bindkey -a ys add-surround
+bindkey -M visual S add-surround
 
 # Change cursor shape for different vi modes.
 function zle-keymap-select () {
@@ -21,11 +32,13 @@ function zle-keymap-select () {
 }
 zle -N zle-keymap-select
 
+# Initiate `vi insert` as keymap (can be removed if `bindkey -V` has been set elsewhere)
 zle-line-init() {
-    zle -K viins # initiate `vi insert` as keymap (can be removed if `bindkey -V` has been set elsewhere)
+    zle -K viins 
     echo -ne "\e[5 q"
 }
 zle -N zle-line-init
 
-echo -ne '\e[5 q' # Use beam shape cursor on startup.
+# Use beam shape cursor on startup.
+echo -ne '\e[5 q' 
 preexec() { echo -ne '\e[5 q' ;} # Use beam shape cursor for each new prompt.
