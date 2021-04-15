@@ -14,3 +14,4 @@ configstore/.config/configstore/update-notifier-npm.json
 zsh/.config/zsh/plugins
 zsh/.config/zsh/.zcompdump
 zsh/.config/zsh/.zhistory
+coc/.config/coc/snippets-mru
