@@ -3,7 +3,8 @@
 # Functions necessary to setup this config
 source "$ZDOTDIR/zsh_functions"
 
-# Normal files to source
+### Source all the files
+# They all depend on `zsh_functions`
 zsh_add_file "zsh_exports"
 zsh_add_file "zsh_options"
 zsh_add_file "zsh_aliases"
@@ -12,7 +13,12 @@ zsh_add_file "zsh_vim_mode"
 zsh_add_file "zsh_keybindings"
 zsh_add_file "zsh_plugins"
 
+### Load ZSH modules
 zmodload zsh/zprof
+
+### Start X on login
+# Only start if DISPLAY == "" && XDG_VTNR == 1
+[[ -z $DISPLAY && $XDG_VTNR -eq 1 ]] && exec startx
 
 # FZF
 #source /usr/share/fzf/key-bindings.zsh

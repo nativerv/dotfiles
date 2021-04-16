@@ -8,12 +8,29 @@ alias clr="clear"
 alias cls="clear"
 alias nv="nvim"
 
+# Aliases for Git
+alias g="git"
+alias gs="git status"
+alias gl="git log"
+alias gll="git log --graph --pretty=oneline"
+alias gd="git diff"
+alias ga="git add"
+alias gc="git commit"
+alias gcm="git commit -m"
+alias gca="git commit --amend"
+alias gst="git stash"
+alias gb="git branch"
+alias gch="git checkout"
+alias gp="git push"
+alias gpall="git push origin --all"
+alias gpmaster="git push origin msater"
+
 # Aliases for updating environments
-alias refreshenv="source ~/.zshenv"
+alias refreshenv="exec zsh"
 alias zsh-update-plugins="find "$ZDOTDIR/plugins" -type d -exec test -e '{}/.git' ';' -print0 | xargs -I {} -0 git -C {} pull -q"
 alias nvplug="nvim +PlugInstall"
 
-# Colorize ls output and add shorthands for options
+# Aliases for ls
 alias ls='ls --color=auto'
 alias ll='ls -alF'
 alias la='ls -A'
@@ -29,8 +46,10 @@ alias cp="cp -i"
 alias mv='mv -i'
 alias rm='rm -i'
 
-# Unsafe rm (no confirm)
+# Unsafe rm, mv and cp (no confirm)
 alias rmunsafe='rm'
+alias mvunsafe='mv'
+alias cpunsafe='cp'
 
 # Get top process eating memory
 alias psmem='ps auxf | sort -nr -k 4 | head -5'
