@@ -15,3 +15,12 @@ zsh/.config/zsh/plugins
 zsh/.config/zsh/.zcompdump
 zsh/.config/zsh/.zhistory
 coc/.config/coc/snippets-mru
+cabal/.cabal/packages/hackage.haskell.org/01-index.tar1139-12.gz
+cabal/.cabal/packages/hackage.haskell.org/01-index.timestamp
+cabal/.cabal/packages/hackage.haskell.org/hackage-security-lock
+cabal/.cabal/packages/hackage.haskell.org/mirrors1139-9.json
+cabal/.cabal/packages/hackage.haskell.org/root.json
+cabal/.cabal/packages/hackage.haskell.org/snapshot1139-6.json
+cabal/.cabal/packages/hackage.haskell.org/timestamp1139-3.json
+desktop-entries/.local/share/applications/mimeinfo.cache
+htop/.config/htop/htoprc

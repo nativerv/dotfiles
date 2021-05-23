@@ -32,14 +32,18 @@ Plug 'pprovost/vim-ps1'
 Plug 'HerringtonDarkholme/yats.vim' " TS Syntax
 Plug 'morhetz/gruvbox'
 Plug 'joshdick/onedark.vim'
+Plug 'tomasiser/vim-code-dark'
 
 " Visuals
 Plug 'ryanoasis/vim-devicons'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
 Plug 'airblade/vim-gitgutter'
 Plug 'ap/vim-css-color'
 
 " Other
 Plug 'metakirby5/codi.vim'
+Plug 'puremourning/vimspector'
 
 call plug#end()
 
@@ -54,15 +58,19 @@ set clipboard=unnamedplus
 
 " inner world
 set termguicolors
-set relativenumber
+set number relativenumber
 set smarttab
 set cindent
 set tabstop=2
 set shiftwidth=2
 set expandtab         " always uses spaces instead of tab characters
 
-" plugins world
-let NERDSpaceDelims=1
+""" Plugins world
+
+let NERDSpaceDelims = 1
+
+let g:airline_theme = 'codedark'
+let g:codedark_term256 = 1
 
 " from readme
 " if hidden is not set, TextEdit might fail.
@@ -144,6 +152,9 @@ inoremap <A-J> <Esc>:t .<CR>==gi
 inoremap <A-K> <Esc>:t .-1<CR>==gi
 vnoremap <A-J> :t '><CR>gv=gv
 vnoremap <A-K> :t '<-1<CR>gv=gv
+
+" Airline
+
 
 " Ctrl+P
 let g:ctrlp_user_command = ['.git/', 'git --git-dir=%s/.git ls-files -oc --exclude-standard']
