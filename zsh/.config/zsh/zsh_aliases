@@ -7,6 +7,7 @@ alias neofetch="neofetch \
 alias clr="clear"
 alias cls="clear"
 alias nv="nvim"
+alias ..="cd .."
 
 # Aliases for Git
 alias g="git"
