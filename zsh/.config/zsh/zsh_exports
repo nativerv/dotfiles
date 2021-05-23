@@ -35,6 +35,9 @@ export PATH=$HOME/.miniconda/bin:$PATH
 
 ### Language-specific stuff =======================
 
+# Setup DotNet
+export DOTNET_CLI_TELEMETRY_OPTOUT=1
+
 # Setup GO
 export GOPATH=$HOME/.local/share/go
 
