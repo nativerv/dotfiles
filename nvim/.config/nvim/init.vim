@@ -44,6 +44,7 @@ Plug 'ap/vim-css-color'
 " Other
 Plug 'metakirby5/codi.vim'
 Plug 'puremourning/vimspector'
+Plug 'OmniSharp/omnisharp-vim'
 
 call plug#end()
 
@@ -116,6 +117,11 @@ let g:VM_maps['Find Subword Under'] = 'gb'           " replace C-n visual
 
 " Explorer pane
 nmap <C-b> :NERDTreeToggle<CR>
+
+" GitGutter
+nmap gz <Plug>(GitGutterPreviewHunk)
+nmap g[ <Plug>(GitGutterPrevHunk)
+nmap g] <Plug>(GitGutterNextHunk)
 
 " nmap <leader>f <plug>(easymotion-prefix)
 
@@ -206,8 +212,8 @@ inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 " inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
 
 " Use `[g` and `]g` to navigate diagnostics
-nmap <silent> [g <Plug>(coc-diagnostic-prev)
-nmap <silent> ]g <Plug>(coc-diagnostic-next)
+nmap <silent> [ <Plug>(coc-diagnostic-prev)
+nmap <silent> ] <Plug>(coc-diagnostic-next)
 
 " Remap keys for gotos
 nmap <silent> gd <Plug>(coc-definition)
