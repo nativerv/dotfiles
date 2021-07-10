@@ -1,0 +1,17 @@
+#!/bin/sh
+# xmonad-recompile
+head="XMonad"
+body_success="Recompiled Sussessfully"
+body_error_recompiling="Error Recompiling"
+body_info_recompiling="Recompiling..."
+
+notify-send "$head" "$body_info_recompiling"
+
+if xmonad --recompile ; then
+  pkill notify-osd
+  notify-send "$head" "$body_success"
+  exit 0
+else
+  notify-send "$head" "$body_error_recompiling" 
+  exit 1
+fi

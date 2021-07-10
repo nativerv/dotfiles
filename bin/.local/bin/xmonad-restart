@@ -1,0 +1,17 @@
+#!/bin/sh
+# xmonad-restart
+head="XMonad"
+body_success="Restarted Sussessfully"
+body_info_restarting="Restarting..."
+body_error_restarting="Error Restarting"
+
+notify-send "$head" "$body_info_restarting";
+
+if xmonad --restart ; then
+  pkill notify-osd
+  notify-send "$head" "$body_success"
+  exit 0
+else
+  notify-send "$head" "$body_error_restarting" 
+  exit 1
+fi
