@@ -24,5 +24,7 @@ Notice that you *must* use `-t ~` flag, otherwise the package will be installed 
 ## Credits
 
 https://gitlab.com/dwt1/dotfiles - for his `xmonad`/`xmobar` configs, which is basically a miniature documentation of it
+
 https://github.com/ChristianChiarulli/Machfiles - for `zsh` config
+
 https://www.youtube.com/watch?v=gnupOrSEikQ - for `nvim` config
