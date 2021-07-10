@@ -37,6 +37,9 @@ alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
 
+# Aliases for tree
+alias t='tree -aAcC'
+
 # Colorize grep output (good for log files)
 alias grep='grep --color=auto'
 alias egrep='egrep --color=auto'
