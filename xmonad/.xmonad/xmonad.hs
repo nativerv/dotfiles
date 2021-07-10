@@ -1,95 +1,232 @@
 import XMonad
+import XMonad.Actions.Navigation2D
+import XMonad.Actions.FloatKeys
+import XMonad.Actions.CycleWS
+import System.Exit
+import qualified Data.Map as M
 import qualified XMonad.StackSet as W
-import XMonad.Util.Run
-import XMonad.Util.EZConfig
+import Data.Monoid
 import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.DynamicLog
-import XMonad.Actions.Navigation2D
-import XMonad.Actions.FloatKeys
-import Data.Monoid
 import XMonad.Layout.Gaps
 import XMonad.Layout.Spacing
+import XMonad.Layout.Tabbed
+import XMonad.Layout.ResizableTile
+import XMonad.Config.Desktop
+import XMonad.Util.Run
+import XMonad.Util.SpawnOnce
+import XMonad.Util.EZConfig
+import XMonad.Util.Cursor
 
 main = do
-  xmproc <- spawnPipe "xmobar $XDG_CONFIG_HOME/xmobar/xmobarrc"
+  xmobarProc <- spawnPipe "killall; xmobar $HOME/.config/xmobar/xmobarrc"
     
-  xmonad $ ewmh def
+  xmonad $ desktopConfig
     { terminal           = myTerminal
     , modMask            = myModMask
+    , keys               = myKeybindings
     , borderWidth        = myBorderWidth
     , focusedBorderColor = myFocusedBorderColor
-    -- , borderColor = "#0055FF"
-    , manageHook         = manageDocks <+> manageHook def
+    , manageHook         = myManageHook
     , layoutHook         = myLayoutHook
-    , handleEventHook    = handleEventHook def <+> docksEventHook
-    , logHook            = myLogHook xmproc
+    , handleEventHook    = myHandleEventHook
+    , logHook            = myLogHook xmobarProc
+    , startupHook        = myStartupHook
     }
     `additionalKeysP`
-    myKeybindings
+    myEzKeybindings
 
-myLogHook dest = dynamicLogWithPP def { ppOutput = hPutStrLn dest
-                                      , ppVisible = wrap "(" ")"
-                                      }
-myFocusedBorderColor = "#10EEFF"
+myTerminal = "st"
 myModMask = mod4Mask
 myBorderWidth = 2
 myOuterGapWidth = 15
 myInnerGapWidth = 5
+
+myLogHook dest = dynamicLogWithPP xmobarPP
+  {  ppOutput = hPutStrLn dest
+  , ppVisible = wrap "(" ")"
+  , ppCurrent = wrap "[" "]"
+  }
+myFocusedBorderColor = "#10EEFF"
+-- , borderColor = "#0055FF"
+
+myInnerGapBorder :: Border
 myInnerGapBorder = Border myInnerGapWidth myInnerGapWidth myInnerGapWidth myInnerGapWidth
-myLayoutHook = avoidStruts $ spacingRaw False myInnerGapBorder True myInnerGapBorder True
-  $ layoutHook def
+
+-- myLayoutHook :: ModifiedLayout
+myLayoutHook = avoidStruts
+  $ spacingRaw False myInnerGapBorder True myInnerGapBorder True
+  $ tallLayout ||| Full  
+  where
+    --                         MasterCount ResizeAmount MasterSize SomeShit
+    tallLayout = ResizableTall 1           (1/30)       0.5        []
+
 -- myLayoutHook = gaps [(U, myOuterGapWidth), (R, myOuterGapWidth), (D, myOuterGapWidth), (L, myOuterGapWidth)] $ Tall 1 (3/100) (1/2) ||| Full
 
-myKeybindings :: [(String, X ())]
-myKeybindings =
+
+myHandleEventHook :: Event -> X All
+myHandleEventHook = handleEventHook def <+> docksEventHook
+
+myEzKeybindings :: [(String, X ())]
+myEzKeybindings =
   [
-    ("M-j",            windows W.focusUp)
-  , ("M-k",            windows W.focusDown)
-  , ("M-J",            windows W.swapDown)
-  , ("M-K",            windows W.swapUp)
-  , ("M-W",            withFocused (keysMoveWindow ( 0, -1)))
-  , ("M-S",            withFocused (keysMoveWindow ( 0,  1)))
-  , ("M-A",            withFocused (keysMoveWindow (-1,  0)))
-  , ("M-D",            withFocused (keysMoveWindow ( 1,  0))) 
-  -- , ("M-M1-W",         withFocused (keysResizeWindow ( 0, -1) ( 0,  0)))
-  -- , ("M-M1-S",         withFocused (keysResizeWindow ( 0,  1) ( 0,  0)))
-  -- , ("M-M1-A",         withFocused (keysResizeWindow (-1, -0) ( 0,  1)))
-  -- , ("M-M1-D",         withFocused (keysResizeWindow ( 1,  0) ( 0,  0)))
+    -- Focus hotkeys
+    ("M-h",            windows W.focusUp)
+  , ("M-l",            windows W.focusDown)
+
+  -- Workspace Cycling hotkeys
+  , ("M-j",            moveTo Prev NonEmptyWS)
+  , ("M-k",            moveTo Next NonEmptyWS)
+
+  -- Window Swap hotkeys
+  , ("M-M1-j",          windows W.swapDown)
+  , ("M-M1-k",          windows W.swapUp)
+
+
+  -- Window Resize hotkeys
+  , ("M-S-h",          sendMessage Shrink)
+  , ("M-S-l",          sendMessage Expand)
+  , ("M-S-j",          sendMessage MirrorShrink)
+  , ("M-S-k",          sendMessage MirrorExpand)
+
+  -- Window Movement hotkeys
+  , ("M-S-w",          withFocused (keysMoveWindow ( 0, -3)))
+  , ("M-S-s",          withFocused (keysMoveWindow ( 0,  3)))
+  , ("M-S-a",          withFocused (keysMoveWindow (-3,  0)))
+  , ("M-S-d",          withFocused (keysMoveWindow ( 3,  0))) 
+
+  -- Window Floating Movement Hotkey
+  , ("M-M1-S-w",       withFocused (keysResizeWindow ( 0, -1) ( 0,  0)))
+  , ("M-M1-S-s",       withFocused (keysResizeWindow ( 0,  1) ( 0,  0)))
+  , ("M-M1-S-a",       withFocused (keysResizeWindow (-1, -0) ( 0,  1)))
+  , ("M-M1-S-d",       withFocused (keysResizeWindow ( 1,  0) ( 0,  0)))
+
+  -- Spacing hotkeys
   , ("M-=",            incScreenWindowSpacing 1)
   , ("M--",            incScreenWindowSpacing (-1))
   , ("M-<Home>",       setScreenWindowSpacing myInnerGapWidth)
-  , ("M-<KP_Home>",    setScreenWindowSpacing myInnerGapWidth)
 
-  -- , ("M-\\=", incScreenWindowSpacing 1)
-  -- , ("M-\\-", incScreenWindowSpacing (-1))
-  -- , ("M-<Home>", setScreenWindowSpacing myInnerGapWidth)
-  -- , ("M-<KP_Home>", setScreenWindowSpacing myInnerGapWidth)
+  -- Screenshot hotkeys
+  , ("<Print>",    spawn "scrot")
+  , ("C-<Print>",  spawn "flameshot gui")
+
+  -- Poweroff hotkeys
+  , ("M-q l",          spawn "lock")
+  , ("M-q q",          spawn "poweroff-ask")
+  , ("M-q r",          spawn "reboot-ask")
+  , ("M-q s",          spawn "suspend-ask")
+  , ("M-q h",          spawn "hibernate-ask")
+
+  -- Debug hotkeys
+  , ("M-d r",          spawn "xmonad-restart")
+  , ("M-d c",          spawn "xmonad-recompile && xmonad-restart")
   ]
-myTerminal = "st"
 
--- myManageHook :: XMonad.Query (Data.Monoid.Endo WindowSet)
+myStartupHook :: X ()
+myStartupHook = do
+    setDefaultCursor xC_left_ptr
+    -- spawnOnce "lxsession &"
+    spawnOnce "feh --randomize --bg-fill ~/wallpapers/* &"
+    spawnOnce "unclutter &"
+    spawnOnce "dunst &"
+    spawnOnce "picom --experimental-backends &"
+    spawnOnce "nm-applet &"
+    spawnOnce "volumeicon &"
+    spawnOnce "flameshot &"
+    -- spawnOnce "conky -c $HOME/.config/conky/xmonad.conkyrc"
+    spawn "killall trayer; trayer --edge top --align right --widthtype request --padding 6 --SetDockType true --SetPartialStrut true --expand true --monitor 1 --transparent true --alpha 0 --tint 0x33373F --height 18"
+    -- spawnOnce "/usr/bin/emacs --daemon &" -- emacs daemon for the emacsclient
+    -- spawnOnce "kak -d -s mysession &"  -- kakoune daemon for better performance
+    -- spawnOnce "urxvtd -q -o -f &"      -- urxvt daemon for better performance
+
+myManageHook :: XMonad.Query (Data.Monoid.Endo WindowSet)
 -- myManageHook = composeAll
-     -- -- 'doFloat' forces a window to float.  Useful for dialog boxes and such.
-     -- -- using 'doShift ( myWorkspaces !! 7)' sends program to workspace 8!
-     -- -- I'm doing it this way because otherwise I would have to write out the full
-     -- -- name of my workspaces and the names would be very long if using clickable workspaces.
-     -- [ className =? "confirm"         --> doFloat
-     -- , className =? "file_progress"   --> doFloat
-     -- , className =? "dialog"          --> doFloat
-     -- , className =? "download"        --> doFloat
-     -- , className =? "error"           --> doFloat
+myManageHook = 
+     -- 'doFloat' forces a window to float.  Useful for dialog boxes and such.
+     -- using 'doShift ( myWorkspaces !! 7)' sends program to workspace 8!
+     -- I'm doing it this way because otherwise I would have to write out the full
+     -- name of my workspaces and the names would be very long if using clickable workspaces.
+     composeAll
+     [ className =? "confirm"         --> doFloat
+     , className =? "file_progress"   --> doFloat
+     , className =? "dialog"          --> doFloat
+     , className =? "download"        --> doFloat
+     , className =? "error"           --> doFloat
      -- , className =? "Gimp"            --> doFloat
-     -- , className =? "notification"    --> doFloat
-     -- , className =? "pinentry-gtk-2"  --> doFloat
-     -- , className =? "splash"          --> doFloat
-     -- , className =? "toolbar"         --> doFloat
-     -- , title =? "Oracle VM VirtualBox Manager"  --> doFloat
+     , className =? "notification"    --> doFloat
+     , className =? "pinentry-gtk-2"  --> doFloat
+     , className =? "splash"          --> doFloat
+     , className =? "toolbar"         --> doFloat
+     , title =? "Oracle VM VirtualBox Manager"  --> doFloat
      -- , title =? "Mozilla Firefox"     --> doShift ( myWorkspaces !! 1 )
      -- , className =? "brave-browser"   --> doShift ( myWorkspaces !! 1 )
      -- , className =? "qutebrowser"     --> doShift ( myWorkspaces !! 1 )
      -- , className =? "mpv"             --> doShift ( myWorkspaces !! 7 )
      -- , className =? "Gimp"            --> doShift ( myWorkspaces !! 8 )
-     -- , className =? "VirtualBox Manager" --> doShift  ( myWorkspaces !! 4 )
-     -- , (className =? "firefox" <&&> resource =? "Dialog") --> doFloat  -- Float Firefox Dialog
-     -- ] <+> namedScratchpadManageHook myScratchPads
+     , className  =? "feh"            --> doFloat
+     ]  <+> manageDocks <+> manageHook def
+     -- <+> namedScratchpadManageHook myScratchPads
+
+-- All default keybindings from XMonad source code
+-- Pasted here as api reference
+myKeybindings :: XConfig Layout -> M.Map (KeyMask, KeySym) (X ())
+myKeybindings conf @ XConfig { XMonad.modMask = modMask } = M.fromList $
+    -- launching and killing programs
+    [ ((modMask .|. shiftMask, xK_Return), spawn $ XMonad.terminal conf) -- %! Launch terminal
+    , ((modMask,               xK_p     ), spawn "dmenu_run") -- %! Launch dmenu
+    , ((modMask .|. shiftMask, xK_p     ), spawn "gmrun") -- %! Launch gmrun
+    , ((modMask .|. shiftMask, xK_c     ), kill) -- %! Close the focused window
+
+    , ((modMask,               xK_space ), sendMessage NextLayout) -- %! Rotate through the available layout algorithms
+    , ((modMask .|. shiftMask, xK_space ), setLayout $ XMonad.layoutHook conf) -- %!  Reset the layouts on the current workspace to default
+
+    , ((modMask,               xK_n     ), refresh) -- %! Resize viewed windows to the correct size
+
+    -- move focus up or down the window stack
+    , ((modMask,               xK_Tab   ), windows W.focusDown) -- %! Move focus to the next window
+    , ((modMask .|. shiftMask, xK_Tab   ), windows W.focusUp  ) -- %! Move focus to the previous window
+    , ((modMask,               xK_j     ), windows W.focusDown) -- %! Move focus to the next window
+    , ((modMask,               xK_k     ), windows W.focusUp  ) -- %! Move focus to the previous window
+    , ((modMask,               xK_m     ), windows W.focusMaster  ) -- %! Move focus to the master window
+
+    -- modifying the window order
+    , ((modMask,               xK_Return), windows W.swapMaster) -- %! Swap the focused window and the master window
+    , ((modMask .|. shiftMask, xK_j     ), windows W.swapDown  ) -- %! Swap the focused window with the next window
+    , ((modMask .|. shiftMask, xK_k     ), windows W.swapUp    ) -- %! Swap the focused window with the previous window
+
+    -- resizing the master/slave ratio
+    , ((modMask,               xK_h     ), sendMessage Shrink) -- %! Shrink the master area
+    , ((modMask,               xK_l     ), sendMessage Expand) -- %! Expand the master area
+
+    -- floating layer support
+    , ((modMask,               xK_t     ), withFocused $ windows . W.sink) -- %! Push window back into tiling
+
+    -- increase or decrease number of windows in the master area
+    , ((modMask              , xK_comma ), sendMessage (IncMasterN 1)) -- %! Increment the number of windows in the master area
+    , ((modMask              , xK_period), sendMessage (IncMasterN (-1))) -- %! Deincrement the number of windows in the master area
+
+    -- quit, or restart
+    , ((modMask .|. shiftMask, xK_q     ), io (exitWith ExitSuccess)) -- %! Quit xmonad
+    , ((modMask              , xK_q     ), spawn "if type xmonad; then xmonad --recompile && xmonad --restart; else xmessage xmonad not in \\$PATH: \"$PATH\"; fi") -- %! Restart xmonad
+
+    -- Commented as `help` is not available
+    -- , ((modMask .|. shiftMask, xK_slash ), helpCommand) -- %! Run xmessage with a summary of the default keybindings (useful for beginners)
+    -- -- repeat the binding for non-American layout keyboards
+    -- , ((modMask              , xK_question), helpCommand) -- %! Run xmessage with a summary of the default keybindings (useful for beginners)
+    ]
+    ++
+    -- mod-[1..9] %! Switch to workspace N
+    -- mod-shift-[1..9] %! Move client to workspace N
+    [((m .|. modMask, k), windows $ f i)
+        | (i, k) <- zip (XMonad.workspaces conf) [xK_1 .. xK_9]
+        , (f, m) <- [(W.greedyView, 0), (W.shift, shiftMask)]]
+    ++
+    -- mod-{w,e,r} %! Switch to physical/Xinerama screens 1, 2, or 3
+    -- mod-shift-{w,e,r} %! Move client to screen 1, 2, or 3
+    [((m .|. modMask, key), screenWorkspace sc >>= flip whenJust (windows . f))
+        | (key, sc) <- zip [xK_w, xK_e, xK_r] [0..]
+        , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
+  -- where
+    -- helpCommand :: X ()
+    -- helpCommand = spawn ("printf " ++ show help ++ " | xmessage -file -")
