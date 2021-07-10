@@ -49,7 +49,7 @@ myLogHook dest = dynamicLogWithPP xmobarPP
   , ppCurrent = wrap "[" "]"
   }
 myFocusedBorderColor = "#10EEFF"
--- , borderColor = "#0055FF"
+    -- , borderColor = "#0055FF"
 
 myInnerGapBorder :: Border
 myInnerGapBorder = Border myInnerGapWidth myInnerGapWidth myInnerGapWidth myInnerGapWidth
@@ -165,6 +165,7 @@ myManageHook =
      -- , className =? "mpv"             --> doShift ( myWorkspaces !! 7 )
      -- , className =? "Gimp"            --> doShift ( myWorkspaces !! 8 )
      , className  =? "feh"            --> doFloat
+     , className  =? "sxiv"           --> doFloat
      ]  <+> manageDocks <+> manageHook def
      -- <+> namedScratchpadManageHook myScratchPads
 
