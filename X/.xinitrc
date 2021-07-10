@@ -11,9 +11,9 @@ xmodmap -e "clear lock"
 xmodmap -e "keycode 66 = Escape NoSymbol Escape"
 
 # Load wallpapers (nitrogen does that) then load xrdb then replace process with dwm 
-nitrogen --restore && \
-picom --experimental-backends &
+# nitrogen --restore && \
+# picom --experimental-backends &
 xrdb & 
-exec dwm 
-#exec xmonad 
+#exec dwm 
+exec xmonad 
 #xmobar & \ 

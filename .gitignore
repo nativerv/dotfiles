@@ -24,3 +24,18 @@ cabal/.cabal/packages/hackage.haskell.org/snapshot1139-6.json
 cabal/.cabal/packages/hackage.haskell.org/timestamp1139-3.json
 desktop-entries/.local/share/applications/mimeinfo.cache
 htop/.config/htop/htoprc
+
+xmonad/.xmonad/xmonad.errors
+xmonad/.xmonad/xmonad.hi
+xmonad/.xmonad/xmonad.o
+desktop-entries/.local/share/applications/userapp-Telegram Desktop-1R5L10.desktop
+desktop-entries/.local/share/applications/wine-extension-chm.desktop
+desktop-entries/.local/share/applications/wine-extension-hlp.desktop
+desktop-entries/.local/share/applications/wine-extension-htm.desktop
+desktop-entries/.local/share/applications/wine-extension-msp.desktop
+desktop-entries/.local/share/applications/wine-extension-pdf.desktop
+desktop-entries/.local/share/applications/wine-extension-vbs.desktop
+desktop-entries/.local/share/applications/wine-extension-xml.desktop
+pepe.txt
+pepe_old_rendered.txt
+xmonad/.xmonad/xmonad-x86_64-linux
