@@ -1,9 +1,10 @@
 #!/bin/sh
 
-# Functions necessary to setup this config
+# Functions necessary to run this config
 source "$ZDOTDIR/zsh_functions"
 
 ### Source all the files
+
 # They all depend on `zsh_functions`
 zsh_add_file "zsh_exports"
 zsh_add_file "zsh_options"
@@ -14,9 +15,12 @@ zsh_add_file "zsh_keybindings"
 zsh_add_file "zsh_plugins"
 
 ### Load ZSH modules
+
+# Enable profiling
 zmodload zsh/zprof
 
 ### Start X on login
+
 # Only start if DISPLAY == "" && XDG_VTNR == 1
 [[ -z $DISPLAY && $XDG_VTNR -eq 1 ]] && exec startx > /dev/null 2>&1
 
