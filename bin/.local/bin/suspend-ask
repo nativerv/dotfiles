@@ -1,0 +1,8 @@
+#!/bin/sh
+# suspend-ask
+body="Are you sure you want to suspend the computer?"
+
+if zenity --question --text="$body" ; then
+  systemctl suspend
+  exit 0
+fi

@@ -1,0 +1,8 @@
+#!/bin/sh
+# hibernate-ask
+body="Are you sure you want to hibernate the computer?"
+
+if zenity --question --text="$body" ; then
+  systemctl hibernate
+  exit 0
+fi

@@ -1,0 +1,8 @@
+#!/bin/sh
+# poweroff-ask
+body="Are you sure you want to turn off the computer?"
+
+if zenity --question --text="$body" ; then
+  poweroff
+  exit 0
+fi

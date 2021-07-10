@@ -1,0 +1,9 @@
+
+#!/bin/sh
+# reboot-ask
+body="Are you sure you want to reboot the computer?"
+
+if zenity --question --text="$body" ; then
+  reboot
+  exit 0
+fi
