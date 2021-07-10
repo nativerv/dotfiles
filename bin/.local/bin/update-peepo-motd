@@ -1,0 +1,3 @@
+#!/bin/sh
+
+/home/nrv/.local/bin/random-pepe > /etc/motd

@@ -1,0 +1,25 @@
+#!/bin/sh
+
+# Characters to be used in PEEPO...
+chars='     /********,.@@@%'
+
+pepes_dir="${1:-"$HOME/Pictures/pepes"}"
+
+# Exit if there is no place of peepos...
+if [ ! -d "$pepes_dir" ]; then
+  echo 'Nowhere to find peepos...'
+  exit 1
+fi
+
+peepos=$(find "$pepes_dir" -type f -iname "*.png" -o -type f -iname "*.jpg" -o -type f -iname "*.webp")
+
+# Exit if there is not a single peepo...
+if [ "$(wc -l "$peepos")" = 0 ]; then
+  echo 'No peepos...'
+  exit 1
+fi
+
+# Get random peepo...
+peepo=$(echo "$peepos" | shuf -n 1)
+
+jp2a --colors --chars="$chars" --height=33 --width=85 "$peepo"
