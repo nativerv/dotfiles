@@ -142,7 +142,7 @@ myEzKeybindings =
   , ("M-<Home>",       setScreenWindowSpacing myInnerGapWidth)
 
   -- Screenshot hotkeys
-  , ("<Print>",    spawn "scrot")
+  , ("<Print>",    spawn "flameshot full --clipboard")
   , ("C-<Print>",  spawn "flameshot gui")
 
   -- Poweroff hotkeys
@@ -161,7 +161,7 @@ myStartupHook :: X ()
 myStartupHook = do
     setDefaultCursor xC_left_ptr
     -- spawnOnce "lxsession &"
-    spawnOnce "feh --randomize --bg-fill ~/wallpapers/* &"
+    spawnOnce "feh --randomize --bg-fill ~/pix/wall/* &"
     spawnOnce "unclutter &"
     spawnOnce "dunst &"
     spawnOnce "picom --config $HOME/.config/picom/picom.jonaburg.conf &"
