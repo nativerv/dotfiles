@@ -25,6 +25,8 @@ cabal/.cabal/packages/hackage.haskell.org/timestamp1139-3.json
 desktop-entries/.local/share/applications/mimeinfo.cache
 htop/.config/htop/htoprc
 
+lazygit/**/*.patch
+
 xmonad/.xmonad/xmonad.errors
 xmonad/.xmonad/xmonad.hi
 xmonad/.xmonad/xmonad.o
@@ -39,3 +41,4 @@ desktop-entries/.local/share/applications/wine-extension-xml.desktop
 pepe.txt
 pepe_old_rendered.txt
 xmonad/.xmonad/xmonad-x86_64-linux
+lazygit/.config/lazygit/state.yml
