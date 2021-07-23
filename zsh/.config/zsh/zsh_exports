@@ -42,7 +42,7 @@ export DOTNET_CLI_TELEMETRY_OPTOUT=1
 export GOPATH=$HOME/.local/share/go
 
 # Setup Rust
-source $HOME/.cargo/env
+[ -s $HOME/.cargo/env ] && source $HOME/.cargo/env
 
 # Setup Haskell
 export PATH="$HOME/.stack/bin:$HOME/.cabal/bin:$HOME/.ghcup/bin:$PATH"
