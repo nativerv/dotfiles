@@ -5,8 +5,15 @@ source "$ZDOTDIR/zsh_functions"
 
 ### Source all the files
 
-# They all depend on `zsh_functions`
+# All of below depend on `zsh_functions`
 zsh_add_file "zsh_exports"
+
+################################################
+           ### PEEPOS, first of all...
+     [[ -o login ]] && random-pepe 2>/dev/null
+################################################
+
+# Continue normally with mundane stuff...
 zsh_add_file "zsh_options"
 zsh_add_file "zsh_aliases"
 zsh_add_file "zsh_prompt"
