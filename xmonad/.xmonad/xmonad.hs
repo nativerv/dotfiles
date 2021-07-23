@@ -8,6 +8,7 @@ import qualified XMonad.StackSet as W
 import Data.Monoid
 import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.ManageDocks
+import XMonad.Hooks.ManageHelpers
 import XMonad.Hooks.DynamicLog
 import XMonad.Layout.Gaps
 import XMonad.Layout.Spacing
@@ -18,6 +19,7 @@ import XMonad.Util.Run
 import XMonad.Util.SpawnOnce
 import XMonad.Util.EZConfig
 import XMonad.Util.Cursor
+import System.IO
 
 main = do
   xmobarProc <- spawnPipe "killall; xmobar $HOME/.config/xmobar/xmobarrc"
@@ -29,6 +31,7 @@ main = do
     , borderWidth        = myBorderWidth
     , focusedBorderColor = myFocusedBorderColor
     , manageHook         = myManageHook
+    , workspaces         = myWorkspaces
     , layoutHook         = myLayoutHook
     , handleEventHook    = myHandleEventHook
     , logHook            = myLogHook xmobarProc
@@ -39,17 +42,48 @@ main = do
 
 myTerminal = "st"
 myModMask = mod4Mask
-myBorderWidth = 2
+myBorderWidth = 0
 myOuterGapWidth = 15
 myInnerGapWidth = 5
 
 myLogHook dest = dynamicLogWithPP xmobarPP
-  {  ppOutput = hPutStrLn dest
+  { ppOutput = hPutStrLn dest
   , ppVisible = wrap "(" ")"
   , ppCurrent = wrap "[" "]"
   }
 myFocusedBorderColor = "#10EEFF"
-    -- , borderColor = "#0055FF"
+-- , borderColor = "#0055FF"
+
+xmobarEscape = concatMap doubleLts
+  where doubleLts '<' = "<<"
+        doubleLts x   = [x]
+
+modMaskName :: KeyMask -> String
+modMaskName modMask
+  | modMask == mod1Mask = "alt"
+  | modMask == mod2Mask = "Num_Lock"
+  | modMask == mod3Mask = undefined
+  | modMask == mod4Mask = "super"
+  | modMask == mod5Mask = undefined
+
+myWorkspaces :: [String]        
+myWorkspaces = clickable . (map xmobarEscape) $ ["www", ">_", "vid", "game", "tool"]
+  where                                                                       
+    -- clickable l = [ "<action=xdotool key super+" ++ show (n) ++ ">" ++ ws ++ "</action>" |
+                             -- (i,ws) <- zip [1..5] l, let n = i
+                  -- ]
+    clickable workspaceList = 
+      [
+        concat [ "<action=xdotool key "
+                , modMaskName myModMask
+                , "+"
+                , show index
+                , ">"
+                , workspace
+                , "</action>" 
+               ] |
+        (index, workspace) <- zip [1..5] workspaceList 
+      ]
 
 myInnerGapBorder :: Border
 myInnerGapBorder = Border myInnerGapWidth myInnerGapWidth myInnerGapWidth myInnerGapWidth
@@ -80,8 +114,8 @@ myEzKeybindings =
   , ("M-k",            moveTo Next NonEmptyWS)
 
   -- Window Swap hotkeys
-  , ("M-M1-j",          windows W.swapDown)
-  , ("M-M1-k",          windows W.swapUp)
+  , ("M-C-j",          windows W.swapDown)
+  , ("M-C-k",          windows W.swapUp)
 
 
   -- Window Resize hotkeys
@@ -103,8 +137,8 @@ myEzKeybindings =
   , ("M-M1-S-d",       withFocused (keysResizeWindow ( 1,  0) ( 0,  0)))
 
   -- Spacing hotkeys
-  , ("M-=",            incScreenWindowSpacing 1)
-  , ("M--",            incScreenWindowSpacing (-1))
+  , ("M--",            incScreenWindowSpacing 1)
+  , ("M-=",            incScreenWindowSpacing (-1))
   , ("M-<Home>",       setScreenWindowSpacing myInnerGapWidth)
 
   -- Screenshot hotkeys
@@ -130,7 +164,7 @@ myStartupHook = do
     spawnOnce "feh --randomize --bg-fill ~/wallpapers/* &"
     spawnOnce "unclutter &"
     spawnOnce "dunst &"
-    spawnOnce "picom --experimental-backends &"
+    spawnOnce "picom --config $HOME/.config/picom/picom.jonaburg.conf &"
     spawnOnce "nm-applet &"
     spawnOnce "volumeicon &"
     spawnOnce "flameshot &"
@@ -148,24 +182,32 @@ myManageHook =
      -- I'm doing it this way because otherwise I would have to write out the full
      -- name of my workspaces and the names would be very long if using clickable workspaces.
      composeAll
-     [ className =? "confirm"         --> doFloat
-     , className =? "file_progress"   --> doFloat
-     , className =? "dialog"          --> doFloat
-     , className =? "download"        --> doFloat
-     , className =? "error"           --> doFloat
+     [ className =? "confirm"         --> doCenterFloat
+     , className =? "file_progress"   --> doCenterFloat
+     , className =? "dialog"          --> doCenterFloat
+     , className =? "Dragon-drag-and-drop"          --> doCenterFloat
+     , className =? "Zenity"          --> doCenterFloat
+     , stringProperty "WM_WINDOW_ROLE" =? "gimp-message-dialog"  --> doCenterFloat
+     , stringProperty "WM_WINDOW_ROLE" =? "GtkFileChooserDialog" --> doRectFloat (W.RationalRect 0 0 0.6 0.6)
+     , stringProperty "WM_WINDOW_ROLE" =? "GtkFileChooserDialog" --> doCenterFloat
+     , className =? "download"        --> doCenterFloat
+     , className =? "error"           --> doCenterFloat
      -- , className =? "Gimp"            --> doFloat
-     , className =? "notification"    --> doFloat
+     , className =? "notification"    --> doCenterFloat
      , className =? "pinentry-gtk-2"  --> doFloat
-     , className =? "splash"          --> doFloat
+     , className =? "splash"          --> doCenterFloat
      , className =? "toolbar"         --> doFloat
-     , title =? "Oracle VM VirtualBox Manager"  --> doFloat
+     , title =? "Oracle VM VirtualBox Manager"  --> doCenterFloat
+     , title =? "Media viewer" 
+       <&&>
+       className =? "TelegramDesktop" --> doFullFloat
      -- , title =? "Mozilla Firefox"     --> doShift ( myWorkspaces !! 1 )
      -- , className =? "brave-browser"   --> doShift ( myWorkspaces !! 1 )
      -- , className =? "qutebrowser"     --> doShift ( myWorkspaces !! 1 )
      -- , className =? "mpv"             --> doShift ( myWorkspaces !! 7 )
      -- , className =? "Gimp"            --> doShift ( myWorkspaces !! 8 )
-     , className  =? "feh"            --> doFloat
-     , className  =? "sxiv"           --> doFloat
+     , className  =? "feh"            --> doFullFloat
+     , className  =? "sxiv"           --> doFullFloat
      ]  <+> manageDocks <+> manageHook def
      -- <+> namedScratchpadManageHook myScratchPads
 
