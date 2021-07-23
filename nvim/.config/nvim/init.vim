@@ -50,6 +50,13 @@ call plug#end()
 
 """ Settings 
 
+
+" Leader
+let g:mapleader = " "
+
+" CamelCaseMotion
+let g:camelcasemotion_key = '<leader>'
+
 " Ranger
 let g:ranger_map_keys = 0
 
@@ -101,15 +108,6 @@ map <silent> <leader>v :Ranger<CR>
 " Easymotion
 " map <silent> <space> <leader><leader><leader>bdw
 
-" Leader
-let g:mapleader = " "
-
-" Esc
-" inoremap jk <ESC>
-
-" CamelCaseMotion
-let g:camelcasemotion_key = '<leader>'
-
 " gb's
 let g:VM_maps = {}
 let g:VM_maps['Find Under']         = 'gb'           " replace C-n
@@ -144,12 +142,12 @@ vmap <C-_> <plug>NERDCommenterToggle
 nmap <C-_> <plug>NERDCommenterToggle
 
 " Alt-Move lines
-nnoremap <A-j> :m .+1<CR>==
-nnoremap <A-k> :m .-2<CR>==
-inoremap <A-j> <Esc>:m .+1<CR>==gi
-inoremap <A-k> <Esc>:m .-2<CR>==gi
-vnoremap <A-j> :m '>+1<CR>gv=gv
-vnoremap <A-k> :m '<-2<CR>gv=gv
+nnoremap <C-A-j> :m .+1<CR>==
+nnoremap <C-A-k> :m .-2<CR>==
+inoremap <C-A-j> <Esc>:m .+1<CR>==gi
+inoremap <C-A-k> <Esc>:m .-2<CR>==gi
+vnoremap <C-A-j> :m '>+1<CR>gv=gv
+vnoremap <C-A-k> :m '<-2<CR>gv=gv
 
 " Alt-Dublicate lines
 nnoremap <A-J> :t .<CR>==
