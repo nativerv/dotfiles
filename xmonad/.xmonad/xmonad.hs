@@ -173,43 +173,53 @@ myStartupHook = do
     -- spawnOnce "/usr/bin/emacs --daemon &" -- emacs daemon for the emacsclient
     -- spawnOnce "kak -d -s mysession &"  -- kakoune daemon for better performance
     -- spawnOnce "urxvtd -q -o -f &"      -- urxvt daemon for better performance
+doDialogCenterFloat :: Query (Endo WindowSet)
+doDialogCenterFloat = doRectFloat (W.RationalRect 0 0 0.6 0.6) >> doCenterFloat 
+windowRole :: Query String
+windowRole = stringProperty "WM_WINDOW_ROLE"
 
 myManageHook :: XMonad.Query (Data.Monoid.Endo WindowSet)
--- myManageHook = composeAll
 myManageHook = 
-     -- 'doFloat' forces a window to float.  Useful for dialog boxes and such.
-     -- using 'doShift ( myWorkspaces !! 7)' sends program to workspace 8!
-     -- I'm doing it this way because otherwise I would have to write out the full
-     -- name of my workspaces and the names would be very long if using clickable workspaces.
      composeAll
-     [ className =? "confirm"         --> doCenterFloat
-     , className =? "file_progress"   --> doCenterFloat
-     , className =? "dialog"          --> doCenterFloat
-     , className =? "Dragon-drag-and-drop"          --> doCenterFloat
-     , className =? "Zenity"          --> doCenterFloat
-     , stringProperty "WM_WINDOW_ROLE" =? "gimp-message-dialog"  --> doCenterFloat
-     , stringProperty "WM_WINDOW_ROLE" =? "GtkFileChooserDialog" --> doRectFloat (W.RationalRect 0 0 0.6 0.6)
-     , stringProperty "WM_WINDOW_ROLE" =? "GtkFileChooserDialog" --> doCenterFloat
-     , className =? "download"        --> doCenterFloat
-     , className =? "error"           --> doCenterFloat
-     -- , className =? "Gimp"            --> doFloat
-     , className =? "notification"    --> doCenterFloat
-     , className =? "pinentry-gtk-2"  --> doFloat
-     , className =? "splash"          --> doCenterFloat
-     , className =? "toolbar"         --> doFloat
-     , title =? "Oracle VM VirtualBox Manager"  --> doCenterFloat
-     , title =? "Media viewer" 
-       <&&>
-       className =? "TelegramDesktop" --> doFullFloat
+     [ className =? "confirm"            --> doCenterFloat
+     , className =? "file_progress"      --> doCenterFloat
+     , className =? "dialog"             --> doCenterFloat
+     , className =? "Zenity"             --> doCenterFloat
+     , className =? "download"           --> doCenterFloat
+     , className =? "error"              --> doCenterFloat
+     , className =? "notification"       --> doCenterFloat
+     , className =? "pinentry-gtk-2"     --> doFloat
+     , className =? "splash"             --> doCenterFloat
+     , className =? "toolbar"            --> doFloat
+     , className =? "feh"                --> doFullFloat
+     , className =? "Sxiv"               --> doFullFloat
+     , className =? "Veracrypt"          --> doCenterFloat 
+
+     , className =? "Dragon-drag-and-drop"
+        --> doCenterFloat
+
+     , windowRole =? "gimp-message-dialog"
+        --> doCenterFloat
+
+     , windowRole =? "GtkFileChooserDialog"
+        --> doDialogCenterFloat
+
+     , title =? "Oracle VM VirtualBox Manager"
+        --> doCenterFloat
+
+     , title =? "Media viewer" <&&> className =? "TelegramDesktop"
+        --> doFullFloat
+
+     ] <+> manageDocks
+       <+> manageHook def
+     -- <+> namedScratchpadManageHook myScratchPads
+
+     -- TODO: add `doShift`s 
      -- , title =? "Mozilla Firefox"     --> doShift ( myWorkspaces !! 1 )
      -- , className =? "brave-browser"   --> doShift ( myWorkspaces !! 1 )
      -- , className =? "qutebrowser"     --> doShift ( myWorkspaces !! 1 )
      -- , className =? "mpv"             --> doShift ( myWorkspaces !! 7 )
      -- , className =? "Gimp"            --> doShift ( myWorkspaces !! 8 )
-     , className  =? "feh"            --> doFullFloat
-     , className  =? "sxiv"           --> doFullFloat
-     ]  <+> manageDocks <+> manageHook def
-     -- <+> namedScratchpadManageHook myScratchPads
 
 -- All default keybindings from XMonad source code
 -- Pasted here as api reference
