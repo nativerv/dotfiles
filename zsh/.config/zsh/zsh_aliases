@@ -27,23 +27,32 @@ alias gpall="git push origin --all"
 alias gpmaster="git push origin msater"
 
 # Aliases for updating environments
-alias refreshenv="exec zsh"
+alias renv="exec zsh"
 alias zsh-update-plugins="find "$ZDOTDIR/plugins" -type d -exec test -e '{}/.git' ';' -print0 | xargs -I {} -0 git -C {} pull -q"
 alias nvplug="nvim +PlugInstall"
 
 # Aliases for ls
-alias ls='ls --color=auto'
-alias ll='ls -alF'
-alias la='ls -A'
-alias l='ls -CF'
+alias ls='ls --color=auto --group-directories-first'
+alias ll='ls -lF --group-directories-first'
+alias lla='ls -alF --group-directories-first'
+alias lld='ls -aldF --group-directories-first'
+alias la='ls -A --group-directories-first'
+alias l='ls -CF --group-directories-first'
 
 # Aliases for tree
 alias t='tree -aAcC'
 
-# Colorize grep output (good for log files)
+# Colorize various commands
 alias grep='grep --color=auto'
 alias egrep='egrep --color=auto'
 alias fgrep='fgrep --color=auto'
+alias ip='ip -color=auto'
+
+# Alias help for ZSH builtins
+unalias run-help
+autoload run-help
+HELPDIR=/usr/share/zsh/"${ZSH_VERSION}"/help
+alias help=run-help
 
 # Confirm before overwriting something
 alias cp="cp -i"
