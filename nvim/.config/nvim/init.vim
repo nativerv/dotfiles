@@ -72,6 +72,27 @@ set cindent
 set tabstop=2
 set shiftwidth=2
 set expandtab         " always uses spaces instead of tab characters
+" set langmap=ФИСВУАПРШОЛДЬТЩЗЙКЫЕГМЦЧНЯ;ABCDEFGHIJKLMNOPQRSTUVWXYZ,фисвуапршолдьтщзйкыегмцчня;abcdefghijklmnopqrstuvwxyz
+" set langmap=QЙ,WЦ,EУ,RК,TЕ,YН,UГ,IШ,OЩ,PЗ,{Х,}Ъ,AФ,SЫ,DВ,FА,GП,HР,JО,KЛ,LД,:Ж,"Э,|/,ZЯ,XЧ,CС,VМ,BИ,NТ,MЬ,<Б,>Ю,?\,,qй,wц,eу,rк,tе,yн,uг,iш,oщ,pз,[х,]ъ,aф,sы,dв,fа,gп,hр,jо,kл,lд,;ж,'э,zя,xч,cс,vм,bи,nт,mь,\,б,.ю,/.
+" set langmap=ЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭ/ЯЧСМИТЬБЮ\,йцукенгшщзхъфывапролджэячсмитьбю.;QWERTYUIOP{}ASDFGHJKL:"|ZXCVBNM<>?qwertyuiop[]asdfghjkl;'zxcvbnm\,./
+" set langmap=ЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭ\ЯЧСМИТЬБЮ,йцукенгшщзхъфывапролджэ\ячсмитьбю.\;QWERTYUIOP{}ASDFGHJKL:"|ZXCVBNM<>?qwertyuiop[]asdfghjkkl;'\zxcvbnm,./
+" set langmap=ЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭ\\ЯЧСМИТЬБЮ\,йцукенгшщзхъфывапролджэ\\ячсмитьбю.;QWERTYUIOP{}ASDFGHJKL:\"\|ZXCVBNM<>?qwertyuiop[]asdfghjkl\;'\\zxcvbnm\,./
+" set langmap=ЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭ/ЯЧСМИТЬБЮ\,йцукенгшщзхъфывапролджэячсмитьбю.
+" set langmap="ЙQ,ЦW,УE,КR,ЕT,НY,ГU,ШI,ЩO,ЗP,Х{,Ъ},ФA,ЫS,ВD,АF,ПG,РH,ОJ,ЛK,ДL,Ж:,Э\",/\\,ЯZ,ЧX,СC,МV,ИB,ТN,ЬM,Б<,Ю>,\,?,йq,цw,уe,кr,еt,нy,гu,шi,щo,зp,х[,ъ],фa,ыs,вd,аf,пg,рh,оj,лk,дl,ж;,э',яz,чx,сc,мv,иb,тn,ьm,б,,ю.,./"
+" set langmap=ЙQ,ЦW,УE,КR,ЕT,НY,ГU,ШI,ЩO,ЗP,Х{,Ъ},ФA,ЫS,ВD,АF,ПG,РH,ОJ,ЛK,ДL,Ж:,Э\\\",/\\|,ЯZ,ЧX,СC,МV,ИB,ТN,ЬM,Б<,Ю>,,?,йq,цw,уe,кr,еt,нy,гu,шi,щo,зp,х[,ъ],фa,ыs,вd,аf,пg,рh,оj,лk,дl,ж\\;,э',\\\\\\,яz,чx,сc,мv,иb,тn,ьm,б\\,,ю.,./
+set langmap=ФИСВУАПРШОЛДЬТЩЗЙКЫЕГМЦЧНЯ;ABCDEFGHIJKLMNOPQRSTUVWXYZ,фисвуапршолдьтщзйкыегмцчня;abcdefghijklmnopqrstuvwxyz
+" set langmap=ЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭ\ЯЧСМИТЬБЮ,йцукенгшщзхъфывапролджэ\ячсмитьбю.
+            " QWERTYUIOP{}ASDFGHJKL:"|ZXCVBNM<>?qwertyuiop[]asdfghjkl;'\zxcvbnm,./
+
+	" The 'langmap' option is a list of parts, separated with commas.  Each
+	" part can be in one of two forms:
+	" 1.  A list of pairs.  Each pair is a "from" character immediately
+			" followed by the "to" character.  Examples: "aA", "aAbBcC".
+	" 2.  A list of "from" characters, a semi-colon and a list of "to"
+			" characters.  Example: "abc;ABC"
+	" Example: "aA,fgh;FGH,cCdDeE"
+	" Special characters need to be preceded with a backslash.  These are
+	" ";", ',', '"', '|' and backslash itself.
 
 """ Plugins world
 
