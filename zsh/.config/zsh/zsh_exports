@@ -33,6 +33,14 @@ export PATH=$HOME/.miniconda/bin:$PATH
 # Default EDITOR
 [ -x /usr/bin/nvim ] && export EDITOR=/usr/bin/nvim
 
+# Truecolor
+# Turned out to be unnecessary with `st`
+# export TERM="xterm-256color"
+
+# Less color
+export LESS='-R --use-color -Dd+r$Du+b'
+export LESSOPEN="| /usr/bin/source-highlight-esc.sh %s"
+
 ### Language-specific stuff =======================
 
 # Setup DotNet
