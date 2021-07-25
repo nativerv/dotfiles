@@ -7,6 +7,7 @@ import qualified Data.Map as M
 import qualified XMonad.StackSet as W
 import Data.Monoid
 import XMonad.Hooks.EwmhDesktops
+import XMonad.Hooks.SetWMName
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.ManageHelpers
 import XMonad.Hooks.DynamicLog
@@ -14,6 +15,7 @@ import XMonad.Layout.Gaps
 import XMonad.Layout.Spacing
 import XMonad.Layout.Tabbed
 import XMonad.Layout.ResizableTile
+import XMonad.Layout.NoBorders
 import XMonad.Config.Desktop
 import XMonad.Util.Run
 import XMonad.Util.SpawnOnce
@@ -51,7 +53,8 @@ myLogHook dest = dynamicLogWithPP xmobarPP
   , ppVisible = wrap "(" ")"
   , ppCurrent = wrap "[" "]"
   }
-myFocusedBorderColor = "#10EEFF"
+-- myFocusedBorderColor = "#10EEFF"
+myFocusedBorderColor = "#EEEEEE"
 -- , borderColor = "#0055FF"
 
 xmobarEscape = concatMap doubleLts
@@ -65,6 +68,7 @@ modMaskName modMask
   | modMask == mod3Mask = undefined
   | modMask == mod4Mask = "super"
   | modMask == mod5Mask = undefined
+  | otherwise = undefined
 
 myWorkspaces :: [String]        
 myWorkspaces = clickable . (map xmobarEscape) $ ["www", ">_", "vid", "game", "tool"]
@@ -89,7 +93,9 @@ myInnerGapBorder :: Border
 myInnerGapBorder = Border myInnerGapWidth myInnerGapWidth myInnerGapWidth myInnerGapWidth
 
 -- myLayoutHook :: ModifiedLayout
-myLayoutHook = avoidStruts
+myLayoutHook =
+  smartBorders
+  $ avoidStruts
   $ spacingRaw False myInnerGapBorder True myInnerGapBorder True
   $ tallLayout ||| Full  
   where
@@ -173,8 +179,10 @@ myStartupHook = do
     -- spawnOnce "/usr/bin/emacs --daemon &" -- emacs daemon for the emacsclient
     -- spawnOnce "kak -d -s mysession &"  -- kakoune daemon for better performance
     -- spawnOnce "urxvtd -q -o -f &"      -- urxvt daemon for better performance
+
 doDialogCenterFloat :: Query (Endo WindowSet)
 doDialogCenterFloat = doRectFloat (W.RationalRect 0 0 0.6 0.6) >> doCenterFloat 
+
 windowRole :: Query String
 windowRole = stringProperty "WM_WINDOW_ROLE"
 
