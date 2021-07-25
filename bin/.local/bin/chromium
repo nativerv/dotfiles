@@ -1,0 +1,6 @@
+#!/bin/sh
+
+# Pass 'prefers-color-scheme: dark' to sites to enable 
+# their native dark mode if present
+/bin/chromium --enable-features=WebUIDarkMode --force-dark-mode $@
+
