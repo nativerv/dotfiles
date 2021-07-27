@@ -1,3 +1,5 @@
+Sxiv.background: #282C34
+
 !! Appearance
 urxvt.termName: rxvt-unicode
 urxvt.scrollBar: false
