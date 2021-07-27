@@ -8,6 +8,8 @@ alias clr="clear"
 alias cls="clear"
 alias nv="nvim"
 alias ..="cd .."
+alias unstow="stow -D"
+alias restow="stow -R"
 
 # Aliases for Git
 alias g="git"
@@ -47,6 +49,7 @@ alias grep='grep --color=auto'
 alias egrep='egrep --color=auto'
 alias fgrep='fgrep --color=auto'
 alias ip='ip -color=auto'
+alias diff='diff --color'
 
 # Alias help for ZSH builtins
 unalias run-help
@@ -55,9 +58,9 @@ HELPDIR=/usr/share/zsh/"${ZSH_VERSION}"/help
 alias help=run-help
 
 # Confirm before overwriting something
-alias cp="cp -i"
-alias mv='mv -i'
-alias rm='rm -i'
+alias cp="cp -iv"
+alias mv='mv -iv'
+alias rm='rm -iv'
 
 # Unsafe rm, mv and cp (no confirm)
 alias rmunsafe='rm'
