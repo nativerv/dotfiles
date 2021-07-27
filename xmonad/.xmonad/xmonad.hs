@@ -71,11 +71,8 @@ modMaskName modMask
   | otherwise = undefined
 
 myWorkspaces :: [String]        
-myWorkspaces = clickable . (map xmobarEscape) $ ["www", ">_", "vid", "game", "tool"]
+myWorkspaces = clickable . map xmobarEscape $ ["www", ">_", "vid", "game", "tool"]
   where                                                                       
-    -- clickable l = [ "<action=xdotool key super+" ++ show (n) ++ ">" ++ ws ++ "</action>" |
-                             -- (i,ws) <- zip [1..5] l, let n = i
-                  -- ]
     clickable workspaceList = 
       [
         concat [ "<action=xdotool key "
@@ -268,7 +265,7 @@ myKeybindings conf @ XConfig { XMonad.modMask = modMask } = M.fromList $
     , ((modMask              , xK_period), sendMessage (IncMasterN (-1))) -- %! Deincrement the number of windows in the master area
 
     -- quit, or restart
-    , ((modMask .|. shiftMask, xK_q     ), io (exitWith ExitSuccess)) -- %! Quit xmonad
+    , ((modMask .|. shiftMask, xK_q     ), io exitSuccess) -- %! Quit xmonad
     , ((modMask              , xK_q     ), spawn "if type xmonad; then xmonad --recompile && xmonad --restart; else xmessage xmonad not in \\$PATH: \"$PATH\"; fi") -- %! Restart xmonad
 
     -- Commented as `help` is not available
