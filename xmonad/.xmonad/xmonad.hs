@@ -42,7 +42,7 @@ main = do
     `additionalKeysP`
     myEzKeybindings
 
-myTerminal = "st"
+myTerminal = "st || xterm"
 myModMask = mod4Mask
 myBorderWidth = 0
 myOuterGapWidth = 15
