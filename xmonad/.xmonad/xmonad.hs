@@ -2,6 +2,7 @@ import XMonad
 import XMonad.Actions.Navigation2D
 import XMonad.Actions.FloatKeys
 import XMonad.Actions.CycleWS
+import XMonad.Actions.UpdatePointer
 import System.Exit
 import qualified Data.Map as M
 import qualified XMonad.StackSet as W
@@ -11,6 +12,7 @@ import XMonad.Hooks.SetWMName
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.ManageHelpers
 import XMonad.Hooks.DynamicLog
+import XMonad.Hooks.FadeInactive
 import XMonad.Layout.Gaps
 import XMonad.Layout.Spacing
 import XMonad.Layout.Tabbed
@@ -48,11 +50,24 @@ myBorderWidth = 0
 myOuterGapWidth = 15
 myInnerGapWidth = 5
 
-myLogHook dest = dynamicLogWithPP xmobarPP
+centerPointerLogHook :: X ()
+centerPointerLogHook = updatePointer (0.5, 0.5) (0, 0)
+
+xmobarLogHook :: Handle -> X()
+xmobarLogHook dest = dynamicLogWithPP xmobarPP
   { ppOutput = hPutStrLn dest
   , ppVisible = wrap "(" ")"
   , ppCurrent = wrap "[" "]"
   }
+
+fadeInactiveLogHook' :: X()
+fadeInactiveLogHook' = fadeInactiveLogHook 0.9
+
+myLogHook dest = 
+  centerPointerLogHook
+  <+> xmobarLogHook dest
+  <+> fadeInactiveLogHook'
+
 -- myFocusedBorderColor = "#10EEFF"
 myFocusedBorderColor = "#EEEEEE"
 -- , borderColor = "#0055FF"
