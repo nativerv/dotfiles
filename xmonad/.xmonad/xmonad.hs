@@ -214,6 +214,10 @@ myManageHook =
      , className =? "feh"                --> doFullFloat
      , className =? "Sxiv"               --> doFullFloat
      , className =? "Veracrypt"          --> doCenterFloat 
+     , isDialog                          --> doCenterFloat
+
+     -- , className =? "obs" <&&> title =? "Filter name"
+        -- --> doCenterFloat
 
      , className =? "Dragon-drag-and-drop"
         --> doCenterFloat
