@@ -1,0 +1,48 @@
+#!/bin/sh
+
+# unclutter\tunclutter &
+commands=$(
+cat <<EOF
+sxhkd\tsxhkd &
+dunst\tdunst &
+mpd\tmpd &
+nm-applet\tnm-applet &
+volumeicon\tvolumeicon &
+flameshot\tflameshot &
+trayer\ttrayer --edge top --align right --widthtype request --padding 6 --SetDockType true --SetPartialStrut true --expand true --monitor 1 --transparent true --alpha 0 --tint 0x33373F --height 18
+picom\tpicom --config "$HOME/.config/picom/picom.jonaburg.conf" &
+EOF
+)
+
+reload=false
+
+while getopts "r" opt; do
+  case "$opt" in
+    "r") reload=true ;;
+    "*") echo 'usage: xinit-daemons [-r]'; exit 1 ;;
+  esac
+done
+
+# Kill all already running daemons first
+echo "$commands" | cut -f1 | xargs -n1 -P4 killall
+
+# Start the daemons
+echo "$commands" | cut -f2 | xargs -d'\n' -n1 -P4 sh -c &
+
+
+# [ -z "$(pidof sxhkd)"      ] && sxhkd &
+# [ -z "$(pidof unclutter)"  ] && unclutter &
+# [ -z "$(pidof dunst)"      ] && dunst &
+# [ -z "$(pidof picom)"      ] && picom --config "$HOME/.config/picom/picom.jonaburg.conf" &
+# [ -z "$(pidof nm-applet)"  ] && nm-applet &
+# [ -z "$(pidof volumeicon)" ] && volumeicon &
+# [ -z "$(pidof flameshot)"  ] && flameshot &
+# [ -z "$(pidof trayer)"     ] && trayer --edge top \
+                                       # --align right \
+                                       # --widthtype request \
+                                       # --padding 6 \
+                                       # --SetDockType true \
+                                       # --SetPartialStrut true \
+                                       # --expand true --monitor 1 \
+                                       # --transparent true --alpha 0 \
+                                       # --tint 0x33373F --height 18
