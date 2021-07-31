@@ -1,0 +1,26 @@
+#!/bin/sh
+
+getch() {
+  old=$(stty -g)
+  stty raw -echo min 0 time 50
+  printf '%s' $(dd bs=1 count=1 2>/dev/null)
+  stty $old
+}
+
+PID=$$
+
+options=$(${@} | xargs -n1 | awk '{print ((NR-1))+1 ")", $0}')
+first=$(echo $options | head -n1 | cut -d' ' -f2)
+
+echo "Starting ${first}"
+echo "Press any key to select another WM..."
+
+answer=$(getch)
+
+([ -z ${answer} ] && ${first}) || print "Choose from:\n${options}"
+
+# -------------------------------------------------------------|| Stopped here
+#                                                              \/
+answer=$(getch)
+while [ ! echo "${answer}" | cut -d' ' -f1 | tr ')' '' | grep '' ]; do
+
