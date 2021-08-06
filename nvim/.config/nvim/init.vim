@@ -1,5 +1,3 @@
-""" Plugins 
-
 call plug#begin('~/.nvim/plugged')      " Specify a directory for plugins
 
 "Plug 'tsony-tsonev/nerdtree-git-plugin'
@@ -39,12 +37,14 @@ Plug 'ryanoasis/vim-devicons'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'airblade/vim-gitgutter'
-Plug 'ap/vim-css-color'
+Plug 'norcalli/nvim-colorizer.lua'
 
 " Other
 Plug 'metakirby5/codi.vim'
 Plug 'puremourning/vimspector'
 Plug 'OmniSharp/omnisharp-vim'
+Plug 'baskerville/vim-sxhkdrc'
+Plug 'neomake/neomake'
 
 call plug#end()
 
@@ -52,6 +52,8 @@ call plug#end()
 
 
 " Leader
+nnoremap <Space> <Nop>
+nmap <Space> <Leader>
 let g:mapleader = " "
 
 " CamelCaseMotion
@@ -60,9 +62,16 @@ let g:camelcasemotion_key = '<leader>'
 " Ranger
 let g:ranger_map_keys = 0
 
+" Neomake
+" normal mode (after 500ms; no delay when writing).
+call neomake#configure#automake('nrwi', 500)
+
 " outer world 
 set mouse=a
 set clipboard=unnamedplus
+set titlestring="%F - NeoVim"
+set title
+set titleold=
 
 " inner world
 set termguicolors
@@ -84,18 +93,22 @@ set langmap=ФИСВУАПРШОЛДЬТЩЗЙКЫЕГМЦЧНЯ;ABCDEFGHIJKLMNO
 " set langmap=ЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭ\ЯЧСМИТЬБЮ,йцукенгшщзхъфывапролджэ\ячсмитьбю.
             " QWERTYUIOP{}ASDFGHJKL:"|ZXCVBNM<>?qwertyuiop[]asdfghjkl;'\zxcvbnm,./
 
-	" The 'langmap' option is a list of parts, separated with commas.  Each
-	" part can be in one of two forms:
-	" 1.  A list of pairs.  Each pair is a "from" character immediately
-			" followed by the "to" character.  Examples: "aA", "aAbBcC".
-	" 2.  A list of "from" characters, a semi-colon and a list of "to"
-			" characters.  Example: "abc;ABC"
-	" Example: "aA,fgh;FGH,cCdDeE"
-	" Special characters need to be preceded with a backslash.  These are
-	" ";", ',', '"', '|' and backslash itself.
+" The 'langmap' option is a list of parts, separated with commas.  Each
+" part can be in one of two forms:
+" 1.  A list of pairs.  Each pair is a "from" character immediately
+"    followed by the "to" character.  Examples: "aA", "aAbBcC".
+" 2.  A list of "from" characters, a semi-colon and a list of "to"
+"    characters.  Example: "abc;ABC"
+" Example: "aA,fgh;FGH,cCdDeE"
+" Special characters need to be preceded with a backslash.  These are
+" ";", ',', '"', '|' and backslash itself.
 
 """ Plugins world
 
+" nvim-colorizer
+lua require'colorizer'.setup()
+
+" nerdtree
 let NERDSpaceDelims = 1
 
 let g:airline_theme = 'codedark'
@@ -123,42 +136,60 @@ set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
 
 """ Remaps 
 
-" Ranger
+" Make db adequate (not actually works in this form)
+"nnoremap db ldb
+
+" Make p in VISUAL adequate
+vnoremap p "_dP
+vnoremap P "_dP
+vnoremap <Leader>p ""p
+vnoremap <Leader>P ""P
+
+"" Ranger
 map <silent> <leader>v :Ranger<CR>
 
-" Easymotion
-" map <silent> <space> <leader><leader><leader>bdw
-
-" gb's
+"" gb's
 let g:VM_maps = {}
 let g:VM_maps['Find Under']         = 'gb'           " replace C-n
 let g:VM_maps['Find Subword Under'] = 'gb'           " replace C-n visual
 
-" Explorer pane
+"" vim-surround
+" surround word
+nmap S ysiw
+
+"" Explorer pane
 nmap <C-b> :NERDTreeToggle<CR>
 
-" GitGutter
+"" GitGutter
 nmap gz <Plug>(GitGutterPreviewHunk)
 nmap g[ <Plug>(GitGutterPrevHunk)
 nmap g] <Plug>(GitGutterNextHunk)
 
-" nmap <leader>f <plug>(easymotion-prefix)
+"" Easymotion
 
-" <Leader>f{char} to move to {char}
-map  <Leader>f <Plug>(easymotion-bd-f)
-nmap <Leader>f <Plug>(easymotion-overwin-f)
+" To word bidirectional
+nmap f <Plug>(easymotion-bd-w)
 
-" s{char}{char} to move to {char}{char}
-nmap s <Plug>(easymotion-overwin-f2)
+" " map <silent> <Space> <leader><leader><leader>bdw
 
-" Move to line
-map <Leader>L <Plug>(easymotion-bd-jk)
-nmap <Leader>L <Plug>(easymotion-overwin-line)
+" " nmap <leader>f <plug>(easymotion-prefix)
 
-" Move to word
-map  <Leader>w <Plug>(easymotion-bd-w)
-nmap <Leader>w <Plug>(easymotion-overwin-w)
-" Comments
+" " <Leader>f{char} to move to {char}
+" map  <Leader>f <Plug>(easymotion-bd-f)
+" nmap <Leader>f <Plug>(easymotion-overwin-f)
+
+" " s{char}{char} to move to {char}{char}
+" nmap s <Plug>(easymotion-overwin-f2)
+" nmap <Leader>f <Leader><Leader><Leader>bdw
+
+
+" " Move to line
+" map <Leader>L <Plug>(easymotion-bd-jk)
+" nmap <Leader>L <Plug>(easymotion-overwin-line)
+
+" nmap <Leader>w <Plug>(easymotion-overwin-w)
+
+" NERDComenter Comments
 vmap <C-_> <plug>NERDCommenterToggle
 nmap <C-_> <plug>NERDCommenterToggle
 
@@ -205,21 +236,21 @@ inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
 " Using CocList
 " Show all diagnostics
-" nnoremap <silent> <space>a  :<C-u>CocList diagnostics<cr>
+" nnoremap <silent> <Space>a  :<C-u>CocList diagnostics<cr>
 " " Manage extensions
-" nnoremap <silent> <space>e  :<C-u>CocList extensions<cr>
+" nnoremap <silent> <Space>e  :<C-u>CocList extensions<cr>
 " " Show commands
-" nnoremap <silent> <space>c  :<C-u>CocList commands<cr>
+" nnoremap <silent> <Space>c  :<C-u>CocList commands<cr>
 " " Find symbol of current document
-" nnoremap <silent> <space>o  :<C-u>CocList outline<cr>
+" nnoremap <silent> <Space>o  :<C-u>CocList outline<cr>
 " " Search workspace symbols
-" nnoremap <silent> <space>s  :<C-u>CocList -I symbols<cr>
+" nnoremap <silent> <Space>s  :<C-u>CocList -I symbols<cr>
 " " Do default action for next item.
-" nnoremap <silent> <space>j  :<C-u>CocNext<CR>
+" nnoremap <silent> <Space>j  :<C-u>CocNext<CR>
 " " Do default action for previous item.
-" nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
+" nnoremap <silent> <Space>k  :<C-u>CocPrev<CR>
 " " Resume latest coc list
-" nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
+" nnoremap <silent> <Space>p  :<C-u>CocListResume<CR>
 
 " Use <c-space> to trigger completion.
 inoremap <silent><expr> <c-space> coc#refresh()
@@ -302,25 +333,6 @@ command! -nargs=0 Prettier :CocCommand prettier.formatFile
 " run prettier on save
 "let g:prettier#autoformat = 0
 "autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.graphql,*.md,*.vue,*.yaml,*.html PrettierAsync
-
-
-" sync open file with NERDTree
-" " Check if NERDTree is open or active
-function! IsNERDTreeOpen()        
-  return exists("t:NERDTreeBufName") && (bufwinnr(t:NERDTreeBufName) != -1)
-endfunction
-
-" Call NERDTreeFind iff NERDTree is active, current window contains a modifiable
-" file, and we're not in vimdiff
-function! SyncTree()
-  if &modifiable && IsNERDTreeOpen() && strlen(expand('%')) > 0 && !&diff
-    NERDTreeFind
-    wincmd p
-  endif
-endfunction
-
-" Highlight currently open buffer in NERDTree
-autocmd BufEnter * call SyncTree()
 
 " coc config
 let g:coc_global_extensions = [
