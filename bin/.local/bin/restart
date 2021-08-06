@@ -1,0 +1,6 @@
+#!/bin/sh
+
+# Restarts passed program if it exists;
+# Starts it even if it wasn't running 
+
+[ -n "${1}" ] && (killall "${1}" ; nohup "${1}")

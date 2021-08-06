@@ -1,2 +1,3 @@
 #!/bin/sh
-betterlockscreen --lock blur
+# betterlockscreen --lock blur
+slock

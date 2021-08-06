@@ -1,0 +1,65 @@
+#!/bin/sh
+
+# This script does the following:
+#	Run by itself        -> cycle layout
+#	Given a valid layout -> set it
+
+layout_loc="${XDG_DATA_HOME:-$HOME/.local/share/}/layout"
+
+# Exit immideately if custom layout specifiet
+[ -n "${1}" ] && (echo "${1}" > "${layout_loc}" && exit 0)
+
+# Else, cycle 
+current_layout=$(cat "${layout_loc}" || echo "us")
+next_layout="us"
+
+case "${current_layout}" in
+  "us") next_layout="ru" ;;
+  "ru") next_layout="us" ;;
+     *) next_layout="us" ;;
+esac
+
+echo "${next_layout}" > "${layout_loc}"
+
+# setxkbmap "${next_layout}" 
+setxkbmap -layout "${next_layout}" -option 'grp:switch' -variant qwerty
+xinit-remaps
+
+# Some crap:
+# set -e
+
+# # Get list of valid keynoard layouts
+# valid_layouts=$(sed '/! variant/,/^$/!d;' < /usr/share/X11/xkb/rules/evdev.lst | tail -n+2 | awk '{print $2}' | tr -d ':' | uniq)
+
+# # Location of file where current layout will be stored.
+# layout_loc="${XDG_DATA_HOME:-$HOME/.local/share/}/layout"
+
+# ensure_valid() {
+  # echo "${valid_layouts}" | grep "${1}" || echo "setlayout: error: layout '${1}' does not exits" >&2 && exit 1
+# }
+
+# [ -n "${1}" ] && (ensure_valid "${1}" && echo "${1}" | tee "${layout_loc}" | exit 0)
+
+# # Location of file with enabled layout 
+# layouts_loc="${XDG_CONFIG_HOME:-$HOME/.config/X/}/xlayouts"
+
+# # Try to read layouts from config file; else use only 'us'
+# layouts_file_contents=$(cat layouts_loc || echo 'us')
+
+# # If it's empty, use 'us'
+# enabled_layouts=${layouts_file_contents:-"us"}
+
+# # Validate layouts in file and exit on nonexistent layout
+# #echo "${enabled_layouts}" | xargs -n1 sh -c 
+# for enabled_layout in ${enabled_layouts}; do
+  # ensure_valid "${enabled_layout}"
+# done
+
+# current_layout=$(cat "${layout_loc}")
+# current_layout_index=$(echo "${enabled_layouts}" | grep -n "${current_layout}" | cut -d: -f1)
+# enabled_layouts_count=$(echo "${enabled_layouts}" | wc -l)
+# next_layout=$(echo "(${current_layout_index} + 1) % ${enabled_layouts_count}" + 1 | bc | xargs -I{} sed '{}q;d')
+
+# echo "${next_layout}" | tee "${layout_loc}"
+
+# # xinit-remaps

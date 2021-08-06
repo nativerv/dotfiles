@@ -1,0 +1,4 @@
+#!/bin/sh
+
+echo "${XDG_CONFIG_HOME:-$HOME/.config}/sxhkd/sxhkdrc" | entr restart sxhkd
+# echo "${HOME}/.local/bin/xinit-config-hot-updaters" | entr restart xinit-config-hot-updaters
