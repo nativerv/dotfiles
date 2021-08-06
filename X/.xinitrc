@@ -2,14 +2,17 @@
 
 ### Loads on X server start
 
-# Wallpaper: 
-setbg &
+# Wallpaper
+setwall &
+
+# Remaps: caps to escape, keyboard layout switch, etc
+xinit-remaps &
 
 # Daemons: dunst, sxhkd, picom, etc
 xinit-daemons &
 
-# Remaps: caps to escape, keyboard layout switch, etc
-xinit-remaps &
+# Restart daemons on config change
+xinit-config-hot-updaters &
 
 # Load Xresources database
 xrdb &
