@@ -23,28 +23,6 @@ bindkey -a ds delete-surround
 bindkey -a ys add-surround
 bindkey -M visual S add-surround
 
-# Yank/Put to/from the system clipboard
-function vi-yank-xclip {
-  zle vi-yank
-  echo "$CUTBUFFER" | xclip -in -selection clipboard
-}
-
-function vi-put-before-xclip {
-  RBUFFER="$(xclip -out -selection clipboard)""$RBUFFER"
-}
-
-function vi-put-after-xclip {
-  RBUFFER="$RBUFFER""$(xclip -out -selection clipboard)"
-}
-
-zle -N vi-yank-xclip
-zle -N vi-put-before-xclip
-zle -N vi-put-after-xclip
-
-bindkey -M vicmd 'y' vi-yank-xclip
-bindkey -M vicmd 'P' vi-put-before-xclip
-bindkey -M vicmd 'p' vi-put-after-xclip
-
 # Change cursor shape for different vi modes.
 function zle-keymap-select () {
     case $KEYMAP in
