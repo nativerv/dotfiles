@@ -1,29 +1,35 @@
 import XMonad
+import qualified XMonad.StackSet as W
+
 import XMonad.Actions.Navigation2D
 import XMonad.Actions.FloatKeys
 import XMonad.Actions.CycleWS
 import XMonad.Actions.UpdatePointer
-import System.Exit
-import qualified Data.Map as M
-import qualified XMonad.StackSet as W
-import Data.Monoid
+
 import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.SetWMName
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.ManageHelpers
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.FadeInactive
+
 import XMonad.Layout.Gaps
 import XMonad.Layout.Spacing
 import XMonad.Layout.Tabbed
 import XMonad.Layout.ResizableTile
 import XMonad.Layout.NoBorders
+
 import XMonad.Config.Desktop
+
 import XMonad.Util.Run
 import XMonad.Util.SpawnOnce
 import XMonad.Util.EZConfig
 import XMonad.Util.Cursor
+
+import qualified Data.Map as M
+import Data.Monoid
 import System.IO
+import System.Exit
 
 main = do
   xmobarProc <- spawnPipe "killall; xmobar $HOME/.config/xmobar/xmobarrc"
@@ -43,8 +49,10 @@ main = do
     }
     `additionalKeysP`
     myEzKeybindings
+    `removeKeysP`
+    myEzRemovedKeybindings
 
-myTerminal = "st || xterm"
+myTerminal = "st"
 myModMask = mod4Mask
 myBorderWidth = 0
 myOuterGapWidth = 15
@@ -175,6 +183,13 @@ myEzKeybindings =
   , ("M-d c",          spawn "xmonad-recompile && xmonad-restart")
   ]
 
+myEzRemovedKeybindings :: [String]
+myEzRemovedKeybindings =
+  [
+      "M-q"
+    , "M-f"
+  ]
+  
 myStartupHook :: X ()
 myStartupHook = do
     setDefaultCursor xC_left_ptr
