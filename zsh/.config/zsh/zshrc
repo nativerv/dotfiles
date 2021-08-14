@@ -9,8 +9,8 @@ source "$ZDOTDIR/zsh_functions"
 zsh_add_file "zsh_exports"
 
 ################################################
-           ### PEEPOS, first of all...
-     [[ -o login ]] && random-pepe 2>/dev/null
+       ### PEEPOS, first of all...
+ [[ -o login ]] && random-pepe 2>/dev/null
 ################################################
 
 # Continue normally with mundane stuff...

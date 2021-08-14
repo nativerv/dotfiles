@@ -3,11 +3,11 @@
 #### XDG stuff ====================================
 
 # Taken from https://wiki.archlinux.org/index.php/XDG_Base_Directory
-XDG_CONFIG_HOME=$HOME/.config
-XDG_CACHE_HOME=$HOME/.cache
-XDG_DATA_HOME=$HOME/.local/share
-XDG_DATA_DIRS=/usr/local/share:/usr/share
-XDG_CONFIG_DIRS=/etc/xdg
+export XDG_CONFIG_HOME=$HOME/.config
+export XDG_CACHE_HOME=$HOME/.cache
+export XDG_DATA_HOME=$HOME/.local/share
+export XDG_DATA_DIRS=/usr/local/share:/usr/share
+export XDG_CONFIG_DIRS=/etc/xdg
  
 ### Shell history stuff ===========================
 
@@ -25,7 +25,7 @@ export MANWIDTH=999
 export PATH=$HOME/.cargo/bin:$PATH
 # Add GO modules
 export PATH=$HOME/.local/share/go/bin:$PATH
-#Add miniconda
+# Add miniconda
 export PATH=$HOME/.miniconda/bin:$PATH
 
 ### Systemwide stuff ==============================
