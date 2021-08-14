@@ -234,6 +234,9 @@ myManageHook =
      -- , className =? "obs" <&&> title =? "Filter name"
         -- --> doCenterFloat
 
+     , title =? "Task Manager - Chromium"
+        --> doDialogCenterFloat 
+
      , className =? "Dragon-drag-and-drop"
         --> doCenterFloat
 
