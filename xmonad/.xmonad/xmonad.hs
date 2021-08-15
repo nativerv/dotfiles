@@ -1,11 +1,20 @@
+{-# LANGUAGE AllowAmbiguousTypes, DeriveDataTypeable, TypeSynonymInstances, MultiParamTypeClasses #-}
+
+-- XMonad
 import XMonad
 import qualified XMonad.StackSet as W
 
+-- Actions
 import XMonad.Actions.Navigation2D
 import XMonad.Actions.FloatKeys
 import XMonad.Actions.CycleWS
 import XMonad.Actions.UpdatePointer
+import XMonad.Actions.Promote
+import XMonad.Actions.DynamicWorkspaces
+import XMonad.Actions.CopyWindow
+import XMonad.Actions.WithAll
 
+-- Hooks
 import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.SetWMName
 import XMonad.Hooks.ManageDocks
@@ -13,19 +22,24 @@ import XMonad.Hooks.ManageHelpers
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.FadeInactive
 
+-- Layout
 import XMonad.Layout.Gaps
 import XMonad.Layout.Spacing
 import XMonad.Layout.Tabbed
 import XMonad.Layout.ResizableTile
 import XMonad.Layout.NoBorders
 
+-- Config
 import XMonad.Config.Desktop
 
+-- Util
 import XMonad.Util.Run
 import XMonad.Util.SpawnOnce
 import XMonad.Util.EZConfig
 import XMonad.Util.Cursor
+import XMonad.Util.NamedActions
 
+-- Base
 import qualified Data.Map as M
 import Data.Monoid
 import System.IO
@@ -34,10 +48,18 @@ import System.Exit
 main = do
   xmobarProc <- spawnPipe "killall; xmobar $HOME/.config/xmobar/xmobarrc"
     
-  xmonad $ desktopConfig
+  xmonad
+    $ withNavigation2DConfig myNav2DConfig
+    $ addDescrKeys' ((myModMask, xK_F1), showKeybindings) myKeys
+    $ myConfig xmobarProc
+
+    `removeKeysP`
+    myEzRemovedKeybindings
+
+myConfig xmobarProc = 
+    desktopConfig
     { terminal           = myTerminal
     , modMask            = myModMask
-    , keys               = myKeybindings
     , borderWidth        = myBorderWidth
     , focusedBorderColor = myFocusedBorderColor
     , manageHook         = myManageHook
@@ -47,13 +69,12 @@ main = do
     , logHook            = myLogHook xmobarProc
     , startupHook        = myStartupHook
     }
-    `additionalKeysP`
-    myEzKeybindings
-    `removeKeysP`
-    myEzRemovedKeybindings
 
 myTerminal = "st"
+myLauncher = "dmenu_run"
+
 myModMask = mod4Mask
+
 myBorderWidth = 0
 myOuterGapWidth = 15
 myInnerGapWidth = 5
@@ -61,11 +82,35 @@ myInnerGapWidth = 5
 centerPointerLogHook :: X ()
 centerPointerLogHook = updatePointer (0.5, 0.5) (0, 0)
 
+myNav2DConfig = def
+    { defaultTiledNavigation    = centerNavigation
+    , floatNavigation           = centerNavigation
+    , screenNavigation          = lineNavigation
+    , layoutNavigation          = [("Full",          centerNavigation)
+    -- line/center same results   ,("Simple Tabs", lineNavigation)
+    --                            ,("Simple Tabs", centerNavigation)
+                                  ]
+    , unmappedWindowRect        = [("Full", singleWindowRect)
+    -- works but breaks tab deco  ,("Simple Tabs", singleWindowRect)
+    -- doesn't work but deco ok   ,("Simple Tabs", fullScreenRect)
+                                  ]
+    }
+
+-- Display keyboard mappings using zenity
+-- from https://github.com/thomasf/dotfiles-thomasf-xmonad/
+--              blob/master/.xmonad/lib/XMonad/Config/A00001.hs
+showKeybindings :: [((KeyMask, KeySym), NamedAction)] -> NamedAction
+showKeybindings x = addName "Show Keybindings" $ io $ do
+    zenityProc <- spawnPipe "yad --no-buttons --font=monospace --text --text-align center"
+    hPutStr zenityProc (unlines $ showKm x)
+    hClose zenityProc
+
 xmobarLogHook :: Handle -> X()
 xmobarLogHook dest = dynamicLogWithPP xmobarPP
   { ppOutput = hPutStrLn dest
   , ppVisible = wrap "(" ")"
   , ppCurrent = wrap "[" "]"
+  , ppVisibleNoWindows = Just id
   }
 
 fadeInactiveLogHook' :: X()
@@ -124,64 +169,111 @@ myLayoutHook =
 
 -- myLayoutHook = gaps [(U, myOuterGapWidth), (R, myOuterGapWidth), (D, myOuterGapWidth), (L, myOuterGapWidth)] $ Tall 1 (3/100) (1/2) ||| Full
 
-
 myHandleEventHook :: Event -> X All
 myHandleEventHook = handleEventHook def <+> docksEventHook
 
-myEzKeybindings :: [(String, X ())]
-myEzKeybindings =
+wsKeys = map show $ [1..9] ++ [0]
+
+-- myKeys :: XConfig l -> [((KeyMask, KeySym), NamedAction)]
+myKeys conf = 
+  let
+
+  subKeys str ks = subtitle str : mkNamedKeymap conf ks
+  screenKeys     = ["w","v","z"]
+  dirKeys        = ["j","k","h","l"]
+  dirs           = [ D,  U,  L,  R ]
+
+  -- Zip with modKey
+  zipM  modKey name keys actions f = zipWith (\key d -> (modKey ++ key, name $ f d)) keys actions
+  zipM' modKey name keys actions f b = zipWith (\key d -> (modKey ++ key, name $ f d b)) keys actions
+
+  in
+
+  subKeys "Window"
+  (
   [
-    -- Focus hotkeys
-    ("M-h",            windows W.focusUp)
-  , ("M-l",            windows W.focusDown)
-
-  -- Workspace Cycling hotkeys
-  , ("M-j",            moveTo Prev NonEmptyWS)
-  , ("M-k",            moveTo Next NonEmptyWS)
-
-  -- Window Swap hotkeys
-  , ("M-C-j",          windows W.swapDown)
-  , ("M-C-k",          windows W.swapUp)
-
-
-  -- Window Resize hotkeys
-  , ("M-S-h",          sendMessage Shrink)
-  , ("M-S-l",          sendMessage Expand)
-  , ("M-S-j",          sendMessage MirrorShrink)
-  , ("M-S-k",          sendMessage MirrorExpand)
-
-  -- Window Movement hotkeys
-  , ("M-S-w",          withFocused (keysMoveWindow ( 0, -3)))
-  , ("M-S-s",          withFocused (keysMoveWindow ( 0,  3)))
-  , ("M-S-a",          withFocused (keysMoveWindow (-3,  0)))
-  , ("M-S-d",          withFocused (keysMoveWindow ( 3,  0))) 
-
-  -- Window Floating Movement Hotkey
-  , ("M-M1-S-w",       withFocused (keysResizeWindow ( 0, -1) ( 0,  0)))
-  , ("M-M1-S-s",       withFocused (keysResizeWindow ( 0,  1) ( 0,  0)))
-  , ("M-M1-S-a",       withFocused (keysResizeWindow (-1, -0) ( 0,  1)))
-  , ("M-M1-S-d",       withFocused (keysResizeWindow ( 1,  0) ( 0,  0)))
-
-  -- Spacing hotkeys
-  , ("M--",            incScreenWindowSpacing 1)
-  , ("M-=",            incScreenWindowSpacing (-1))
-  , ("M-<Home>",       setScreenWindowSpacing myInnerGapWidth)
-
-  -- Screenshot hotkeys
-  , ("<Print>",    spawn "flameshot full --clipboard")
-  , ("C-<Print>",  spawn "flameshot gui")
-
-  -- Poweroff hotkeys
-  , ("M-q l",          spawn "lock")
-  , ("M-q q",          spawn "poweroff-ask")
-  , ("M-q r",          spawn "reboot-ask")
-  , ("M-q s",          spawn "suspend-ask")
-  , ("M-q h",          spawn "hibernate-ask")
-
-  -- Debug hotkeys
-  , ("M-d r",          spawn "xmonad-restart")
-  , ("M-d c",          spawn "xmonad-recompile && xmonad-restart")
+      ("M-<Backspace>"      , addName "Kill This Copy Of Focused"          kill1)
+    , ("M-S-<Backspace>"    , addName "Kill All Copies Of Focused"         kill)
+    , ("M-M1-<Backspace>"   , addName "Kill All On Current Workspace"      kill)
+    , ("M-b"                , addName "Promote To Master"                  promote)
+    , ("M-,"                , addName "Increment Master Size"              $ sendMessage (IncMasterN 1))
+    , ("M-."                , addName "Decrement Master Size"              $ sendMessage (IncMasterN (-1)))
+    , ("M-<Tab>"            , addName "Cycle Focus"                        $ windows W.focusDown)
+    , ("M-S-<Tab>"          , addName "Cycle Focus Back"                   $ windows W.focusUp)
+    , ("M-z m"              , addName "Focus Master"                       $ windows W.focusMaster)
+    , ("M-t"                , addName "Tile Window"                        $ withFocused $ windows . W.sink)
   ]
+    ++ zipM' "M-"            (addName "Navigate")                          dirKeys dirs windowGo True
+    ++ zipM' "M-C-"          (addName "Swap")                              dirKeys dirs windowSwap True
+    ++ zipM  "M-S-"          (addName "Move To Workspace")                 wsKeys [0..] (withNthWorkspace W.shift)
+    ++ zipM  "M-C-"          (addName "Copy To Workspace")                 wsKeys [0..] (withNthWorkspace copy)
+  )
+  ^++^
+
+  subKeys "Workspace"
+  (
+  [
+      ("M-i"                , addName "Cycle Left"                         $ moveTo Prev NonEmptyWS)
+    , ("M-o"                , addName "Cycle Right"                        $ moveTo Next NonEmptyWS)
+  ]
+    ++ zipM "M-"             (addName "Switch to workspace")               wsKeys [0..] (withNthWorkspace W.greedyView)
+ )
+  ^++^
+
+  subKeys "Layout"
+  [
+      ("M-<Space>"          , addName "Cycle Layout"                       $ sendMessage NextLayout) 
+    , ("M-S-<Space>"        , addName "Set Layout To Default"              $ setLayout (XMonad.layoutHook conf))
+  ]
+  ^++^
+
+  subKeys "Spawn"
+  [
+      ("M-S-<Return>"       , addName "Terminal"                           $ spawn myTerminal)
+    , ("M-p"                , addName "Launcher"                           $ spawn myLauncher)
+  ]
+   ^++^
+
+  subKeys "Resize"
+  [
+      ("M-S-h"              , addName "Resize Left"                        $ sendMessage Shrink)
+    , ("M-S-l"              , addName "Resize Right"                       $ sendMessage Expand)
+    , ("M-S-j"              , addName "Resize Down"                        $ sendMessage MirrorShrink)
+    , ("M-S-k"              , addName "Resize Up"                          $ sendMessage MirrorExpand)
+  ]
+  ^++^
+
+  subKeys "Spacing" 
+  [
+      ("M-["                , addName "Decrease Spacing"                   $ incScreenWindowSpacing 1)
+    , ("M-]"                , addName "Increase Spacing"                   $ incScreenWindowSpacing (-1))
+    , ("M-<Home>"           , addName "Reset Spacing"                      $ setScreenWindowSpacing myInnerGapWidth)
+
+  ] ^++^
+
+  subKeys "System" 
+  [
+      ("M-S-q"              , addName "Quit XMonad"                        $ io exitSuccess)
+    , ("M-d r"              , addName "Recompile XMonad"                   $ spawn "xmonad-restart")
+    , ("M-d c"              , addName "Restart XMonad"                     $ spawn "xmonad-recompile && xmonad-restart")
+  ]
+
+-- TODO
+  -- subKeys "Move"
+  -- (
+  -- [
+  -- ("M-S-w",                  addName "" $ withFocused (keysMoveWindow ( 0, -3)))
+  -- , ("M-S-s",                  addName "" $ withFocused (keysMoveWindow ( 0,  3)))
+  -- , ("M-S-a",                  addName "" $ withFocused (keysMoveWindow (-3,  0)))
+  -- , ("M-S-d",                  addName "" $ withFocused (keysMoveWindow ( 3,  0))) 
+  -- ]
+  -- )
+
+    -- -- Window Floating Movement Hotkey
+    -- , ("M-M1-S-w",                  addName "" $ withFocused (keysResizeWindow ( 0, -1) ( 0,  0)))
+    -- , ("M-M1-S-s",                  addName "" $ withFocused (keysResizeWindow ( 0,  1) ( 0,  0)))
+    -- , ("M-M1-S-a",                  addName "" $ withFocused (keysResizeWindow (-1, -0) ( 0,  1)))
+    -- , ("M-M1-S-d",                  addName "" $ withFocused (keysResizeWindow ( 1,  0) ( 0,  0)))
 
 myEzRemovedKeybindings :: [String]
 myEzRemovedKeybindings =
@@ -193,19 +285,6 @@ myEzRemovedKeybindings =
 myStartupHook :: X ()
 myStartupHook = do
     setDefaultCursor xC_left_ptr
-    -- spawnOnce "lxsession &"
-    spawnOnce "feh --randomize --bg-fill ~/pix/wall/* &"
-    spawnOnce "unclutter &"
-    spawnOnce "dunst &"
-    spawnOnce "picom --config $HOME/.config/picom/picom.jonaburg.conf &"
-    spawnOnce "nm-applet &"
-    spawnOnce "volumeicon &"
-    spawnOnce "flameshot &"
-    -- spawnOnce "conky -c $HOME/.config/conky/xmonad.conkyrc"
-    spawn "killall trayer; trayer --edge top --align right --widthtype request --padding 6 --SetDockType true --SetPartialStrut true --expand true --monitor 1 --transparent true --alpha 0 --tint 0x33373F --height 18"
-    -- spawnOnce "/usr/bin/emacs --daemon &" -- emacs daemon for the emacsclient
-    -- spawnOnce "kak -d -s mysession &"  -- kakoune daemon for better performance
-    -- spawnOnce "urxvtd -q -o -f &"      -- urxvt daemon for better performance
 
 doDialogCenterFloat :: Query (Endo WindowSet)
 doDialogCenterFloat = doRectFloat (W.RationalRect 0 0 0.6 0.6) >> doCenterFloat 
@@ -262,66 +341,3 @@ myManageHook =
      -- , className =? "qutebrowser"     --> doShift ( myWorkspaces !! 1 )
      -- , className =? "mpv"             --> doShift ( myWorkspaces !! 7 )
      -- , className =? "Gimp"            --> doShift ( myWorkspaces !! 8 )
-
--- All default keybindings from XMonad source code
--- Pasted here as api reference
-myKeybindings :: XConfig Layout -> M.Map (KeyMask, KeySym) (X ())
-myKeybindings conf @ XConfig { XMonad.modMask = modMask } = M.fromList $
-    -- launching and killing programs
-    [ ((modMask .|. shiftMask, xK_Return), spawn $ XMonad.terminal conf) -- %! Launch terminal
-    , ((modMask,               xK_p     ), spawn "dmenu_run") -- %! Launch dmenu
-    , ((modMask .|. shiftMask, xK_p     ), spawn "gmrun") -- %! Launch gmrun
-    , ((modMask .|. shiftMask, xK_c     ), kill) -- %! Close the focused window
-
-    , ((modMask,               xK_space ), sendMessage NextLayout) -- %! Rotate through the available layout algorithms
-    , ((modMask .|. shiftMask, xK_space ), setLayout $ XMonad.layoutHook conf) -- %!  Reset the layouts on the current workspace to default
-
-    , ((modMask,               xK_n     ), refresh) -- %! Resize viewed windows to the correct size
-
-    -- move focus up or down the window stack
-    , ((modMask,               xK_Tab   ), windows W.focusDown) -- %! Move focus to the next window
-    , ((modMask .|. shiftMask, xK_Tab   ), windows W.focusUp  ) -- %! Move focus to the previous window
-    , ((modMask,               xK_j     ), windows W.focusDown) -- %! Move focus to the next window
-    , ((modMask,               xK_k     ), windows W.focusUp  ) -- %! Move focus to the previous window
-    , ((modMask,               xK_m     ), windows W.focusMaster  ) -- %! Move focus to the master window
-
-    -- modifying the window order
-    , ((modMask,               xK_Return), windows W.swapMaster) -- %! Swap the focused window and the master window
-    , ((modMask .|. shiftMask, xK_j     ), windows W.swapDown  ) -- %! Swap the focused window with the next window
-    , ((modMask .|. shiftMask, xK_k     ), windows W.swapUp    ) -- %! Swap the focused window with the previous window
-
-    -- resizing the master/slave ratio
-    , ((modMask,               xK_h     ), sendMessage Shrink) -- %! Shrink the master area
-    , ((modMask,               xK_l     ), sendMessage Expand) -- %! Expand the master area
-
-    -- floating layer support
-    , ((modMask,               xK_t     ), withFocused $ windows . W.sink) -- %! Push window back into tiling
-
-    -- increase or decrease number of windows in the master area
-    , ((modMask              , xK_comma ), sendMessage (IncMasterN 1)) -- %! Increment the number of windows in the master area
-    , ((modMask              , xK_period), sendMessage (IncMasterN (-1))) -- %! Deincrement the number of windows in the master area
-
-    -- quit, or restart
-    , ((modMask .|. shiftMask, xK_q     ), io exitSuccess) -- %! Quit xmonad
-    , ((modMask              , xK_q     ), spawn "if type xmonad; then xmonad --recompile && xmonad --restart; else xmessage xmonad not in \\$PATH: \"$PATH\"; fi") -- %! Restart xmonad
-
-    -- Commented as `help` is not available
-    -- , ((modMask .|. shiftMask, xK_slash ), helpCommand) -- %! Run xmessage with a summary of the default keybindings (useful for beginners)
-    -- -- repeat the binding for non-American layout keyboards
-    -- , ((modMask              , xK_question), helpCommand) -- %! Run xmessage with a summary of the default keybindings (useful for beginners)
-    ]
-    ++
-    -- mod-[1..9] %! Switch to workspace N
-    -- mod-shift-[1..9] %! Move client to workspace N
-    [((m .|. modMask, k), windows $ f i)
-        | (i, k) <- zip (XMonad.workspaces conf) [xK_1 .. xK_9]
-        , (f, m) <- [(W.greedyView, 0), (W.shift, shiftMask)]]
-    ++
-    -- mod-{w,e,r} %! Switch to physical/Xinerama screens 1, 2, or 3
-    -- mod-shift-{w,e,r} %! Move client to screen 1, 2, or 3
-    [((m .|. modMask, key), screenWorkspace sc >>= flip whenJust (windows . f))
-        | (key, sc) <- zip [xK_w, xK_e, xK_r] [0..]
-        , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
-  -- where
-    -- helpCommand :: X ()
-    -- helpCommand = spawn ("printf " ++ show help ++ " | xmessage -file -")
