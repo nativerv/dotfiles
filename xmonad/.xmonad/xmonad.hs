@@ -86,7 +86,7 @@ myNav2DConfig = def
     { defaultTiledNavigation    = centerNavigation
     , floatNavigation           = centerNavigation
     , screenNavigation          = lineNavigation
-    , layoutNavigation          = [("Full",          centerNavigation)
+    , layoutNavigation          = [("Full", centerNavigation)
     -- line/center same results   ,("Simple Tabs", lineNavigation)
     --                            ,("Simple Tabs", centerNavigation)
                                   ]
@@ -203,8 +203,8 @@ myKeys conf =
     , ("M-z m"              , addName "Focus Master"                       $ windows W.focusMaster)
     , ("M-t"                , addName "Tile Window"                        $ withFocused $ windows . W.sink)
   ]
-    ++ zipM' "M-"            (addName "Navigate")                          dirKeys dirs windowGo True
-    ++ zipM' "M-C-"          (addName "Swap")                              dirKeys dirs windowSwap True
+    ++ zipM' "M-"            (addName "Navigate")                          dirKeys dirs windowGo False
+    ++ zipM' "M-C-"          (addName "Swap")                              dirKeys dirs windowSwap False
     ++ zipM  "M-S-"          (addName "Move To Workspace")                 wsKeys [0..] (withNthWorkspace W.shift)
     ++ zipM  "M-C-"          (addName "Copy To Workspace")                 wsKeys [0..] (withNthWorkspace copy)
   )
