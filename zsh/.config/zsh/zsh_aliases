@@ -10,6 +10,7 @@ alias nv="nvim"
 alias ..="cd .."
 alias unstow="stow -D"
 alias restow="stow -R"
+alias lz="lazygit"
 
 # Aliases for Git
 alias g="git"
