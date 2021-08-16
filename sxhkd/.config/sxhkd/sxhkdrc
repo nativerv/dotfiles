@@ -21,6 +21,12 @@ super + q ; {q,r,s,h,l}
 super + Pause
   pkill -USR1 -x sxhkd
 
+Print
+  flameshot full --clipboard
+
+control + Print
+  flameshot gui
+
 super + {minus,equal,m}
   pulsemixer {--change-volume -5,--change-volume +5,--toggle-mute}
 
