@@ -12,7 +12,7 @@ xinit-remaps &
 xinit-daemons &
 
 # Restart daemons on config change
-xinit-config-hot-updaters &
+#xinit-config-hot-updaters &
 
 # Load Xresources database
 xrdb &
