@@ -1,0 +1,25 @@
+
+name: xmonad-nrv
+version: 0.1.0
+synopsis: My XMonad Config
+# github: <yourname>/.xmonad
+# author: <yourname>
+# maintainer: <youremail>@example.com
+# copyright: © <yourname>
+license: GPL-3.0
+dependencies:
+  - X11
+  - base
+  - containers
+  - xmonad
+  - xmonad-contrib
+executables:
+  xmonad-x86_64-linux:
+    main: xmonad.hs
+    ghc-options:
+      - -Wall
+      - -fwarn-tabs
+      - -threaded
+      - -O2
+      - -with-rtsopts=-N4
+      - -haddock
