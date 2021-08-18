@@ -38,7 +38,7 @@ Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'airblade/vim-gitgutter'
 Plug 'norcalli/nvim-colorizer.lua'
-
+Plug 'yggdroot/indentline'
 " Other
 Plug 'metakirby5/codi.vim'
 Plug 'puremourning/vimspector'
@@ -80,6 +80,7 @@ set smarttab
 set cindent
 set tabstop=2
 set shiftwidth=2
+set cursorline 
 set expandtab         " always uses spaces instead of tab characters
 " set langmap=ФИСВУАПРШОЛДЬТЩЗЙКЫЕГМЦЧНЯ;ABCDEFGHIJKLMNOPQRSTUVWXYZ,фисвуапршолдьтщзйкыегмцчня;abcdefghijklmnopqrstuvwxyz
 " set langmap=QЙ,WЦ,EУ,RК,TЕ,YН,UГ,IШ,OЩ,PЗ,{Х,}Ъ,AФ,SЫ,DВ,FА,GП,HР,JО,KЛ,LД,:Ж,"Э,|/,ZЯ,XЧ,CС,VМ,BИ,NТ,MЬ,<Б,>Ю,?\,,qй,wц,eу,rк,tе,yн,uг,iш,oщ,pз,[х,]ъ,aф,sы,dв,fа,gп,hр,jо,kл,lд,;ж,'э,zя,xч,cс,vм,bи,nт,mь,\,б,.ю,/.
