@@ -45,12 +45,13 @@ import Data.Monoid
 import System.IO
 import System.Exit
 
+main :: IO ()
 main = do
-  xmobarProc <- spawnPipe "killall; xmobar $HOME/.config/xmobar/xmobarrc"
+  xmobarProc <- spawnPipe "killall xmobar; xmobar $HOME/.config/xmobar/xmobarrc"
     
   xmonad
     $ withNavigation2DConfig myNav2DConfig
-    $ addDescrKeys' ((myModMask, xK_F1), showKeybindings) myKeys
+    $ addDescrKeys' ((myModMask .|. shiftMask, xK_slash), showKeybindings) myKeys
     $ myConfig xmobarProc
 
     `removeKeysP`
@@ -70,21 +71,29 @@ myConfig xmobarProc =
     , startupHook        = myStartupHook
     }
 
+myTerminal :: String
 myTerminal = "st"
+
+myLauncher :: String
 myLauncher = "dmenu_run"
 
+myModMask :: KeyMask 
 myModMask = mod4Mask
 
+myBorderWidth :: Dimension
 myBorderWidth = 0
+
+myOuterGapWidth, myInnerGapWidth :: Integer
 myOuterGapWidth = 15
 myInnerGapWidth = 5
 
 centerPointerLogHook :: X ()
 centerPointerLogHook = updatePointer (0.5, 0.5) (0, 0)
 
+myNav2DConfig :: Navigation2DConfig
 myNav2DConfig = def
     { defaultTiledNavigation    = centerNavigation
-    , floatNavigation           = centerNavigation
+    , floatNavigation           = lineNavigation
     , screenNavigation          = lineNavigation
     , layoutNavigation          = [("Full", centerNavigation)
     -- line/center same results   ,("Simple Tabs", lineNavigation)
@@ -101,7 +110,7 @@ myNav2DConfig = def
 --              blob/master/.xmonad/lib/XMonad/Config/A00001.hs
 showKeybindings :: [((KeyMask, KeySym), NamedAction)] -> NamedAction
 showKeybindings x = addName "Show Keybindings" $ io $ do
-    zenityProc <- spawnPipe "yad --no-buttons --font=monospace --text --text-align center"
+    zenityProc <- spawnPipe "zenity --text-info"
     hPutStr zenityProc (unlines $ showKm x)
     hClose zenityProc
 
@@ -113,13 +122,13 @@ xmobarLogHook dest = dynamicLogWithPP xmobarPP
   , ppVisibleNoWindows = Just id
   }
 
-fadeInactiveLogHook' :: X()
+fadeInactiveLogHook' :: X ()
 fadeInactiveLogHook' = fadeInactiveLogHook 0.9
 
 myLogHook dest = 
   centerPointerLogHook
   <+> xmobarLogHook dest
-  <+> fadeInactiveLogHook'
+  -- <+> fadeInactiveLogHook'
 
 -- myFocusedBorderColor = "#10EEFF"
 myFocusedBorderColor = "#EEEEEE"
