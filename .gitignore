@@ -44,3 +44,17 @@ xmonad/.xmonad/xmonad-x86_64-linux
 lazygit/.config/lazygit/state.yml
 
 X/.Xauthority
+stack/.stack/global-project
+stack/.stack/pantry
+stack/.stack/programs
+stack/.stack/stack.sqlite3
+stack/.stack/stack.sqlite3.pantry-write-lock
+stack/.stack/snapshots
+
+bin/.local/bin/xmonad
+stack/.stack/setup-exe-src
+stack/.stack/setup-exe-cache/*
+
+xmonad/.xmonad/.stack-work
+xmonad/.xmonad/xmonad.state
+xmonad/.xmonad/xmonad
