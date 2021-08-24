@@ -1,10 +1,29 @@
 #!/bin/sh
 
 # This script does the following:
-#	Run by itself, set the wallpaper (at X start).
-#	If given a file, set that as the new wallpaper.
-#	If given a directory, choose random file in it.
-#	If wal is installed, also generates a colorscheme.
+#	setwall                ->  set the wallpaper (at X start).
+#	setwall <file>         ->  set that as the new wallpaper.
+#	setwall <directory>    ->  choose random file in it.
+#	[ wal is installed ? ] -+> also generate and set a wal colorscheme.
+
+help () {
+  echo "usage: ${1} [-s saturation] file"
+  echo ""
+  echo "-s saturation\tspecify wal saturation"
+  echo "--help\tprint this message"
+}
+
+saturation='0.5'
+
+while getopts 's:' option
+do case "${option}" in
+         s)	saturation="${OPTARG}" ;;
+    # --help) help "$@" ;;
+       [?]) help "$@"; exit 1 ;;
+  esac
+done
+
+shift $(($OPTIND - 1))
 
 # Location of link to wallpaper link.
 bgloc="${XDG_DATA_HOME:-$HOME/.local/share/}/wallpaper"
@@ -17,8 +36,11 @@ case "$(file --mime-type -b "$trueloc")" in
 esac
 
 # If pywal is installed, use it.
-command -v wal >/dev/null 2>&1 &&
-	wal -i "$trueloc" -o "${XDG_CONFIG_HOME:-$HOME/.config}/wal/postrun" >/dev/null 2>&1 &&
-	pidof dwm >/dev/null && xdotool key super+F12
+command -v wal >/dev/null 2>&1 || exit 0
+
+# >/dev/null 2>&1
+wal --saturate "${saturation}" -i "$trueloc" -o "${XDG_CONFIG_HOME:-$HOME/.config}/wal/postrun"  || (echo 'Error running `wal`'; exit 1)
+pidof nvim >/dev/null && killall -USR1 nvim
+pidof dwm >/dev/null && xdotool key super+F12
 
 xwallpaper --zoom "$bgloc"
