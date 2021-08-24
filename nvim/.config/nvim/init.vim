@@ -31,6 +31,7 @@ Plug 'HerringtonDarkholme/yats.vim' " TS Syntax
 Plug 'morhetz/gruvbox'
 Plug 'joshdick/onedark.vim'
 Plug 'tomasiser/vim-code-dark'
+Plug '~/pr/wal.vim'
 
 " Visuals
 Plug 'ryanoasis/vim-devicons'
@@ -50,6 +51,10 @@ call plug#end()
 
 """ Settings 
 
+" Theme
+" colorscheme gruvbox
+" colorscheme onedark
+colorscheme wal
 
 " Leader
 nnoremap <Space> <Nop>
@@ -109,27 +114,29 @@ set langmap=ФИСВУАПРШОЛДЬТЩЗЙКЫЕГМЦЧНЯ;ABCDEFGHIJKLMNO
 " nvim-colorizer
 lua require'colorizer'.setup()
 
-" nerdtree
+" Nerdtree
 let NERDSpaceDelims = 1
 
-let g:airline_theme = 'codedark'
+" Airline theme
+"let g:airline_theme = 'codedark'
+let g:airline_theme = 'wal'
+
+" Needed there cuz airline colors is wrong (not wal) without it
+colorscheme onedark
+
 let g:codedark_term256 = 1
 
-" from readme
-" if hidden is not set, TextEdit might fail.
+" If hidden is not set, TextEdit might fail.
 set hidden " Some servers have issues with backup files, see #649 set nobackup set nowritebackup " Better display for messages set cmdheight=2 " You will have bad experience for diagnostic messages when it's default 4000.
 set updatetime=300
 
-" don't give |ins-completion-menu| messages.
+" Don't give |ins-completion-menu| messages.
 set shortmess+=c
 
-" always show signcolumns
+" Always show signcolumns
 set signcolumn=yes
 
 autocmd FileType * set formatoptions-=o
-
-" colorscheme gruvbox
-colorscheme onedark
 
 " Add status line support, for integration with other plugin, checkout `:h coc-status`
 set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
@@ -362,6 +369,14 @@ endfunction
 
 " Highlight symbol under cursor on CursorHold
 autocmd CursorHold * silent call CocActionAsync('highlight')
+
+" Refresh `wal` theme on SIGUSR1
+autocmd Signal SIGUSR1 call RefreshWalTheme()
+function RefreshWalTheme()
+  source ~/.cache/wal/colors-wal.vim
+  :AirlineTheme wal 
+  :redraw
+endfunction
 
 augroup mygroup
   autocmd!
