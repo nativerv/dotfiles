@@ -1,7 +1,11 @@
-call plug#begin('~/.nvim/plugged')      " Specify a directory for plugins
+"     _____   _____________    ________  ___
+"    /  _/ | / /  _/_  __/ |  / /  _/  |/  /
+"    / //  |/ // /  / /  | | / // // /|_/ /
+"  _/ // /|  // /  / /  _| |/ // // /  / /
+" /___/_/ |_/___/ /_/  (_)___/___/_/  /_/
 
-"Plug 'tsony-tsonev/nerdtree-git-plugin'
-"Plug 'prettier/vim-prettier', { 'do': 'yarn install' }
+" Specify a directory for plugins
+call plug#begin('~/.local/share/nvim/plugged')
 
 " Text edit
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
