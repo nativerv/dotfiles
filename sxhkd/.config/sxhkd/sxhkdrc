@@ -9,23 +9,23 @@
 # 
 # The valid modifier names are: super, hyper, meta, alt, control, ctrl, shift, mode_switch, lock, mod1, mod2, mod3, mod4, mod5 and any.
 
+### Open a program 
+
+super + shift + o ; t ; {p}
+  {keepassxc}
+
 super + shift + o ; b ; {b,f,t}
   {chromium,firefox,torbrowser-launcher}
 
-super + q ; {q,r,s,h,l}
-  {poweroff-ask,reboot-ask,suspend-ask,hibernate-ask,lock}
-
-# super + F5
-  # {setlayout}
-
-super + Pause
-  pkill -USR1 -x sxhkd
+### Screenshot 
 
 Print
   flameshot full --clipboard
 
 control + Print
   flameshot gui
+
+### Music/Sound
 
 super + {minus,equal,m}
   pulsemixer {--change-volume -5,--change-volume +5,--toggle-mute}
@@ -35,3 +35,18 @@ super + shift + {minus,equal}
 
 super + {F5,F6,F7,F8}
   mpc {prev,toggle,toggle,next}
+
+### System
+
+# Shutdown/reboot/suspend/hibernate/lock
+super + q ; {q,r,s,h,l}
+  {poweroff-ask,reboot-ask,suspend-ask,hibernate-ask,lock}
+
+# Change input language
+# super + `
+super + grave:
+  xkblayout-state set +1
+
+# Reload sxhkd config
+super + Pause
+  pkill -USR1 -x sxhkd
