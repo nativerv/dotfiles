@@ -19,5 +19,4 @@ xrdb &
 
 # Choose your Window Manager...
 exec xmonad 
-
 #exec dwm 
