@@ -2,5 +2,13 @@
 
 # Pass 'prefers-color-scheme: dark' to sites to enable 
 # their native dark mode if present
-/bin/chromium --enable-features=WebUIDarkMode --force-dark-mode $@
+# Also enable dark mode in chrome:// pages
+
+# DARK_MODE_ARGS='--enable-features=WebUIDarkMode --force-dark-mode'
+
+if command -v 'firejail'; then
+  firejail --profile=chromium /usr/bin/chromium --enable-features=WebUIDarkMode --force-dark-mode "${@}"
+else
+  /bin/chromium --enable-features=WebUIDarkMode --force-dark-mode "${@}"
+fi
 
