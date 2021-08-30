@@ -84,8 +84,10 @@ set titleold=
 
 " inner world
 set termguicolors
+" set t_Co=16
 set number relativenumber
 set smarttab
+set ignorecase
 set cindent
 set tabstop=2
 set shiftwidth=2
