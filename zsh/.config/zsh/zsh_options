@@ -2,21 +2,31 @@
 
 # some useful options (man zshoptions)
 setopt extendedglob nomatch menucomplete notify incappendhistory sharehistory
+
 setopt interactive_comments
-unsetopt autocd beep
+
+# Don't paste first option automatically when autocompleting
+setopt nomenucomplete
+
+# Disable beep on error
+unsetopt beep
+
+# Disable cd by typing path only
+unsetopt autocd 
 
 # Disable ctrl-s to freeze terminal.
 stty stop undef
-zle_highlight=('paste:none')
+#zle_highlight=('paste:none')
 
-# completions
+# Enable completions
 autoload -Uz compinit
-# zstyle ':completion:*' menu select
+
+#zstyle ':completion:*' menu select
 zstyle ':completion:*' matcher-list '' \
   'm:{a-z\-}={A-Z\_}' \
   'r:[^[:alpha:]]||[[:alpha:]]=** r:|=* m:{a-z\-}={A-Z\_}' \
   'r:|?=** m:{a-z\-}={A-Z\_}'
-# zstyle ':completion::complete:lsof:*' menu yes select
+#zstyle ':completion::complete:lsof:*' menu yes select
 zmodload zsh/complist
 compinit
 _comp_options+=(globdots)		# Include hidden files.
@@ -26,10 +36,10 @@ autoload -U down-line-or-beginning-search
 zle -N up-line-or-beginning-search
 zle -N down-line-or-beginning-search
 
-# Colors
+# Enable colors
 autoload -Uz colors && colors
 
 # Edit line in vim with ctrl-e:
-autoload edit-command-line;
-zle -N edit-command-line
-# bindkey '^e' edit-command-line
+#autoload edit-command-line;
+#zle -N edit-command-line
+#bindkey '^e' edit-command-line

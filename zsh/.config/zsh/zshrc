@@ -1,9 +1,9 @@
 #!/bin/sh
 
 # Functions necessary to run this config
-source "$ZDOTDIR/zsh_functions"
+source "${ZDOTDIR}/zsh_functions"
 
-### Source all the files
+### Source all config files
 
 # All of below depend on `zsh_functions`
 zsh_add_file "zsh_exports"
@@ -26,7 +26,16 @@ zsh_add_file "zsh_plugins"
 # Enable profiling
 zmodload zsh/zprof
 
+# Enable pywal colors in terminal by pasting 
+# their escape sequences to it
+(cat ~/.cache/wal/sequences &)
+
 ### Start X on login
+
+RED='\033[0;31m'
+NC='\033[0m' # No Color
+
+ERROR="${RED}ERROR: ${NC}"
 
 maybe_startx () {
 
@@ -37,26 +46,26 @@ maybe_startx () {
 
   # Trow to shell if not on first TTY
   if [ ! "$(tty)" = '/dev/tty1' ]; then
-    echo "ERROR: You are not in the first TTY. X server won't start."
+    echo "${ERROR}You are not in the first TTY. X server won't start."
     echo "Leaving you in the shell."
     return;
   fi
 
   # Throw to shell if `DISPLAY` is already set
-  if ! [ -z $DISPLAY ]; then
-    echo "ERROR: \`DISPLAY\` is already set. X server already running on this TTY and you seeng this message. Something wrong."
+  if ! [ -z "${DISPLAY}" ]; then
+    echo "${ERROR}ERROR: \`DISPLAY\` is already set. X server already running on this TTY and you seeng this message. Something wrong."
     echo "Leaving you in the shell."
     return
   fi
 
   # Throw to shell if `startx` is missing
   if [ ! -x /bin/startx ]; then
-    echo "ERROR: Seems like the X server is not installed or not properly installed: \`startx\` is not in your \`PATH\`. X server won't start."
+    echo "${ERROR}: Seems like the X server is not installed or not properly installed: \`startx\` is not in your \`PATH\`. X server won't start."
     echo "Leaving you in the shell."
     return
   fi
 
-  exec startx >> $HOME/.local/share/xinitrc/xinitrc.log 2>> $HOME/.local/share/xinitrc/xinitrc.error.log
+  exec startx >> "${HOME}/.local/share/xinitrc/xinitrc.log" 2>> "${HOME}/.local/share/xinitrc/xinitrc.error.log"
 }
 
 # Only start if `DISPLAY == "" && startx`

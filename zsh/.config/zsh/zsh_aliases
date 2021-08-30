@@ -13,6 +13,8 @@ alias restow="stow -R"
 alias lz="lazygit"
 alias lyrics="ncmpcpp --screen lyrics"
 alias visualizer="ncmpcpp --screen visualizer"
+alias pac="pacman"
+alias sudo="sudo "
 
 # Aliases for Git
 alias g="git"

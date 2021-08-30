@@ -9,11 +9,15 @@ export XDG_DATA_HOME=$HOME/.local/share
 export XDG_DATA_DIRS=/usr/local/share:/usr/share
 export XDG_CONFIG_DIRS=/etc/xdg
  
-### Shell history stuff ===========================
+### Zsh history stuff ===========================
 
-HISTFILE=$XDG_CONFIG_HOME/zsh/.zhistory
-HISTSIZE=1000000
-SAVEHIST=1000000
+HISTFILEDIR="${XDG_DATA_HOME}/zsh"
+HISTFILE="${HISTFILEDIR}/.zhistory"
+# Seems like Zsh is not smart enough to do this automatically:
+[ ! -d "${HISTFILEDIR}" ] && mkdir "${HISTFILEDIR}"
+
+HISTSIZE=100000000
+SAVEHIST=100000000
 
 ### Path stuff ====================================
 # Add binaries from HOME
@@ -35,11 +39,12 @@ export PATH=$HOME/.miniconda/bin:$PATH
 
 # Truecolor
 # Turned out to be unnecessary with `st`
-# export TERM="xterm-256color"
+#export TERM="xterm-256color"
 
-# Less color
+# Less: enable color, disable history
 export LESS='-R --use-color -Dd+r$Du+b'
 export LESSOPEN="| /usr/bin/source-highlight-esc.sh %s"
+export LESSHISTSIZE=0
 
 ### Language-specific stuff =======================
 
@@ -56,7 +61,7 @@ export GOPATH=$HOME/.local/share/go
 export PATH="$HOME/.stack/bin:$HOME/.cabal/bin:$HOME/.ghcup/bin:$PATH"
 
 # Setup NVM
-export NVM_DIR="$HOME/.nvm"
+export NVM_DIR="${XDG_DATA_HOME}/nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
