@@ -35,6 +35,8 @@ case "$(file --mime-type -b "$trueloc")" in
 	*) notify-send "Error" "Not a valid image." ; exit 1;;
 esac
 
+xwallpaper --zoom "$bgloc"
+
 # If pywal is installed, use it.
 command -v wal >/dev/null 2>&1 || exit 0
 
@@ -43,4 +45,3 @@ wal --saturate "${saturation}" -i "$trueloc" -o "${XDG_CONFIG_HOME:-$HOME/.confi
 pidof nvim >/dev/null && killall -USR1 nvim
 pidof dwm >/dev/null && xdotool key super+F12
 
-xwallpaper --zoom "$bgloc"
