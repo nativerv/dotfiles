@@ -58,3 +58,6 @@ stack/.stack/setup-exe-cache/*
 xmonad/.xmonad/.stack-work
 xmonad/.xmonad/xmonad.state
 xmonad/.xmonad/xmonad
+bin/.local/bin/xmobar
+xmobar/.config/xmobar/dist-newstyle
+newsboat/.config/newsboat/urls
