@@ -15,6 +15,8 @@ alias lyrics="ncmpcpp --screen lyrics"
 alias visualizer="ncmpcpp --screen visualizer"
 alias pac="pacman"
 alias sudo="sudo "
+alias you="youtube-dl"
+alias mkdir="mkdir -p"
 
 # Aliases for Git
 alias g="git"
