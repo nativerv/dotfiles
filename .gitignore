@@ -61,3 +61,4 @@ xmonad/.xmonad/xmonad
 bin/.local/bin/xmobar
 xmobar/.config/xmobar/dist-newstyle
 newsboat/.config/newsboat/urls
+mpv/.config/mpv/watch_later
