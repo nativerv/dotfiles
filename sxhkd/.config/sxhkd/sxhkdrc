@@ -25,6 +25,16 @@ Print
 control + Print
   flameshot gui
 
+### Dmenu
+
+# Emoji: copy
+super + period:
+  dmenu_unicode
+
+# Emoji: type
+super + control + period:
+  dmenu_unicode -t
+
 ### Music/Sound
 
 super + {minus,equal,m}
