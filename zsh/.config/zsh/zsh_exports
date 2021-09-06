@@ -20,15 +20,22 @@ HISTSIZE=100000000
 SAVEHIST=100000000
 
 ### Path stuff ====================================
+
 # Add binaries from HOME
 export PATH="$HOME/.local/bin":$PATH
+
 # Make nvim open man pages 
-[ -x /bin/nvim ] && export MANPAGER='nvim +Man!'
+#[ -x /bin/nvim ] && export MANPAGER='nvim +Man!'
+export MANPAGER=less
+
 export MANWIDTH=999
+
 # Add Rust modules 
 export PATH=$HOME/.cargo/bin:$PATH
+
 # Add GO modules
 export PATH=$HOME/.local/share/go/bin:$PATH
+
 # Add miniconda
 export PATH=$HOME/.miniconda/bin:$PATH
 
