@@ -1,9 +1,12 @@
-Sxiv.background: #282C34
+#include ".cache/wal/colors.Xresources" 
+! Sxiv.background: #282C34
+
+! *.background: #FFAAAA
 
 !! Appearance
 urxvt.termName: rxvt-unicode
 urxvt.scrollBar: false
-urxvt.background: #282C34
+! urxvt.background: #282C34
 urxvt.foreground: gray
 !! Font prefferenes
 urxvt.font: xft:FiraCode Nerd Font Mono:pixelsize=13

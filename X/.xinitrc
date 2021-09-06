@@ -15,7 +15,7 @@ xinit-daemons &
 #xinit-config-hot-updaters &
 
 # Load Xresources database
-xrdb &
+xrdb -I"$HOME" ~/.Xresources
 
 # Choose your Window Manager...
 exec xmonad 
