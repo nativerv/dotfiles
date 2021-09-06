@@ -1,0 +1,33 @@
+#!/bin/sh
+
+# The famous "get a menu of emojis to copy" script.
+
+EMOJI_FILE="${XDG_DATA_HOME:-$HOME/.local/share}/dmenu_unicode/emoji"
+
+is_type_mode="\t"	# default separator is tab
+
+dmenu_prompt='Copy emoji:'
+
+while getopts t o; do
+  case "$o" in
+	  t)	dmenu_prompt="Paste emoji:" ;;
+	[?])	print >&2 "usage: $0 [-s] [-d seplist] file ..."; exit 1 ;;
+	esac
+done
+shift $((OPTIND - 1))
+
+
+# Get user selection via dmenu from emoji file.
+chosen=$(cut -d ';' -f1 "${EMOJI_FILE}" | dmenu -p "${dmenu_prompt:-Emoji}" -i -l 30 | sed "s/ .*//")
+
+# Exit if none chosen.
+[ -z "$chosen" ] && exit
+
+# If you run this command with an argument, it will automatically insert the
+# character. Otherwise, show a message that the emoji has been copied.
+if [ -n "$1" ]; then
+	xdotool type "$chosen"
+else
+	printf "$chosen" | xclip -selection clipboard
+	notify-send "'$chosen' copied to clipboard." &
+fi

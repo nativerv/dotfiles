@@ -10,7 +10,6 @@ nm-applet\tnm-applet &
 xautolock\txautolock -time 10 -locker slock &
 volumeicon\tvolumeicon &
 flameshot\tflameshot &
-trayer\ttrayer --edge top --align right --widthtype request --padding 6 --SetDockType true --SetPartialStrut true --expand true --monitor 1 --transparent true --alpha 0 --tint 0x33373F --height 18
 picom\tpicom --config "$HOME/.config/picom/picom.jonaburg.conf" &
 EOF
 )
