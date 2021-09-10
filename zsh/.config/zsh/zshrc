@@ -65,7 +65,7 @@ maybe_startx () {
     return
   fi
 
-  exec startx >> "${HOME}/.local/share/xinitrc/xinitrc.log" 2>> "${HOME}/.local/share/xinitrc/xinitrc.error.log"
+  exec startx "${XINITRC}" >>"${XDG_DATA_HOME}/xinitrc/xinitrc.log" 2>>"${XDG_DATA_HOME}/xinitrc/xinitrc.error.log"
 }
 
 # Only start if `DISPLAY == "" && startx`

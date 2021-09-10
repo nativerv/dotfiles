@@ -53,6 +53,11 @@ export LESS='-R --use-color -Dd+r$Du+b'
 export LESSOPEN="| /usr/bin/source-highlight-esc.sh %s"
 export LESSHISTSIZE=0
 
+### Move individual applications' directories to XDG Base Dirs
+
+# X11
+export XINITRC="${XDG_CONFIG_HOME}/x11/xinitrc"
+export XSERVERRC="${XDG_CONFIG_HOME}/x11/xserverrc"
 ### Language-specific stuff =======================
 
 # Setup DotNet

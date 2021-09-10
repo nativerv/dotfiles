@@ -3,6 +3,8 @@
 
 ! *.background: #FFAAAA
 
+! *.font: xft:Noto Sans Mono Regular Nerd Font Complete:pixelsize=12:antialias=true
+
 !! Appearance
 urxvt.termName: rxvt-unicode
 urxvt.scrollBar: false
