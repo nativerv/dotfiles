@@ -176,7 +176,7 @@ set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
 "nnoremap db ldb
 
 " Make p in VISUAL adequate
-vnoremap p "_dp
+vnoremap p "_dP
 vnoremap P "_dP
 vnoremap <Leader>p ""p
 vnoremap <Leader>P ""P
