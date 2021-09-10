@@ -1,5 +1,9 @@
 #!/bin/sh
 
+ensure_dir() {
+  [ ! -d "${1}" ] && mkdir -p "${1}"
+}
+
 #### XDG stuff ====================================
 
 # Taken from https://wiki.archlinux.org/index.php/XDG_Base_Directory
@@ -13,22 +17,15 @@ export XDG_CONFIG_DIRS=/etc/xdg
 
 HISTFILEDIR="${XDG_DATA_HOME}/zsh"
 HISTFILE="${HISTFILEDIR}/.zhistory"
-# Seems like Zsh is not smart enough to do this automatically:
-[ ! -d "${HISTFILEDIR}" ] && mkdir "${HISTFILEDIR}"
+ensure_dir "${HISTFILEDIR}"
 
-HISTSIZE=100000000
-SAVEHIST=100000000
+export HISTSIZE=100000000
+export SAVEHIST=100000000
 
 ### Path stuff ====================================
 
 # Add binaries from HOME
 export PATH="$HOME/.local/bin":$PATH
-
-# Make nvim open man pages 
-#[ -x /bin/nvim ] && export MANPAGER='nvim +Man!'
-export MANPAGER=less
-
-export MANWIDTH=999
 
 # Add Rust modules 
 export PATH=$HOME/.cargo/bin:$PATH
@@ -39,14 +36,14 @@ export PATH=$HOME/.local/share/go/bin:$PATH
 # Add miniconda
 export PATH=$HOME/.miniconda/bin:$PATH
 
-### Systemwide stuff ==============================
+### Systemwide stuff        =======================
+
+# Default MANPAGER
+export MANPAGER=less
+export MANWIDTH=999
 
 # Default EDITOR
 [ -x /usr/bin/nvim ] && export EDITOR=/usr/bin/nvim
-
-# Truecolor
-# Turned out to be unnecessary with `st`
-#export TERM="xterm-256color"
 
 # Less: enable color, disable history
 export LESS='-R --use-color -Dd+r$Du+b'
@@ -61,6 +58,20 @@ export XSERVERRC="${XDG_CONFIG_HOME}/x11/xserverrc"
 
 # GTK2: Move config to XDG_CONFIG_HOME
 export GTK2_RC_FILES="${XDG_CONFIG_HOME}/gtk-2.0/gtkrc-2.0"
+
+# OpenSSL
+export OPENSSL_DATA_HOME="${XDG_DATA_HOME}/openssl"
+export RANDFILE="${OPENSSL_DATA_HOME}"
+ensure_dir "${OPENSSL_DATA_HOME}"
+
+# Pass
+export PASSWORD_STORE_DIR="${XDG_DATA_HOME}/pass"
+
+# NodeJS
+export NODE_DATA_DIR="${XDG_DATA_HOME}/nodejs"
+export NODE_REPL_HISTORY="${NODE_DATA_DIR}/node_repl_history" # This moves node_repl_history to XDG_DATA_HOME
+ensure_dir "${NODE_DATA_DIR}"
+
 ### Language-specific stuff =======================
 
 # Setup DotNet
@@ -70,20 +81,17 @@ export DOTNET_CLI_TELEMETRY_OPTOUT=1
 export GOPATH=$HOME/.local/share/go
 
 # Setup Rust
-[ -s $HOME/.cargo/env ] && source $HOME/.cargo/env
+[ -s "${HOME}/.cargo/env" ] && source "${HOME}/.cargo/env"
 
 # Setup Haskell
 export PATH="$HOME/.stack/bin:$HOME/.cabal/bin:$HOME/.ghcup/bin:$PATH"
 
-# Setup NVM
+# Setup NVM and NodeJS
 export NVM_DIR="${XDG_DATA_HOME}/nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
-# Setup PyEnv
+# Setup PyEnv and Python
+eval "$(pip completion --zsh)" # Enable zsh completion for pip 
 export PYENV_ROOT="$HOME/.pyenv"
 export PATH="$PYENV_ROOT/bin:$PATH"
-
-#eval "$(fnm env)"
-#eval "$(zoxide init zsh)"
-#eval "`pip completion --zsh`"

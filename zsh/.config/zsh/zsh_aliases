@@ -17,6 +17,7 @@ alias pac="pacman"
 alias sudo="sudo "
 alias you="youtube-dl"
 alias mkdir="mkdir -p"
+alias bs="bullshit"
 
 # Aliases for Git
 alias g="git"
