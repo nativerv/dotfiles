@@ -1,0 +1,5 @@
+# whitelist ${HOME}/.local/share/surf
+# noblacklist ${HOME}/.local/share/surf
+# noblacklist ${HOME}/.local/share
+# whitelist ${HOME}/.local/share
+# blacklist ${HOME}/.local/share/*

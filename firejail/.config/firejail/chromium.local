@@ -1,0 +1,5 @@
+blacklist ${HOME}/.bashrc
+ignore blacklist ${VIDEOS}
+whitelist ${VIDEOS}
+noblacklist ${VIDEOS}
+ignore mkdir ${HOME}/.pki

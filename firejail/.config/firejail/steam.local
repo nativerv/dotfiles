@@ -1,0 +1,26 @@
+# Fix ESO (probably dont needed, i include this just in case)
+noblacklist ${HOME}/.local/share/Steam/steamapps
+noblacklist ${HOME}/.local/share/Steam/steamapps/common
+noblacklist ${HOME}/.local/share/Steam/steamapps/common/Zenimax Online
+
+# Prevent Steam from flooding your $HOME and $XDG_DATA_HOME
+ignore mkdir ${HOME}/.config/Epic
+ignore mkdir ${HOME}/.config/Loop_Hero
+ignore mkdir ${HOME}/.config/ModTheSpire
+ignore mkdir ${HOME}/.config/RogueLegacy
+ignore mkdir ${HOME}/.config/unity3d
+ignore mkdir ${HOME}/.killingfloor
+ignore mkdir ${HOME}/.klei
+ignore mkdir ${HOME}/.local/share/3909/PapersPlease
+ignore mkdir ${HOME}/.local/share/aspyr-media
+ignore mkdir ${HOME}/.local/share/bohemiainteractive
+ignore mkdir ${HOME}/.local/share/cdprojektred
+ignore mkdir ${HOME}/.local/share/SteamWorldDig
+ignore mkdir ${HOME}/.local/share/SteamWorld Dig 2
+ignore mkdir ${HOME}/.local/share/SuperHexagon
+ignore mkdir ${HOME}/.local/share/Dredmor
+ignore mkdir ${HOME}/.local/share/FasterThanLight
+ignore mkdir ${HOME}/.local/share/feral-interactive
+ignore mkdir ${HOME}/.local/share/IntoTheBreach
+ignore mkdir ${HOME}/.mbwarband
+ignore mkdir ${HOME}/.paradoxinteractive

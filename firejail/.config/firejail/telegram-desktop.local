@@ -1,0 +1,14 @@
+# Telegram-desktop local firejail profile
+
+# Disable mic access
+private-dev
+#nosound
+novideo
+
+# TODO: Remove this after moving to hydrus/sorting vid dir
+#ignore blacklist ${VIDEOS}
+noblacklist ${VIDEOS}
+whitelist ${VIDEOS}
+ignore whitelist ${DOWNLOADS}
+
+ignore mkdir ${HOME}/.TelegramDesktop
