@@ -74,7 +74,10 @@ maybe_startx () {
     return
   fi
 
-  exec startx "${XINITRC}" >>"${XDG_DATA_HOME}/xinitrc/xinitrc.log" 2>>"${XDG_DATA_HOME}/xinitrc/xinitrc.error.log"
+  LOGDIR="${XDG_DATA_HOME}/xinitrc"
+
+  [ ! -d "${LOGDIR}" ] && (mkdir "${LOGDIR}"; echo 'This is a custom `.xinitrc` log location. See `maybe_startx` in `~/.config/zsh/zshrc`' > "${LOGDIR}/README.md")
+  exec startx >>"${LOGDIR}/xinitrc.error.log" 2>>"${LOGDIR}/xinitrc.error.log"
 }
 
 # Only start if `DISPLAY == "" && tty == tty1 && startx`
