@@ -72,8 +72,10 @@ let g:camelcasemotion_key = '<leader>'
 let g:ranger_map_keys = 0
 
 " Neomake
-" normal mode (after 500ms; no delay when writing).
-call neomake#configure#automake('nrwi', 500)
+augroup my_neomake
+  au!
+  autocmd FileType sh call neomake#configure#automake_for_buffer('nwri', 500)
+augroup END
 
 " outer world 
 set mouse=a
