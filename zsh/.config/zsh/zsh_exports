@@ -85,7 +85,7 @@ export PSQLRC="$XDG_CONFIG_HOME/pg/psqlrc"
 export PGPASSFILE="$XDG_CONFIG_HOME/pg/pgpass"
 export PGSERVICEFILE="$XDG_CONFIG_HOME/pg/pg_service.conf"
 export PSQL_HISTORY="$XDG_CACHE_HOME/pg/psql_history"
-if_bin_exists 'psql' && mkdir "$XDG_CONFIG_HOME/pg" && mkdir "$XDG_CACHE_HOME/pg"
+if_bin_exists 'psql' && mkdir -p "$XDG_CONFIG_HOME/pg" && mkdir -p "$XDG_CACHE_HOME/pg"
 
 ### Language-specific stuff =======================
 
