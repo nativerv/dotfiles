@@ -62,3 +62,7 @@ bin/.local/bin/xmobar
 xmobar/.config/xmobar/dist-newstyle
 newsboat/.config/newsboat/urls
 mpv/.config/mpv/watch_later
+bin/.local/bin/colorz
+bin/.local/bin/f2py
+bin/.local/bin/f2py3
+bin/.local/bin/f2py3.9
