@@ -18,6 +18,7 @@ alias sudo="sudo "
 alias you="youtube-dl"
 alias mkdir="mkdir -p"
 alias bs="bullshit"
+alias r="ranger"
 
 # Aliases for Git
 alias g="git"

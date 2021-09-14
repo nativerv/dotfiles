@@ -1,0 +1,2 @@
+global:zsh:The program which is configured by this package
+stow:firejail:Enable XDG_CONFIG_HOME and XDG_DATA_HOME permissions for some apps with exported locations here

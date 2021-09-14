@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Functions necessary to run this config
 source "${ZDOTDIR}/zsh_functions"
@@ -37,6 +37,15 @@ NC='\033[0m' # No Color
 
 ERROR="${RED}ERROR: ${NC}"
 
+# Start/source ssh-agent
+if ! pgrep -u "${USER}" ssh-agent > /dev/null; then
+    ssh-agent -t 1h > "${XDG_RUNTIME_DIR}/ssh-agent.env"
+fi
+if [[ ! "$SSH_AUTH_SOCK" ]]; then
+    source "${XDG_RUNTIME_DIR}/ssh-agent.env" >/dev/null
+fi
+
+# Start X server if in tty1 and X server isn't running
 maybe_startx () {
 
   # Continue to the terminal if in the pseudo terminal, not TTY
