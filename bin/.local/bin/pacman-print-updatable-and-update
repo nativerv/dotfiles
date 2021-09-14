@@ -1,0 +1,25 @@
+#!/bin/sh
+
+figlet -f slant System Upgrade
+
+updatable="$(unbuffer pacman -Qu)"
+updatable_count="$(echo "${updatable}" | wc -l)"
+
+echo
+echo 'Updatable packages: '
+
+if [ "${updatable_count}" = '0' ]; then
+  echo "${updatable}" | xargs -I{} printf '  '{}'\n'
+else
+  echo "  No packages is updatable at the moment."
+fi
+
+if [ "${updatable_count}" = '0' ]; then
+  echo 'Executing [1;32msudo pacman -Syu[0m...'
+  echo
+  sudo pacman -Syu
+else
+  echo
+  echo "Press any key to continue..."
+  read -r ""
+fi

@@ -1,0 +1,6 @@
+#!/bin/bash
+
+message="$(echo ${@})"
+[ -z "${message}" ] && message="Enter password:"
+
+dmenu -p "${message}" <&- && echo

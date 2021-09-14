@@ -1,0 +1,9 @@
+#!/bin/sh
+
+if command -v 'firejail' >/dev/null; then
+  firejail --profile=ssh /bin/ssh "${@}"
+else
+  ssh "${@}"
+fi
+
+[ -d "${HOME}/.cache/wal" ] && (cat "${HOME}/.cache/wal/sequences")

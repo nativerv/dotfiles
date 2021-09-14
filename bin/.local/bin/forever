@@ -1,0 +1,26 @@
+#!/bin/sh
+
+timeout='0.0'
+
+while getopts 't:' option; do
+  case "${option}" in
+	  t)	timeout="${OPTARG}" ;;
+	[?])	print >&2 "usage: ${0} [-t timeout] command"; exit 1 ;;
+	esac
+done
+shift $((OPTIND - 1))
+
+if [ -z "${1}" ]; then
+  set -- echo
+fi
+
+if [ "${timeout}" = '0.0' ]; then
+  while true; do
+    "${@}"
+  done
+else 
+  while true; do
+    sleep "${timeout}"
+    "${@}"
+  done
+fi
