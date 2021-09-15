@@ -66,3 +66,6 @@ bin/.local/bin/colorz
 bin/.local/bin/f2py
 bin/.local/bin/f2py3
 bin/.local/bin/f2py3.9
+ranger/.config/ranger/plugins/__pycache__
+ranger/.config/ranger/plugins/ranger_devicons/__pycache__
+ranger/.config/ranger/plugins/__init__.py
