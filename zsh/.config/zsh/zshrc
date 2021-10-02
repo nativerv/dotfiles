@@ -6,6 +6,7 @@ source "${ZDOTDIR}/zsh_functions"
 ### Source all config files
 
 # All of below depend on `zsh_functions`
+
 zsh_add_file "zsh_exports"
 
 ################################################
@@ -39,7 +40,7 @@ ERROR="${RED}ERROR: ${NC}"
 
 # Start/source ssh-agent
 if ! pgrep -u "${USER}" ssh-agent > /dev/null; then
-    ssh-agent -t 1h > "${XDG_RUNTIME_DIR}/ssh-agent.env"
+    ssh-agent -t 744h > "${XDG_RUNTIME_DIR}/ssh-agent.env"
 fi
 if [[ ! "$SSH_AUTH_SOCK" ]]; then
     source "${XDG_RUNTIME_DIR}/ssh-agent.env" >/dev/null
@@ -77,7 +78,7 @@ maybe_startx () {
   LOGDIR="${XDG_DATA_HOME}/xinitrc"
 
   [ ! -d "${LOGDIR}" ] && (mkdir "${LOGDIR}"; echo 'This is a custom `.xinitrc` log location. See `maybe_startx` in `~/.config/zsh/zshrc`' > "${LOGDIR}/README.md")
-  exec startx >>"${LOGDIR}/xinitrc.error.log" 2>>"${LOGDIR}/xinitrc.error.log"
+  exec startx "${XDG_CONFIG_HOME}/x11/xinitrc" >>"${LOGDIR}/xinitrc.error.log" 2>>"${LOGDIR}/xinitrc.error.log"
 }
 
 # Only start if `DISPLAY == "" && tty == tty1 && startx`
