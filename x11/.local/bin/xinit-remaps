@@ -1,5 +1,6 @@
 #!/bin/sh
 
 setxkbmap -layout "us,ru" -option "grp:switch" -variant qwerty
+
 xmodmap -e "clear lock"
 xmodmap -e "keycode 66 = Escape NoSymbol Escape"
