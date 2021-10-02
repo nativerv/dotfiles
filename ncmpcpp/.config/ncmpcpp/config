@@ -33,7 +33,7 @@ progressbar_elapsed_color = blue:b
 statusbar_color = red
 statusbar_time_color = cyan:b
 
-# execute_on_song_change="~/.local/bin/ncmpcpp-ueberzug-cover-art"
+execute_on_song_change="/home/nrv/.local/bin/ncmpcpp-ueberzug-cover-art"
 
 visualizer_look = "▃▃"
 
@@ -42,7 +42,7 @@ progressbar_look = "▃▃▃"
 now_playing_prefix = " $b$7$6$9"
 now_playing_suffix = "$/b$9"
 
-song_columns_list_format = "(6)[]{} (25)[blue]{a} (34)[white]{t|f} (5f)[magenta]{l} (1)[]{}"
+song_columns_list_format = "(3)[]{} (15)[blue]{a} (30)[white]{t|f} (5f)[magenta]{l} (1)[]{}"
 
 color1 = "white"
 color2 = "blue"
@@ -52,3 +52,5 @@ song_list_format = " %t $R%a │                     "
 song_status_format = "$b$7♫ $2%a $4⟫$3⟫ $8%t $4⟫$3⟫ $5%b "
 
 song_window_title_format = "  {%a}  {%t}"
+
+playlist_disable_highlight_delay = 0
