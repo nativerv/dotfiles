@@ -5,6 +5,10 @@
 
 ! *.font: xft:Noto Sans Mono Regular Nerd Font Complete:pixelsize=12:antialias=true
 
+dmenu.lineheight: 18 
+dmenu.censorchar: *
+! dmenu.lines: 59
+
 !! Appearance
 urxvt.termName: rxvt-unicode
 urxvt.scrollBar: false
@@ -53,3 +57,5 @@ URxvt.color13: rgb:AD/7F/A8
 URxvt.color14: rgb:34/E2/E2
 URxvt.color15: rgb:EE/EE/EC
 URxvt.colorBD: rgb:ff/ff/ff
+
+! vim:syntax=xdefaults
