@@ -1,0 +1,4 @@
+env GATSBY_TELEMETRY_DISABLED=1
+noblacklist ${HOME}/.config/npm
+noblacklist ${HOME}/.local/share/npm
+noblacklist ${RUNUSER}/npm

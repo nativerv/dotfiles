@@ -1,0 +1,11 @@
+# The following should be considered catch-all directories
+blacklist ${DESKTOP}
+blacklist ${DOWNLOADS}
+
+# Disable my custom ${HOME} dirs too
+blacklist ${HOME}/vms
+blacklist ${HOME}/dock
+#blacklist ${HOME}/pr
+#blacklist ${HOME}/dot
+#blacklist ${HOME}/edu
+#blacklist ${HOME}/pub

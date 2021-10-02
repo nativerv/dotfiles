@@ -1,0 +1,4 @@
+read-only ${HOME}/.config/zsh
+read-only ${HOME}/.config/bash
+read-only ${HOME}/.config/shell
+#read-only ${HOME}/.config/firejail
