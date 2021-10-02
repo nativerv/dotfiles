@@ -1,0 +1,13 @@
+#!/bin/sh
+
+image=$(mktemp)
+
+xclip -out -selection clipboard -target image/png > "${image}"
+
+output="$(zbarimg "${image}")"
+
+if [ -z "${output}" ]; then
+  notify-send 'Barcode Scan' 'Clipboard contains no image'
+else
+  echo "${output}" | zenity --title 'Barcode Scan' --text-info
+fi
