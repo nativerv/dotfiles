@@ -27,12 +27,12 @@ control + Print
 
 ### Dmenu
 
-# Emoji: copy
-super + period:
+# Emoji: copy to clipboard
+super + control + period:
   dmenu_unicode
 
-# Emoji: type
-super + control + period:
+# Emoji: type (paste)
+super + period:
   dmenu_unicode -t
 
 ### Music/Sound
