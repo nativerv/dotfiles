@@ -7,18 +7,33 @@ alias neofetch="neofetch \
 alias clr="clear"
 alias cls="clear"
 alias nv="nvim"
-alias ..="cd .."
 alias unstow="stow -D"
 alias restow="stow -R"
 alias lz="lazygit"
-alias lyrics="ncmpcpp --screen lyrics"
-alias visualizer="ncmpcpp --screen visualizer"
+alias muslyr="ncmpcpp --screen lyrics"
+alias musvis="ncmpcpp --screen visualizer"
 alias pac="pacman"
-alias sudo="sudo "
 alias you="youtube-dl"
-alias mkdir="mkdir -p"
 alias bs="bullshit"
 alias r="ranger"
+alias nf="neofetch"
+alias pf="pfetch"
+alias nb="newsboat"
+alias zt="zathura"
+alias fj="firejail"
+alias fjn="firejail --noprofile"
+
+# Fix mkdir to create all dirs recursively
+alias mkdir="mkdir -p"
+
+# Fix sudo to take another alias like `nv`
+alias sudo="sudo "
+
+# Fix lolcat to always output truecolor
+alias lolcat="lolcat --truecolor"
+
+# Configure ncdu
+alias ncdu="ncdu -q --color dark --confirm-quit --exclude-kernfs"
 
 # Aliases for Git
 alias g="git"
@@ -39,19 +54,19 @@ alias gpmaster="git push origin msater"
 
 # Aliases for updating environments
 alias renv="exec zsh"
-alias zsh-update-plugins="find "$ZDOTDIR/plugins" -type d -exec test -e '{}/.git' ';' -print0 | xargs -I {} -0 git -C {} pull -q"
+alias zshplug="find "${ZDOTDIR}/plugins" -type d -exec test -e '{}/.git' ';' -print0 | xargs -I {} -0 git -C {} pull -q"
 alias nvplug="nvim +PlugInstall"
 
 # Aliases for ls
-alias ls='ls --color=auto --group-directories-first'
-alias ll='ls -lF --group-directories-first'
-alias lla='ls -alF --group-directories-first'
-alias lld='ls -aldF --group-directories-first'
-alias la='ls -A --group-directories-first'
-alias l='ls -CF --group-directories-first'
+alias ls='ls --color=auto --group-directories-first' 
+alias ll='ls -lF'    # Table with file type indicators
+alias lla='ls -alF'  # Table with all and file type indicators
+alias lld='ls -aldF' # Table with exact file (for looking at directories, not their contents)
+alias la='ls -A'     # Simple with all 
+alias l='ls -F'      # Simple with file type indicators
 
 # Aliases for tree
-alias t='tree -aAcC'
+alias t='tree -aAcC --dirsfirst' # Sort by modtime, show all, enable colors, fix lines
 
 # Colorize various commands
 alias grep='grep --color=auto'
@@ -77,10 +92,10 @@ alias mvunsafe='mv'
 alias cpunsafe='cp'
 
 # Get top process eating memory
-alias psmem='ps auxf | sort -nr -k 4 | head -5'
+alias psmem='ps aux | sort -nr -k 4 | head -5'
 
 # Get top process eating cpu ##
-alias pscpu='ps auxf | sort -nr -k 3 | head -5'
+alias pscpu='ps aux | sort -nr -k 3 | head -5'
 
 # systemd
 alias list_systemctl="systemctl list-unit-files --state=enabled"
