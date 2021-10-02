@@ -44,12 +44,14 @@ Plug 'vim-airline/vim-airline-themes'
 Plug 'airblade/vim-gitgutter'
 Plug 'norcalli/nvim-colorizer.lua'
 Plug 'yggdroot/indentline'
+
 " Other
 Plug 'metakirby5/codi.vim'
 Plug 'puremourning/vimspector'
 Plug 'OmniSharp/omnisharp-vim'
 Plug 'baskerville/vim-sxhkdrc'
 Plug 'neomake/neomake'
+Plug 'tpope/vim-fugitive'
 
 call plug#end()
 
@@ -65,11 +67,20 @@ nnoremap <Space> <Nop>
 nmap <Space> <Leader>
 let g:mapleader = " "
 
+" Vimspector
+let g:vimspector_enable_mappings = 'HUMAN'
+
 " CamelCaseMotion
 let g:camelcasemotion_key = '<leader>'
 
 " Ranger
 let g:ranger_map_keys = 0
+
+" Disable conceallevel
+autocmd BufEnter * set conceallevel=0
+
+" Firejail
+" autocmd BufEnter *.local set syntax=firejail
 
 " Neomake
 augroup my_neomake
@@ -86,7 +97,7 @@ set titleold=
 
 " inner world
 set termguicolors
-" set t_Co=16
+set t_Co=16
 set number relativenumber
 set smarttab
 set ignorecase
@@ -385,6 +396,7 @@ let g:coc_global_extensions = [
   \ 'coc-eslint', 
   \ 'coc-prettier', 
   \ 'coc-json', 
+  \ 'coc-docker', 
   \ ]
 
 
