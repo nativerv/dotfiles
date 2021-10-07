@@ -2,6 +2,8 @@
 -- | Todo: install nvim-lspconfig
 -- | Todo: install lsp-status
 -- | Todo: install treesitter
+-- | Todo: install trouble.nvim
+-- | Todo: install gitsigns.nvim
 
 return require('packer').startup(function()
   -- | Packer
