@@ -4,6 +4,12 @@
 --  _/ // /|  // /  / /  _ / /___/ /_/ / ___ |
 -- /___/_/ |_/___/ /_/  (_)_____/\____/_/  |_|
 
+vim.cmd [[
+  profile start ~/desk/nvim-profile-lua.log
+  profile file *
+  profile func *
+]]
+
 require 'bootstrap'  -- | Ensure packer.nvim installed
 require 'plugins'    -- | Load plugins
 require 'options'    -- | Load options

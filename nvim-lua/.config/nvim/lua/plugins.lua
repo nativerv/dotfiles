@@ -37,14 +37,23 @@ return require('packer').startup(function()
     config = function()
     end
   }
+  use {
+    'shadmansaleh/lualine.nvim',
+    requires = { 'kyazdani42/nvim-web-devicons', opt = true},
+    options = { theme = 'pywal' },
+  }
+  use {
+    'akinsho/bufferline.nvim',
+    requires = 'kyazdani42/nvim-web-devicons'
+  }
   use 'lukas-reineke/indent-blankline.nvim'
 
   use 'tpope/vim-surround'              -- | Vimscript (surround.nvim)
   use 'matze/vim-move'                  -- | Vimscript (move.nvim)
   use 'mg979/vim-visual-multi'          -- | Vimscript
   use 'bkad/CamelCaseMotion'            -- | Vimscript
-  use 'vim-airline/vim-airline'         -- | Vimscript (surround.nvim)
-  use 'vim-airline/vim-airline-themes'  -- | Vimscript (move.nvim)
+  --use 'vim-airline/vim-airline'         -- | Vimscript (surround.nvim)
+  --use 'vim-airline/vim-airline-themes'  -- | Vimscript (move.nvim)
   use 'preservim/nerdcommenter'         -- | Vimscript
   use 'airblade/vim-gitgutter'          -- | Vimscript
 end)                                    
