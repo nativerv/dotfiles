@@ -11,11 +11,13 @@ if_bin_exists() {
 #### XDG stuff ====================================
 
 # Taken from https://wiki.archlinux.org/index.php/XDG_Base_Directory
-export XDG_CONFIG_HOME=$HOME/.config
-export XDG_CACHE_HOME=$HOME/.cache
-export XDG_DATA_HOME=$HOME/.local/share
+export XDG_CONFIG_HOME=${HOME}/.config
+export XDG_CACHE_HOME=${HOME}/.cache
+export XDG_DATA_HOME=${HOME}/.local/share
 export XDG_DATA_DIRS=/usr/local/share:/usr/share
 export XDG_CONFIG_DIRS=/etc/xdg
+export XDG_RUNTIME_DIR="${PREFIX}/var/run"
+
  
 ### Zsh history stuff ===========================
 
@@ -56,6 +58,9 @@ if_bin_exists 'nvim' && export EDITOR=/usr/bin/nvim
 export LESS='-R --use-color -Dd+r$Du+b'
 export LESSOPEN="| /usr/bin/source-highlight-esc.sh %s"
 export LESSHISTSIZE=0
+
+# QT theme
+export QT_QPA_PLATFORMTHEME=qt5ct
 
 ### Move individual applications' directories to XDG Base Dirs
 

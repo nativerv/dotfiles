@@ -53,7 +53,7 @@ alias gpall="git push origin --all"
 alias gpmaster="git push origin msater"
 
 # Aliases for updating environments
-alias renv="exec zsh"
+alias renv="reset; exec zsh"
 alias zshplug="find "${ZDOTDIR}/plugins" -type d -exec test -e '{}/.git' ';' -print0 | xargs -I {} -0 git -C {} pull -q"
 alias nvplug="nvim +PlugInstall"
 
