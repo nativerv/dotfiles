@@ -4,12 +4,13 @@ figlet -f slant System Upgrade
 
 updatable="$(unbuffer pacman -Qu)"
 updatable_count="$(echo "${updatable}" | wc -l)"
+updatable_count="$((updatable_count - 1))"
 
 echo
-echo 'Updatable packages: '
+echo "Updatable packages (${updatable_count}): "
 
-if [ "${updatable_count}" = '0' ]; then
-  echo "${updatable}" | xargs -I{} printf '  '{}'\n'
+if [ "${updatable_count}" -ne '0' ]; then
+  echo "${updatable}" | pr -2 -t -o 20 | xargs -I{} printf '  '{}'\n'
 else
   echo "  No packages is updatable at the moment."
 fi
