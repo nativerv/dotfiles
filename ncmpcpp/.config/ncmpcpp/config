@@ -54,3 +54,5 @@ song_status_format = "$b$7♫ $2%a $4⟫$3⟫ $8%t $4⟫$3⟫ $5%b "
 song_window_title_format = "  {%a}  {%t}"
 
 playlist_disable_highlight_delay = 0
+
+seek_time = 5
