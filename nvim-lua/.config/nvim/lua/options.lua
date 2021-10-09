@@ -6,8 +6,8 @@ vim.opt.title          = true           -- | Enable title
 vim.opt.titleold       = ''             -- | ?
 
 -- | Inner world
-vim.g.mapleader = ' '
-
+vim.g.mapleader        = ' '
+vim.g.maplocalleader   = ' '
 vim.opt.termguicolors  = true           -- | Truecolor
 vim.opt.number         = true           -- | ?
 vim.opt.relativenumber = true           -- | Line numbers starting their count from line
@@ -19,6 +19,7 @@ vim.opt.shiftwidth     = 2              -- | ?
 vim.opt.cursorline     = true           -- | Highlight line
 vim.opt.expandtab      = true           -- | Tabs -> Spaces         
 vim.opt.colorcolumn    = '80'           -- | Tabs -> Spaces         
+vim.opt.wrap           = false          -- | Disable word wrap
 vim.opt.langmap = 'ФИСВУАПРШОЛДЬТЩЗЙКЫЕГМЦЧНЯ;ABCDEFGHIJKLMNOPQRSTUVWXYZ,фисвуапршолдьтщзйкыегмцчня;abcdefghijklmnopqrstuvwxyz,!"№%?;!@#%&,Ж;:,\\;;$'
 
 -- | Plugin world
@@ -48,6 +49,9 @@ vim.cmd [[
 vim.g.onedark_color_overrides = {
   cursor_grey = {
     gui = "#2c1a1c",
+    --gui = "#3F521B",
+    --gui = "#1F290D",
+    --gui = "#0F1203",
     cterm = 235,
     cterm16 = 0
   },
@@ -67,7 +71,7 @@ vim.cmd [[ colorscheme onedark ]]
 vim.cmd [[
   " Refresh `wal` theme on SIGUSR1
   autocmd Signal SIGUSR1 call RefreshWalTheme()
-  function RefreshWalTheme()
+  function! RefreshWalTheme()
     source ~/.cache/wal/colors-wal.vim
     :AirlineTheme wal 
     :redraw
