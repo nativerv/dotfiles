@@ -122,7 +122,7 @@ capabilities = require'cmp_nvim_lsp'.update_capabilities(capabilities)
 capabilities = vim.tbl_extend('keep', capabilities or {}, lsp_status.capabilities)
 
 -- | Enable the following language servers
-local lsps = { 
+local lsps = {
   clangd = {},
   rust_analyzer = {},
   pyright = {},
@@ -132,6 +132,45 @@ local lsps = {
     cmd = { 'bash-language-server', 'start' },
     filetypes = { 'sh', 'zsh' }
   },
+  sumneko_lua = {
+    cmd = { 'lua-language-server', '-E', '/usr/lib/lua-language-server/main.lua' },
+    settings = {
+      Lua = {
+        runtime = {
+          -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
+          version = 'LuaJIT',
+          -- Setup your lua path
+          path = vim.split(package.path, ';')
+        },
+        --root_dir = lspconfig.util.root_pattern(".git") or bufdir,
+        --root_dir = bufdir,
+        --root_dir = vim.loop.cwd(),
+        --root_dir = function(fname)
+          --local root_pattern = lspconfig.util.root_pattern('.git', '*.rockspec')(fname)
+
+          ---- | Prevent indexing $HOME
+          --if fname == vim.loop.os_homedir() then return nil end
+
+          --return root_pattern or fname
+        --end,
+        diagnostics = {
+          -- Get the language server to recognize the `vim` global
+          globals = { 'vim' }
+        },
+        workspace = {
+          -- Make the server aware of Neovim runtime files
+          library = {
+            [vim.fn.expand('$VIMRUNTIME/lua')] = true,
+            [vim.fn.expand('$VIMRUNTIME/lua/vim/lsp')] = true
+          },
+          maxPreload = 2000,
+        },
+        telemetry = {
+          enable = false,
+        },
+      }
+    }
+  },
   ['null-ls'] = {
     autostart = true,
   },
@@ -140,11 +179,11 @@ local lsps = {
 -- | Execute all configs and inject common capabilities to them
 for lsp, lsp_config in pairs(lsps) do
   -- | Merge configs with custom function
-  default_config = {
+  local default_config = {
     on_attach    = on_attach,
     capabilities = capabilities,
   }
-  config = merge(default_config, lsp_config)
+  local config = merge(default_config, lsp_config)
 
   lspconfig[lsp].setup (config)
 end
