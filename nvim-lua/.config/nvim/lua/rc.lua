@@ -23,9 +23,9 @@ require'gitsigns'.setup {
   signs = {
     add          = { hl = 'GitGutterAdd',    text = '│' },
     change       = { hl = 'GitGutterChange', text = '│' },
-    delete       = { hl = 'GitGutterDelete', text = '│' },
-    topdelete    = { hl = 'GitGutterDelete', text = '│' },
     changedelete = { hl = 'GitGutterChange', text = '│' },
+    delete       = { hl = 'GitGutterDelete', text = '' },
+    topdelete    = { hl = 'GitGutterDelete', text = '' },
   },
 }
 require'lualine'.setup {
@@ -43,13 +43,24 @@ require'colorizer'.setup()
 require'nvim-autopairs'.setup()
 require'bufferline'.setup()
 require'lsp-status'.register_progress()
-require'null-ls'.config()
 
 -- | Lsp world
 
 -- | nvim-lspconfig
 local lspconfig  = require'lspconfig'
 local lsp_status = require'lsp-status'
+local null_ls = require'null-ls'
+
+null_ls.config {
+  sources = {
+    null_ls.builtins.diagnostics.shellcheck.with {
+      diagnostics_format = '[#{c}] #{m} (#{s})',
+      filetypes = { 'sh' },
+    },
+    null_ls.builtins.formatting.shfmt
+  },
+  debug = true
+}
 
 local on_attach = function(client, buffer)
   -- | Some bullshit
@@ -58,32 +69,41 @@ local on_attach = function(client, buffer)
   -- | Attach lsp-status
   lsp_status.on_attach(client)
 
+  -- | Define commands
+
+  -- | Formatting
+  vim.cmd [[ command! Format execute 'lua vim.lsp.buf.formatting()' ]]
+
   -- | Define mappings (for this buffer only)
+
+  -- | Diagnostic and goto mappings
   local mapping_options = { noremap = true, silent = true }
-  vim.api.nvim_buf_set_keymap(buffer, 'n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>',      mapping_options)
-  vim.api.nvim_buf_set_keymap(buffer, 'n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>',     mapping_options)
-  vim.api.nvim_buf_set_keymap(buffer, 'n', 'gh', '<cmd>lua vim.lsp.buf.hover()<CR>',           mapping_options)
-  vim.api.nvim_buf_set_keymap(buffer, 'n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>',  mapping_options)
-  vim.api.nvim_buf_set_keymap(buffer, 'n', 'gH', '<cmd>lua vim.lsp.buf.signature_help()<CR>',  mapping_options)
+  vim.api.nvim_buf_set_keymap(buffer, 'n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>',                   mapping_options)
+  vim.api.nvim_buf_set_keymap(buffer, 'n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>',                  mapping_options)
+  vim.api.nvim_buf_set_keymap(buffer, 'n', 'gh', '<cmd>lua vim.lsp.buf.hover()<CR>',                        mapping_options)
+  vim.api.nvim_buf_set_keymap(buffer, 'n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>',               mapping_options)
+  vim.api.nvim_buf_set_keymap(buffer, 'n', 'gH', '<cmd>lua vim.lsp.buf.signature_help()<CR>',               mapping_options)
   --vim.api.nvim_buf_set_keymap(buffer, 'n', '<leader>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', mapping_options)
   --vim.api.nvim_buf_set_keymap(buffer, 'n', '<leader>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', mapping_options)
   --vim.api.nvim_buf_set_keymap(buffer, 'n', '<leader>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', mapping_options)
-  vim.api.nvim_buf_set_keymap(buffer, 'n', 'gt', '<cmd>lua vim.lsp.buf.type_definition()<CR>', mapping_options)
-  vim.api.nvim_buf_set_keymap(buffer, 'n', '<F2>', '<cmd>lua vim.lsp.buf.rename()<CR>',        mapping_options)
-  vim.api.nvim_buf_set_keymap(buffer, 'n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>',      mapping_options)
-  vim.api.nvim_buf_set_keymap(buffer, 'n', 'gy', '<cmd>lua vim.lsp.buf.code_action()<CR>',     mapping_options)
-  -- vim.api.nvim_buf_set_keymap(buffer, 'v', '<leader>ca', '<cmd>lua vim.lsp.buf.range_code_action()<CR>', mapping_options)
-  --vim.api.nvim_buf_set_keymap(buffer, 'n', 'gh', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', mapping_options)
-  vim.api.nvim_buf_set_keymap(buffer, 'n', '[', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', mapping_options)
-  vim.api.nvim_buf_set_keymap(buffer, 'n', ']', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', mapping_options)
+  vim.api.nvim_buf_set_keymap(buffer, 'n', 'gt', '<cmd>lua vim.lsp.buf.type_definition()<CR>',              mapping_options)
+  vim.api.nvim_buf_set_keymap(buffer, 'n', '<F2>', '<cmd>lua vim.lsp.buf.rename()<CR>',                     mapping_options)
+  vim.api.nvim_buf_set_keymap(buffer, 'n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>',                   mapping_options)
+  vim.api.nvim_buf_set_keymap(buffer, 'n', 'gy', '<cmd>lua vim.lsp.buf.code_action()<CR>',                  mapping_options)
+  vim.api.nvim_buf_set_keymap(buffer, 'v', 'gy', '<cmd>lua vim.lsp.buf.range_code_action()<CR>',            mapping_options)
+  vim.api.nvim_buf_set_keymap(buffer, 'n', 'gK', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', mapping_options)
+  vim.api.nvim_buf_set_keymap(buffer, 'n', '[', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>',              mapping_options)
+  vim.api.nvim_buf_set_keymap(buffer, 'n', ']', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>',              mapping_options)
   --vim.api.nvim_buf_set_keymap(buffer, 'n', '<leader>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', mapping_options)
   --vim.api.nvim_buf_set_keymap(buffer, 'n', '<leader>so', [[<cmd>lua require('telescope.builtin').lsp_document_symbols()<CR>]], mapping_options)
 
+  -- | Formatting mapping
+
   -- | Format on save
-  vim.cmd [[ command! Format execute 'lua vim.lsp.buf.formatting()' ]]
   vim.cmd [[ autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.graphql,*.md,*.vue,*.yaml,*.html Format ]]
 end
 
+-- | Create a command to get `lsp-status.nvim` output
 vim.cmd [[
   function! LspStatus() abort
     if luaeval('#vim.lsp.buf_get_clients() > 0')
@@ -103,27 +123,37 @@ capabilities = vim.tbl_extend('keep', capabilities or {}, lsp_status.capabilitie
 
 -- | Enable the following language servers
 local lsps = { 
-  'clangd',
-  'rust_analyzer',
-  'pyright',
-  'tsserver',
-  'hls',
-  --'bashls',
-  'null-ls',
+  clangd = {},
+  rust_analyzer = {},
+  pyright = {},
+  tsserver = {},
+  hls = {},
+  bashls = {
+    cmd = { 'bash-language-server', 'start' },
+    filetypes = { 'sh', 'zsh' }
+  },
+  ['null-ls'] = {
+    autostart = true,
+  },
 }
 
-for _, lsp in ipairs(lsps) do
-  lspconfig[lsp].setup {
+-- | Execute all configs and inject common capabilities to them
+for lsp, lsp_config in pairs(lsps) do
+  -- | Merge configs with custom function
+  default_config = {
     on_attach    = on_attach,
     capabilities = capabilities,
   }
+  config = merge(default_config, lsp_config)
+
+  lspconfig[lsp].setup (config)
 end
 
 -- | luasnip
 local luasnip = require'luasnip'
 
 -- | nvim-cmp
-local cmp     = require'cmp'
+local cmp = require'cmp'
 
 cmp.setup {
   snippet = {
@@ -168,14 +198,4 @@ cmp.setup {
 }
 
 -- | null-ls
-local null_ls = require'null-ls'
-
--- | Register any number of sources simultaneously
-local sources = {
-  null_ls.builtins.diagnostics.shellcheck.with {
-      diagnostics_format = "[#{c}] #{m} (#{s})",
-      filetypes = { "sh" }
-  },
-}
-
-null_ls.config({ sources = sources })
+--local null_ls = require'null-ls'
