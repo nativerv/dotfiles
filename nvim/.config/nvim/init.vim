@@ -4,6 +4,10 @@
 "  _/ // /|  // /  / /  _| |/ // // /  / /
 " /___/_/ |_/___/ /_/  (_)___/___/_/  /_/
 
+profile start ~/desk/vim-markdown.log
+profile file *
+profile func *
+
 " Specify a directory for plugins
 call plug#begin('~/.local/share/nvim/plugged')
 
@@ -66,6 +70,11 @@ colorscheme wal
 nnoremap <Space> <Nop>
 nmap <Space> <Leader>
 let g:mapleader = " "
+
+" Ctrl-A
+nnoremap <C-a> <Esc>ggVG
+inoremap <C-a> <Esc>ggVG
+vnoremap <C-a> <Esc>ggVG
 
 " Vimspector
 let g:vimspector_enable_mappings = 'HUMAN'
@@ -188,6 +197,10 @@ set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
 " Make db adequate (not actually works in this form)
 "nnoremap db ldb
 
+" Tabs 
+nnoremap <silent><M-i> :tabprevious<CR>
+nnoremap <silent><M-o> :tabnext<CR>
+
 " Make p in VISUAL adequate
 vnoremap p "_dP
 vnoremap P "_dP
@@ -212,7 +225,7 @@ map <F10> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans
 \ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
 
 "" Explorer pane
-nmap <C-b> :NERDTreeToggle<CR>
+nmap <silent><C-b> :NERDTreeToggle<CR>
 
 "" GitGutter
 nmap gz <Plug>(GitGutterPreviewHunk)
@@ -248,20 +261,20 @@ vmap <C-_> <plug>NERDCommenterToggle
 nmap <C-_> <plug>NERDCommenterToggle
 
 " Alt-Move lines
-nnoremap <C-A-j> :m .+1<CR>==
-nnoremap <C-A-k> :m .-2<CR>==
-inoremap <C-A-j> <Esc>:m .+1<CR>==gi
-inoremap <C-A-k> <Esc>:m .-2<CR>==gi
-vnoremap <C-A-j> :m '>+1<CR>gv=gv
-vnoremap <C-A-k> :m '<-2<CR>gv=gv
+nnoremap <silent><C-A-j> :m .+1<CR>==
+nnoremap <silent><C-A-k> :m .-2<CR>==
+inoremap <silent><C-A-j> <Esc>:m .+1<CR>==gi
+inoremap <silent><C-A-k> <Esc>:m .-2<CR>==gi
+vnoremap <silent><C-A-j> :m '>+1<CR>gv=gv
+vnoremap <silent><C-A-k> :m '<-2<CR>gv=gv
 
 " Alt-Dublicate lines
-nnoremap <A-J> :t .<CR>==
-nnoremap <A-K> :t .-1<CR>==
-inoremap <A-J> <Esc>:t .<CR>==gi
-inoremap <A-K> <Esc>:t .-1<CR>==gi
-vnoremap <A-J> :t '><CR>gv=gv
-vnoremap <A-K> :t '<-1<CR>gv=gv
+nnoremap <silent><A-J> :t .<CR>==
+nnoremap <silent><A-K> :t .-1<CR>==
+inoremap <silent><A-J> <Esc>:t .<CR>==gi
+inoremap <silent><A-K> <Esc>:t .-1<CR>==gi
+vnoremap <silent><A-J> :t '><CR>gv=gv
+vnoremap <silent><A-K> :t '<-1<CR>gv=gv
 
 " Airline
 
@@ -315,9 +328,12 @@ inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 " Or use `complete_info` if your vim support it, like:
 " inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
 
-" Use `[g` and `]g` to navigate diagnostics
+" Use `[` and `]` to navigate diagnostics
 nmap <silent> [ <Plug>(coc-diagnostic-prev)
 nmap <silent> ] <Plug>(coc-diagnostic-next)
+
+" Use gy to CocFix
+nmap <silent> gy :CocFix<CR>
 
 " Remap keys for gotos
 nmap <silent> gd <Plug>(coc-definition)
@@ -386,7 +402,7 @@ let g:NERDTreeIgnore = ['^node_modules$']
 command! -nargs=0 Prettier :CocCommand prettier.formatFile
 " run prettier on save
 "let g:prettier#autoformat = 0
-"autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.graphql,*.md,*.vue,*.yaml,*.html PrettierAsync
+autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.graphql,*.md,*.vue,*.yaml,*.html Prettier
 
 " coc config
 let g:coc_global_extensions = [
@@ -397,6 +413,9 @@ let g:coc_global_extensions = [
   \ 'coc-prettier', 
   \ 'coc-json', 
   \ 'coc-docker', 
+  \ 'coc-styled-components', 
+  \ 'coc-css',
+  \ 'coc-lua',
   \ ]
 
 
