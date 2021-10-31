@@ -1,47 +1,91 @@
 #!/bin/sh
 
 # This script does the following:
-#	setwall                ->  set the wallpaper (at X start).
-#	setwall <file>         ->  set that as the new wallpaper.
-#	setwall <directory>    ->  choose random file in it.
-#	[ wal is installed ? ] -+> also generate and set a wal colorscheme.
+#	setwall                ->  set the saved wallpaper (for use on X startup).
+#	setwall FILE           ->  set FILE as the new wallpaper.
+#	setwall DIRECTORY      ->  set random file from DIRECTORY as new wallpaper.
+#	[ wal is installed ? ] -+> also generate and set a `wal` colorscheme.
 
-help () {
-  echo "usage: ${1} [-s saturation] file"
-  echo ""
-  echo "-s saturation\tspecify wal saturation"
-  echo "--help\tprint this message"
+help() {
+	echo "usage: $(basename "${0}") [-l] [-s saturation] FILE"
+	echo ""
+	printf -- '-s saturation\tspecify wal saturation'
+  printf -- '-l\tgenerate linht theme'
+	# shellcheck disable=3045
+	printf -- '--help\tprint this message'
 }
+
+die() {
+	echo "${0}: error: ${1}"
+	exit 1
+}
+
+POSTRUN_FILE="${XDG_CONFIG_HOME:-$HOME/.config}/wal/postrun"
 
 saturation='0.5'
 
-while getopts 's:' option
-do case "${option}" in
-         s)	saturation="${OPTARG}" ;;
-    # --help) help "$@" ;;
-       [?]) help "$@"; exit 1 ;;
-  esac
+while getopts 'ls:' option; do
+	case "${option}" in
+	s) saturation="${OPTARG}" ;;
+  l) light='true' ;;
+		# --help) help "$@" ;;
+	[?])
+		help "$@"
+		exit 1
+		;;
+	esac
 done
 
-shift $(($OPTIND - 1))
+shift $((OPTIND - 1))
 
-# Location of link to wallpaper link.
-bgloc="${XDG_DATA_HOME:-$HOME/.local/share/}/wallpaper"
+# Location of link to wallpaper
+wallpaper_link="${XDG_DATA_HOME:-$HOME/.local/share}/wallpaper"
 
-trueloc="$(readlink -f "$1")" &&
-case "$(file --mime-type -b "$trueloc")" in
-	image/* ) ln -sf "$(readlink -f "$1")" "$bgloc" && notify-send -i "$bgloc" "Changing wallpaper..." ;;
-	inode/directory ) ln -sf "$(find "$trueloc" -iregex '.*.\(jpg\|jpeg\|png\|gif\)' -type f | shuf -n 1)" "$bgloc" && notify-send -i "$bgloc" "Random Wallpaper chosen." ;;
-	*) notify-send "Error" "Not a valid image." ; exit 1;;
-esac
+# Replace link with new image if provided; else just use the ond one behind link
+# shellcheck disable=2236
+if [ ! -z "${1}" ]; then
+	# Readlink input location to ensure we can test its mime type
+	input_true_location="$(readlink -f "${1}")" || die 'could not readlink wallpaper location'
 
-xwallpaper --zoom "$bgloc"
+	# Test mime type:
+	# image     -> set link to that image
+	# directory -> set link to a random image from that directory
+	# otherwise -> exit with error
+	case "$(file --mime-type -b "${input_true_location}")" in
+	image/*)
+		ln -sf "${input_true_location}" "${wallpaper_link}"
+		notify-send -i "${wallpaper_link}" "Changing wallpaper..."
+		;;
+	inode/directory)
+		ln -sf "$(find "${input_true_location}" -iregex '.*.\(jpg\|jpeg\|png\|gif\)' -type f | shuf -n 1)" "${wallpaper_link}"
+		notify-send -i "${wallpaper_link}" "Random Wallpaper chosen."
+		;;
+	*)
+		notify-send "Error" "Not a valid image."
+		die 'not a valid image'
+		;;
+	esac
+fi
 
-# If pywal is installed, use it.
+# Set the wallpaper
+xwallpaper --zoom "${wallpaper_link}"
+
+# If pywal is installed, use it
 command -v wal >/dev/null 2>&1 || exit 0
 
-# >/dev/null 2>&1
-wal --saturate "${saturation}" -i "$trueloc" -o "${XDG_CONFIG_HOME:-$HOME/.config}/wal/postrun"  || (echo 'Error running `wal`'; exit 1)
+wal \
+	--saturate "${saturation}" \
+  ${light:+-l} \
+	-i "$(readlink -f "${wallpaper_link}")" \
+	-o "${POSTRUN_FILE}" ||
+	{
+		# shellcheck disable=SC2016
+		echo 'Error running `wal`'
+		exit 1
+	}
+
+# Send signals/restart some programs that `wal`
+# doesn't restart by itself
 pidof nvim >/dev/null && killall -USR1 nvim
 pidof dwm >/dev/null && xdotool key super+F12
-
+pidof xmonad-x86_64-linux >/dev/null && xmonad --restart
