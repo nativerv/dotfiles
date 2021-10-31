@@ -1,3 +1,5 @@
+---@diagnostic disable: undefined-global
+
 -- | Todo: install vim-matchup
 -- | Todo: install lsp-status
 -- | Todo: install treesitter
@@ -9,17 +11,28 @@ return require('packer').startup(function()
   use 'wbthomason/packer.nvim'
 
   -- | Color Schemes
-  use '~/pr/wal.vim'
   use 'joshdick/onedark.vim'
   use 'morhetz/gruvbox'
 
-  -- | Lsp
-  use 'neovim/nvim-lspconfig'     -- | Collection of configurations for built-in LSP client
-  use 'hrsh7th/nvim-cmp'          -- | Autocompletion plugin
-  use 'hrsh7th/cmp-nvim-lsp'      -- | LSP source for nvim-cmp
-  use 'saadparwaiz1/cmp_luasnip'  -- | Snippets source for nvim-cmp
+  -- | Editing
+  use 'tpope/vim-surround'        -- | Vimscript (surround.nvim)
+  use 'matze/vim-move'            -- | Vimscript (move.nvim)
+  use 'mg979/vim-visual-multi'    -- | Vimscript
+  use 'preservim/nerdcommenter'   -- | Vimscript
+
   use 'L3MON4D3/LuaSnip'          -- | Snippets plugin
-  use 'nvim-lua/lsp-status.nvim'  -- | Lsp info getters for statuslines
+  use 'hrsh7th/nvim-cmp'          -- | Autocompletion  core plugin
+  use 'hrsh7th/cmp-buffer'        -- | Buffer word     source for nvim-cmp
+  use 'hrsh7th/cmp-path'          -- | Path            source for nvim-cmp
+  use 'hrsh7th/cmp-nvim-lua'      -- | Nvim lua config source for nvim-cmp
+  use 'saadparwaiz1/cmp_luasnip'  -- | Snippet         source for nvim-cmp
+
+  -- | Language Server Protocol
+  use 'neovim/nvim-lspconfig'     -- | Collection of configurations for
+                                  -- | built-in LSP client
+  use 'hrsh7th/cmp-nvim-lsp'      -- | LSP source for nvim-cmp
+  use 'onsails/lspkind-nvim'      -- | Display kind in nvim-cmp
+  use 'nvim-lua/lsp-status.nvim'  -- | LSP info getters for statuslines
   use {
     'jose-elias-alvarez/null-ls.nvim',
     requires = {
@@ -28,25 +41,24 @@ return require('packer').startup(function()
     }
   }
 
-  -- | Navigation 
+  -- | Features
+  use 'kristijanhusak/orgmode.nvim'
+  use 'akinsho/org-bullets.nvim'
+  use 'tpope/vim-fugitive'
+
+  -- | Syntax
+  use 'tikhomirov/vim-glsl' -- | Vimscript
+
+  -- | Navigation
   use {
     'phaazon/hop.nvim',
     as = 'hop',
-    config = function()
-      require'hop'.setup { keys = 'etovxqpdygfblzhckisuran' }
-    end
   }
   use {
     'nvim-telescope/telescope.nvim',
-    requires = { {'nvim-lua/plenary.nvim'} }
+    requires = { 'nvim-lua/plenary.nvim' }
   }
-  use 'bkad/CamelCaseMotion'            -- | Vimscript
-
-  -- | Edit
-  use 'tpope/vim-surround'              -- | Vimscript (surround.nvim)
-  use 'matze/vim-move'                  -- | Vimscript (move.nvim)
-  use 'mg979/vim-visual-multi'          -- | Vimscript
-  use 'preservim/nerdcommenter'         -- | Vimscript
+  use 'bkad/CamelCaseMotion'    -- | Vimscript
 
   -- | Status
   use {
@@ -66,6 +78,7 @@ return require('packer').startup(function()
     tag = 'release'
   }
   use 'lukas-reineke/indent-blankline.nvim'
+  use 'aserowy/tmux.nvim'
 
   -- | Quality of Life
   use {
@@ -81,4 +94,6 @@ return require('packer').startup(function()
     config = function()
     end
   }
-end)                                    
+  use 'powerman/vim-plugin-ruscmd'
+  use 'luukvbaal/stabilize.nvim'
+end)

@@ -1,3 +1,5 @@
+require'lsp/custom_languages/glslls'
+
 -- | Neovim world
 
 -- | Customize diagnostic signs
@@ -29,20 +31,32 @@ require'gitsigns'.setup {
   },
 }
 require'lualine'.setup {
+  options = {
+    theme = 'pywal'
+  },
   sections = {
     lualine_c = {
       "os.data('%a')",
       'data',
       require'lsp-status'.status,
-      'pidorass'
     }
   }
 }
+require'orgmode'.setup {}
 
 require'colorizer'.setup()
 require'nvim-autopairs'.setup()
 require'bufferline'.setup()
 require'lsp-status'.register_progress()
+require'org-bullets'.setup()
+require'hop'.setup { keys = 'etovxqpdygfblzhckisuran' }
+require'stabilize'.setup {
+  ignore = {
+    -- | Removing help from there not working for some reason
+    filetype = { "list", "Trouble" },
+  }
+}
+require'tmux'.setup {}
 
 -- | Lsp world
 
@@ -74,7 +88,7 @@ local on_attach = function(client, buffer)
   -- | Formatting
   vim.cmd [[ command! Format execute 'lua vim.lsp.buf.formatting()' ]]
 
-  -- | Define mappings (for this buffer only)
+  -- | Define mappings (for lsp buffers only)
 
   -- | Diagnostic and goto mappings
   local mapping_options = { noremap = true, silent = true }
@@ -144,7 +158,7 @@ local lsps = {
         },
         --root_dir = lspconfig.util.root_pattern(".git") or bufdir,
         --root_dir = bufdir,
-        --root_dir = vim.loop.cwd(),
+        root_dir = vim.loop.cwd(),
         --root_dir = function(fname)
           --local root_pattern = lspconfig.util.root_pattern('.git', '*.rockspec')(fname)
 
@@ -164,6 +178,7 @@ local lsps = {
             [vim.fn.expand('$VIMRUNTIME/lua/vim/lsp')] = true
           },
           maxPreload = 2000,
+          checkThirdParty = false,
         },
         telemetry = {
           enable = false,
@@ -174,6 +189,7 @@ local lsps = {
   ['null-ls'] = {
     autostart = true,
   },
+  glslls = {},
 }
 
 -- | Execute all configs and inject common capabilities to them
@@ -197,44 +213,36 @@ local cmp = require'cmp'
 cmp.setup {
   snippet = {
     expand = function(args)
-      require('luasnip').lsp_expand(args.body)
+      luasnip.lsp_expand(args.body)
     end,
   },
   mapping = {
-    ['<C-p>'] = cmp.mapping.select_prev_item(),
-    ['<C-n>'] = cmp.mapping.select_next_item(),
-    ['<C-d>'] = cmp.mapping.scroll_docs(-4),
-    ['<C-f>'] = cmp.mapping.scroll_docs(4),
-    ['<C-Space>'] = cmp.mapping.complete(),
+    ['<C-k>'] = cmp.mapping.select_prev_item(),
+    ['<C-j>'] = cmp.mapping.select_next_item(),
+    ['<C-d>'] = cmp.mapping.scroll_docs(4),
+    ['<C-u>'] = cmp.mapping.scroll_docs(-4),
+    ['<C-Space>'] = cmp.mapping(cmp.mapping.complete(), { 'i', 'n', 's' }),
     ['<C-e>'] = cmp.mapping.close(),
     ['<CR>'] = cmp.mapping.confirm {
       behavior = cmp.ConfirmBehavior.Replace,
       select = true,
     },
-    ['<Tab>'] = function(fallback)
-      if vim.fn.pumvisible() == 1 then
-        vim.fn.feedkeys(vim.api.nvim_replace_termcodes('<C-n>', true, true, true), 'n')
-      elseif luasnip.expand_or_jumpable() then
-        vim.fn.feedkeys(vim.api.nvim_replace_termcodes('<Plug>luasnip-expand-or-jump', true, true, true), '')
-      else
-        fallback()
-      end
-    end,
-    ['<S-Tab>'] = function(fallback)
-      if vim.fn.pumvisible() == 1 then
-        vim.fn.feedkeys(vim.api.nvim_replace_termcodes('<C-p>', true, true, true), 'n')
-      elseif luasnip.jumpable(-1) then
-        vim.fn.feedkeys(vim.api.nvim_replace_termcodes('<Plug>luasnip-jump-prev', true, true, true), '')
-      else
-        fallback()
-      end
-    end,
+    ['<Tab>'] = cmp.mapping(cmp.mapping.select_next_item(), { 'i', 's' }),
+    ['<S-Tab>'] = cmp.mapping(cmp.mapping.select_prev_item(), { 'i', 's' }),
+  },
+  formatting = {
+    format = require'lspkind'.cmp_format { with_text = true, maxwidth = 50,  }
   },
   sources = {
-    { name = 'nvim_lsp' },
-    { name = 'luasnip' },
+    { name = 'nvim_lua', },
+    { name = 'nvim_lsp', keyword_length = 3 },
+    { name = 'luasnip', },
+    { name = 'orgmode', keyword_length = 3 },
+    { name = 'path', keyword_length = 3 },
+    { name = 'buffer', keyword_length = 10 }, -- | keyword_length is for debouncing cmp for text until at least 5 symbols is typed
+  },
+  experimental = {
+    native_menu = false,
+    ghost_text = true,
   },
 }
-
--- | null-ls
---local null_ls = require'null-ls'

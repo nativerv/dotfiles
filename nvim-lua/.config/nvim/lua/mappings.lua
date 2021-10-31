@@ -1,7 +1,25 @@
 -- | VIM world
 
--- Unmap <space> so it don't interfere with the leader>
+-- | Toggle 80 color column
+vim.api.nvim_set_keymap('n', '<leader>ul', [[
+  <cmd>lua 
+  if vim.opt.colorcolumn == '80' then
+    vim.opt.colorcolumn = '0'
+  else
+    vim.opt.colorcolumn = '80'
+  end
+<cr>
+]], { noremap = true, silent = true })
+
+-- | Toggle wrap
+vim.api.nvim_set_keymap('n', '<leader>uw', '<cmd>set wrap!<cr>',             { noremap = true, silent = true })
+
+-- | Unmap <space> so it don't interfere with the leader>
 vim.api.nvim_set_keymap('n', '<space>', '<nop>',             { noremap = true, silent = true })
+
+-- | Unmap annoying q:/Q
+vim.api.nvim_set_keymap('n', 'q:', '<nop>',                  { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', 'Q',  '<nop>',                  { noremap = true, silent = true })
 
 -- | Make db adequate (not actually works in this form)
 vim.api.nvim_set_keymap('n', 'db', 'dvb',                    { noremap = true, silent = true })
@@ -29,10 +47,10 @@ vim.api.nvim_set_keymap('v', 'P', '""p',                     { noremap = true, s
 -- | Dublicate lines
 vim.api.nvim_set_keymap('n', '<M-J>', ':t .<cr>==',          { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<M-K>', ':t .-1<cr>==',        { noremap = true, silent = true })
-vim.api.nvim_set_keymap('i', '<M-J>', '<Esc>:t .<cr>==gi',   { noremap = true, silent = true })
-vim.api.nvim_set_keymap('v', '<M-J>', ':t \'><cr>gv=gv',     { noremap = true, silent = true })
-vim.api.nvim_set_keymap('i', '<M-K>', '<Esc>:t .-1<cr>==gi', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('v', '<M-K>', ':t \'<-1<cr>gv=gv',   { noremap = true, silent = true })
+vim.api.nvim_set_keymap('i', '<M-K>', '<Esc>:t .<cr>==gi',   { noremap = true, silent = true })
+vim.api.nvim_set_keymap('v', '<M-K>', ':t \'><cr>gv=gv',     { noremap = true, silent = true })
+vim.api.nvim_set_keymap('i', '<M-J>', '<Esc>:t .-1<cr>==gi', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('v', '<M-J>', ':t \'<-1<cr>gv=gv',   { noremap = true, silent = true })
 
 -- | Print highlight group under cursor
 vim.api.nvim_set_keymap('n', '<F10>', [[
@@ -91,3 +109,15 @@ vim.api.nvim_set_keymap('n', '<leader>fd', '<cmd>lua require"telescope.builtin".
 vim.api.nvim_set_keymap('n', '<leader>fp', '<cmd>lua require"telescope.builtin".live_grep()<cr>',                          { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>fo', '<cmd>lua require"telescope.builtin".tags{ only_current_buffer = true }<cr>',   { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>?',  '<cmd>lua require"telescope.builtin".oldfiles()<cr>',                           { noremap = true, silent = true })
+
+-- | bufferline.nvim
+vim.api.nvim_set_keymap('n', '<M-i>',  '<cmd>BufferLineCyclePrev<cr>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<M-o>',  '<cmd>BufferLineCycleNext<cr>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '(',      '<cmd>BufferLineMovePrev <cr>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', ')',      '<cmd>BufferLineMoveNext <cr>', { noremap = true, silent = true })
+
+-- | tmux.nvim
+vim.api.nvim_set_keymap('n', '<M-h>',  [[<cmd>lua require'tmux'.move_left()<cr>]]   , { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<M-j>',  [[<cmd>lua require'tmux'.move_bottom()<cr>]] , { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<M-k>',  [[<cmd>lua require'tmux'.move_top()<cr>]]    , { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<M-l>',  [[<cmd>lua require'tmux'.move_right()<cr>]]  , { noremap = true, silent = true })

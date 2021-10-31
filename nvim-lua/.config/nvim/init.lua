@@ -16,4 +16,5 @@ require 'bootstrap'  -- | Ensure `packer.nvim` is installed
 require 'plugins'    -- | Load plugins
 require 'options'    -- | Load options
 require 'mappings'   -- | Load mappings
+require 'autocmds'   -- | Load autocommands
 require 'rc'         -- | Load commands
