@@ -1,0 +1,7 @@
+#include /etc/firejail/allow-bin-sh.inc
+
+#ignore shell none
+#private-bin sh,dash,bash,qbittorrent,python*
+#ignore private-bin
+
+# vim:syntax=firejail

@@ -1,0 +1,7 @@
+noblacklist ${PICTURES}
+noblacklist ${VIDEOS}
+noblacklist ${DESKTOP}
+noblacklist ${MUSIC}
+noblacklist ${DOCUMENTS}
+noblacklist ${DOWNLOADS}
+ignore include disable-xdg.inc

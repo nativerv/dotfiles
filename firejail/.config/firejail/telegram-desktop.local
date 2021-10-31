@@ -1,14 +1,30 @@
 # Telegram-desktop local firejail profile
 
-# Disable mic access
+# Allow xdg-open 
+ignore shell none
+include /etc/firejail/allow-bin-sh.inc
+
+# Disable mic and cam access
 private-dev
-#nosound
+nosound
 novideo
 
-# TODO: Remove this after moving to hydrus/sorting vid dir
-#ignore blacklist ${VIDEOS}
-noblacklist ${VIDEOS}
-whitelist ${VIDEOS}
+# Disable `${DOWNLOADS}`
 ignore whitelist ${DOWNLOADS}
 
+# Allow `TelegramDesktop` inside `${DOWNLOADS}`
+noblacklist ${DOWNLOADS}
+mkdir ${HOME}/dl/Telegram Desktop
+whitelist ${HOME}/dl/Telegram Desktop
+
+# Allow `wal-telegram` folder
+ignore private-cache
+noblacklist ${HOME}/.cache/wal-telegram
+whitelist ${HOME}/.cache/wal-telegram
+
+# Allow `hydrus` folder
+noblacklist ${HOME}/.local/share/hydrus
+whitelist ${HOME}/.local/share/hydrus
+
+# Prevent unused directory creation
 ignore mkdir ${HOME}/.TelegramDesktop

@@ -1,4 +1,9 @@
+# Blacklist ~/.pki to force applications to use XDG_DATA_HOME/pki
+blacklist ${HOME}/.pki
+
 read-only ${HOME}/.config/zsh
 read-only ${HOME}/.config/bash
 read-only ${HOME}/.config/shell
-#read-only ${HOME}/.config/firejail
+read-only ${HOME}/.config/firejail
+
+# vim:syntax=firejail

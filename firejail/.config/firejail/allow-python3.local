@@ -1,0 +1,8 @@
+noblacklist ${HOME}/.local/lib
+noblacklist ${HOME}/.local/lib/python3*
+whitelist ${HOME}/.local/lib
+whitelist ${HOME}/.local/lib/python3*
+read-only ${HOME}/.local/lib
+read-only ${HOME}/.local/lib/python3*
+
+# vim:syntax=firejail

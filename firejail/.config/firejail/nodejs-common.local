@@ -1,4 +1,35 @@
 env GATSBY_TELEMETRY_DISABLED=1
+
+# 
+ignore seccomp
+ignore seccomp.block-secondary
+
+# This fixes:
+# `Error: no suitable /tmp/yarn--1635026745180-0.7119542057973685/node executable found`
+ignore noexec /tmp
+noblacklist /tmp
+
+# Allow my stuff
+noblacklist ${HOME}/pr
+whitelist ${HOME}/pr
+
+noblacklist ${HOME}/edu
+whitelist ${HOME}/edu
+
+noblacklist ${HOME}/dot
+whitelist ${HOME}/dot
+read-only ${HOME}/dot
+
 noblacklist ${HOME}/.config/npm
+whitelist ${HOME}/.config/npm
+
+noblacklist ${HOME}/.config/yarn
+whitelist ${HOME}/.config/yarn
+
 noblacklist ${HOME}/.local/share/npm
+whitelist ${HOME}/.local/share/npm
+
 noblacklist ${RUNUSER}/npm
+whitelist ${RUNUSER}/npm
+
+# vim:syntax=firejail

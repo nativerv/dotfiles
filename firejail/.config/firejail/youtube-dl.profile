@@ -1,0 +1,88 @@
+# Mine .local part
+#noblacklist ${HOME}
+#whitelist ${HOME}
+
+noblacklist ${DOWNLOADS}
+whitelist ${DOWNLOADS}
+
+noblacklist ${VIDEOS}
+whitelist ${VIDEOS}
+
+noblacklist ${PICTURES}
+whitelist ${PICTURES}
+
+noblacklist ${MUSIC}
+whitelist ${MUSIC}
+
+include /etc/firejail/allow-bin-sh.inc
+
+# Copied & Modified /etc/firejail/youtube-dl.profile, becouse .local file
+# can't ignore shell none without breaking stuff
+
+# Firejail profile for youtube-dl
+# Description: Downloader of videos from YouTube and other sites
+# This file is overwritten after every install/update
+quiet
+# Persistent local customizations
+include youtube-dl.local
+# Persistent global definitions
+include globals.local
+
+# breaks when installed under ${HOME} via `pip install --user` (see #2833)
+ignore noexec ${HOME}
+
+noblacklist ${HOME}/.cache/youtube-dl
+noblacklist ${HOME}/.config/youtube-dl
+noblacklist ${HOME}/.netrc
+noblacklist ${MUSIC}
+noblacklist ${VIDEOS}
+
+# Allow python (blacklisted by disable-interpreters.inc)
+include allow-python2.inc
+include allow-python3.inc
+
+blacklist /tmp/.X11-unix
+blacklist ${RUNUSER}
+
+include /etc/firejail/disable-common.inc
+include /etc/firejail/disable-devel.inc
+include /etc/firejail/disable-exec.inc
+include /etc/firejail/disable-interpreters.inc
+include /etc/firejail/disable-passwdmgr.inc
+include /etc/firejail/disable-programs.inc
+include /etc/firejail/disable-shell.inc
+#include /etc/firejail/disable-xdg.inc
+
+include whitelist-usr-share-common.inc
+include whitelist-var-common.inc
+
+apparmor
+caps.drop all
+ipc-namespace
+machine-id
+netfilter
+no3d
+nodvd
+nogroups
+noinput
+nonewprivs
+noroot
+nosound
+notv
+nou2f
+novideo
+protocol unix,inet,inet6
+seccomp
+seccomp.block-secondary
+tracelog
+
+private-bin env,ffmpeg,python*,youtube-dl,bash,sh,dash,zsh,yt-dlp
+private-cache
+private-dev
+private-etc alternatives,ca-certificates,crypto-policies,hostname,hosts,ld.so.cache,mime.types,pki,resolv.conf,ssl,youtube-dl.conf
+private-tmp
+
+dbus-user none
+dbus-system none
+
+#memory-deny-write-execute - breaks on Arch (see issue #1803)

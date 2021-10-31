@@ -1,0 +1,6 @@
+#noblacklist ${HOME}/dl
+#whitelist ${HOME}/dl/torbrowser
+#ignore noexec /tmp
+#ignore private-tmp
+
+# vim:syntax=firejail

@@ -1,0 +1,2 @@
+#whitelist ${RUNUSER}/x11/xauthority
+#read-only ${RUNUSER}/x11/xauthority

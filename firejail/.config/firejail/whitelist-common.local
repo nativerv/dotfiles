@@ -1,0 +1,5 @@
+#whitelist ${RUNUSER}/x11/xauthority
+#read-only ${RUNUSER}/x11/xauthority
+
+whitelist ${HOME}/.local/share/applications/*
+read-only ${HOME}/.local/share/applications/*

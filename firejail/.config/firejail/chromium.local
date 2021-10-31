@@ -1,9 +1,30 @@
-blacklist ${HOME}/.bashrc
-ignore blacklist ${VIDEOS}
-ignore blacklist ${DOWNLOADS}
-whitelist ${VIDEOS}
-noblacklist ${VIDEOS}
+# Block
+
+# Disable creating crap
 ignore mkdir ${HOME}/.pki
 
-ignore blacklist ${HOME}/edu
+# Blacklist sus stuff
+blacklist ${HOME}/.bashrc
+
+# Allow
+
+# Allow downloads dir
+noblacklist ${HOME}/dl
+whitelist ${HOME}/dl/chromium
+
+# Allow my stuff
+noblacklist ${HOME}/edu
 whitelist ${HOME}/edu
+
+noblacklist ${HOME}/pr
+whitelist ${HOME}/pr
+
+# Allow screenshots dir
+noblacklist ${HOME}/pix
+whitelist ${HOME}/pix/scr
+
+# Allow hydrus
+noblacklist ${HOME}/.local/share/hydrus
+whitelist ${HOME}/.local/share/hydrus
+
+# vim:syntax=firejail

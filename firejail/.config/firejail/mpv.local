@@ -1,0 +1,4 @@
+whitelist ${HOME}/.local/share/hydrus
+whitelist ${HOME}
+
+# vim:syntax=firejail

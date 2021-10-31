@@ -1,0 +1,5 @@
+#ignore shell none
+#
+#private-bin keepassxc,keepassxc-cli,keepassxc-proxy,sh,bash,dash
+#
+#include /etc/firejail/allow-bin-sh.inc
