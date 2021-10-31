@@ -11,8 +11,11 @@
 
 ### Open a program 
 
+super + shift + o ; h
+  {QT_QPA_PLATFORMTHEME=qt5ct hydrus-client}
+
 super + shift + o ; t ; {p}
-  {keepassxc}
+  {QT_QPA_PLATFORMTHEME=qt5ct keepassxc}
 
 super + shift + o ; b ; {b,f,t}
   {chromium,firefox,torbrowser-launcher}
@@ -60,3 +63,9 @@ super + grave:
 # Reload sxhkd config
 super + Pause
   pkill -USR1 -x sxhkd
+
+# Tools
+
+# xprop
+# super + shift + t ; {c,p}
+  # {xcolor,}
