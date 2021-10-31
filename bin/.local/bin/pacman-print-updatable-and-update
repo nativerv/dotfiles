@@ -10,7 +10,7 @@ echo
 echo "Updatable packages (${updatable_count}): "
 
 if [ "${updatable_count}" -ne '0' ]; then
-  echo "${updatable}" | pr -2 -t -o 20 | xargs -I{} printf '  '{}'\n'
+  echo "${updatable}" | xargs -I{} printf '  '{}'\n'
 else
   echo "  No packages is updatable at the moment."
 fi
