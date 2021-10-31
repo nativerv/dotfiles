@@ -1,0 +1,16 @@
+#!/bin/sh
+
+set -e
+
+LOGDIR="${XDG_DATA_HOME:-$HOME/.local/share}/you"
+
+mkdir -p "${LOGDIR}"
+
+printf 'Enter a url: '
+read -r 'url'
+
+yt-dlp "${@}" "${url}"
+
+printf "%s\t%s\n" "${url}" "${?}" > "${LOGDIR}/downloads.log"
+
+exit "${?}"

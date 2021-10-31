@@ -1,0 +1,5 @@
+#!/bin/sh
+
+[ -z "${1}" ] && { echo "usage: $(basename "${0}") PACKAGE"; exit 1; }
+
+pacman -Qi "${1}" | grep --color=none -Ei "(groups|description|name)"
