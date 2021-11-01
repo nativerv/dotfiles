@@ -9,7 +9,7 @@ notification_type=1
 [StatusIcon]
 stepsize=5
 onclick=st -e 'pulsemixer'
-theme=Default
+theme=White Gnome
 use_panel_specific_icons=false
 lmb_slider=true
 mmb_mute=true
