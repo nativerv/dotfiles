@@ -40,10 +40,10 @@ ERROR="${RED}ERROR: ${NC}"
 
 # Start/source ssh-agent
 if ! pgrep -u "${USER}" ssh-agent > /dev/null; then
-    ssh-agent -t 744h > "${XDG_RUNTIME_DIR}/ssh-agent.env"
+  [ ! -d "${XDG_RUNTIME_DIR}" ] && mkdir -p "${XDG_RUNTIME_DIR}"
+  ssh-agent -t 744h > "${XDG_RUNTIME_DIR}/ssh-agent.env"
 fi
 if [[ ! "$SSH_AUTH_SOCK" ]]; then
-  [ ! -d "${XDG_RUNTIME_DIR}" ] && mkdir -p "${XDG_RUNTIME_DIR}"
   # shellcheck disable=1091
   source "${XDG_RUNTIME_DIR}/ssh-agent.env" >/dev/null
 fi
