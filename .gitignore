@@ -69,3 +69,6 @@ bin/.local/bin/f2py3.9
 ranger/.config/ranger/plugins/__pycache__
 ranger/.config/ranger/plugins/ranger_devicons/__pycache__
 ranger/.config/ranger/plugins/__init__.py
+
+nvim-lua/.config/nvim/plugin/packer_compiled.lua
+gtk/.config/gtk-2.0/gtkfilechooser.ini
