@@ -1,9 +1,10 @@
 #!/bin/sh
 
 if command -v 'firejail' >/dev/null; then
-  firejail --profile=ssh /bin/ssh "${@}"
+  # shellcheck disable=2145
+  firejail --profile=ssh "${PREFIX}/bin/ssh" "${@}"
 else
-  ssh "${@}"
+  "${PREFIX}/bin/ssh" "${@}"
 fi
 
 [ -d "${HOME}/.cache/wal" ] && (cat "${HOME}/.cache/wal/sequences")
