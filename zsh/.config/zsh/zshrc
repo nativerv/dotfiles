@@ -43,7 +43,9 @@ if ! pgrep -u "${USER}" ssh-agent > /dev/null; then
     ssh-agent -t 744h > "${XDG_RUNTIME_DIR}/ssh-agent.env"
 fi
 if [[ ! "$SSH_AUTH_SOCK" ]]; then
-    source "${XDG_RUNTIME_DIR}/ssh-agent.env" >/dev/null
+  [ ! -d "${XDG_RUNTIME_DIR}" ] && mkdir -p "${XDG_RUNTIME_DIR}"
+  # shellcheck disable=1091
+  source "${XDG_RUNTIME_DIR}/ssh-agent.env" >/dev/null
 fi
 
 # Start X server if in tty1 and X server isn't running
@@ -62,6 +64,7 @@ maybe_startx () {
   fi
 
   # Throw to shell if `DISPLAY` is already set
+  # shellcheck disable=2237
   if ! [ -z "${DISPLAY}" ]; then
     echo "${ERROR}ERROR: \`DISPLAY\` is already set. X server already running on this TTY and you seeng this message. Something wrong."
     echo "Leaving you in the shell."
