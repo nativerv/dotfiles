@@ -13,15 +13,17 @@ alias lz="lazygit"
 alias muslyr="ncmpcpp --screen lyrics"
 alias musvis="ncmpcpp --screen visualizer"
 alias pac="pacman"
-alias you="youtube-dl"
 alias bs="bullshit"
 alias r="ranger"
 alias nf="neofetch"
 alias pf="pfetch"
+alias af="afetch"
 alias nb="newsboat"
 alias zt="zathura"
-alias fj="firejail"
-alias fjn="firejail --noprofile"
+alias fj="firejail "
+alias nfj="firejail --noprofile "
+alias dfj="firejail --profile=default "
+alias pm="pulsemixer"
 
 # Fix mkdir to create all dirs recursively
 alias mkdir="mkdir -p"
@@ -31,6 +33,9 @@ alias sudo="sudo "
 
 # Fix lolcat to always output truecolor
 alias lolcat="lolcat --truecolor"
+
+# Fix yarn to use XDG directory
+alias yarn='yarn --use-yarnrc "${XDG_CONFIG_HOME}/yarn/config"'
 
 # Configure ncdu
 alias ncdu="ncdu -q --color dark --confirm-quit --exclude-kernfs"
