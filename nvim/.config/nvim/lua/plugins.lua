@@ -12,6 +12,7 @@ return require('packer').startup(function()
 
   -- | Color Schemes
   use 'joshdick/onedark.vim'
+  --use 'navarasu/onedark.nvim'
   use 'morhetz/gruvbox'
 
   -- | Editing
@@ -27,9 +28,24 @@ return require('packer').startup(function()
   use 'hrsh7th/cmp-nvim-lua'      -- | Nvim lua config source for nvim-cmp
   use 'saadparwaiz1/cmp_luasnip'  -- | Snippet         source for nvim-cmp
 
+  -- | Treesitter
+  use 'nvim-treesitter/nvim-treesitter'
+
   -- | Language Server Protocol
   use 'neovim/nvim-lspconfig'     -- | Collection of configurations for
                                   -- | built-in LSP client
+  use {
+    'tami5/lspsaga.nvim',
+    config = function ()
+      --vim.api.nvim_buf_set_keymap(buffer, 'n', '<F2>', '<cmd>lua require("lspsaga.rename").rename()<cr>', { noremap = true, silent = true })
+      --vim.api.nvim_buf_set_keymap(buffer, 'n', '<F2>', '<cmd>lua require("lspsaga.rename").rename()<cr>', { noremap = true, silent = true })
+    end
+  }
+  use {
+   'weilbith/nvim-code-action-menu',
+   --cmd = 'CodeActionMenu',
+  }
+  use 'ray-x/lsp_signature.nvim'
   use 'hrsh7th/cmp-nvim-lsp'      -- | LSP source for nvim-cmp
   use 'onsails/lspkind-nvim'      -- | Display kind in nvim-cmp
   use 'nvim-lua/lsp-status.nvim'  -- | LSP info getters for statuslines
@@ -41,10 +57,23 @@ return require('packer').startup(function()
     }
   }
 
+  -- | Language-Specific Plugins
+  use {
+    'simrat39/rust-tools.nvim',
+    requires = {
+     'nvim-lua/popup.nvim', 'nvim-lua/plenary.nvim'
+    }
+  }
+
   -- | Features
   use 'kristijanhusak/orgmode.nvim'
   use 'akinsho/org-bullets.nvim'
   use 'tpope/vim-fugitive'
+  use {
+    'NTBBloodbath/rest.nvim',
+    requires = { 'nvim-lua/plenary.nvim' }
+  }
+  use 'kevinhwang91/rnvimr'
 
   -- | Syntax
   use 'tikhomirov/vim-glsl' -- | Vimscript
@@ -96,4 +125,8 @@ return require('packer').startup(function()
   }
   use 'powerman/vim-plugin-ruscmd'
   use 'luukvbaal/stabilize.nvim'
+  use 'folke/which-key.nvim'
+  use 'dstein64/nvim-scrollview'
+  use 'ojroques/nvim-bufdel'
+  
 end)

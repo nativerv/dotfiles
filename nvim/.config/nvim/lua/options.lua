@@ -14,13 +14,16 @@ vim.opt.relativenumber = true           -- | Line numbers starting their count f
 vim.opt.smarttab       = true           -- | ?
 vim.opt.ignorecase     = true           -- | Search ignorecase
 vim.opt.cindent        = true           -- | Autoindent new lines using C rules
-vim.opt.tabstop        = 2              -- | ?
+vim.opt.cinoptions     = '2'            -- | ?
 vim.opt.shiftwidth     = 2              -- | ?
+vim.opt.tabstop        = 2              -- | ?
+vim.opt.softtabstop    = 2              -- | ?
 vim.opt.cursorline     = true           -- | Highlight line
 vim.opt.expandtab      = true           -- | Tabs -> Spaces
-vim.opt.colorcolumn    = '0'            -- | 80 columns hing
+vim.opt.colorcolumn    = '999999'       -- | 80 columns hint, or disable it (99999 is because of #59 in `lukas-reineke/indent-blankline.nvim`)
 vim.opt.wrap           = false          -- | Disable word wrap
 vim.opt.autochdir      = false          -- | Automatically cd to buffer's dir
+vim.opt.signcolumn     = 'yes:2'        -- | FIX FUCKING GITSIGNS JUMPING BACK AND FORTH
 
 -- | Plugin world
 
@@ -70,3 +73,11 @@ vim.g.camelcasemotion_key = '<leader>'
 
 -- | vim-move
 vim.g.move_key_modifier = 'M-C'
+
+-- | rnvimr
+-- | Make Ranger replace Netrw and be the file explorer
+vim.g.rnvimr_enable_ex = 1
+
+-- | nvim-code-action-menu
+vim.g.code_action_menu_show_details = false
+vim.g.code_action_menu_show_diff = true

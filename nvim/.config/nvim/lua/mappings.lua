@@ -1,15 +1,10 @@
 -- | VIM world
 
+-- | FIX RUSSIAN ;;;;;->$$$$$$!!!111
+vim.api.nvim_set_keymap('n', ';', '$', { unique = true });
+
 -- | Toggle 80 color column
-vim.api.nvim_set_keymap('n', '<leader>ul', [[
-  <cmd>lua 
-  if vim.opt.colorcolumn == '80' then
-    vim.opt.colorcolumn = '0'
-  else
-    vim.opt.colorcolumn = '80'
-  end
-<cr>
-]], { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<leader>ul', [[<cmd>lua if vim.opt.colorcolumn == '80' then vim.opt.colorcolumn = '0' else vim.opt.colorcolumn = '80' end<cr>]], { noremap = true, silent = true })
 
 -- | Toggle wrap
 vim.api.nvim_set_keymap('n', '<leader>uw', '<cmd>set wrap!<cr>',             { noremap = true, silent = true })
@@ -41,8 +36,6 @@ vim.api.nvim_set_keymap('n', '<leader>dp', ':PackerInstall<cr>',              { 
 -- | Make p in `VISUAL` adequate
 vim.api.nvim_set_keymap('v', 'p', '"_dP',                    { noremap = true, silent = true })
 vim.api.nvim_set_keymap('v', 'P', '"_dP',                    { noremap = true, silent = true })
-vim.api.nvim_set_keymap('v', 'p', '""p',                     { noremap = true, silent = true })
-vim.api.nvim_set_keymap('v', 'P', '""p',                     { noremap = true, silent = true })
 
 -- | Dublicate lines
 vim.api.nvim_set_keymap('n', '<M-J>', ':t .<cr>==',          { noremap = true, silent = true })
@@ -65,6 +58,16 @@ vim.cmd [[
   noremap <silent> <expr> k (v:count == 0 ? 'gk' : 'k') 
 ]]
 
+-- | Close current buffer instead of window
+--vim.api.nvim_set_keymap('c', 'wq', 'w<bar>BufDel', { noremap = true, silent = true })
+--vim.api.nvim_set_keymap('c', 'q', 'BufDel',        { noremap = true, silent = true })
+--vim.api.nvim_set_keymap('c', 'q!', 'BufDel!',      { noremap = true, silent = true })
+vim.cmd [[
+  cnoreabbrev wq w<bar>BufDel
+  cnoreabbrev q BufDel
+  cnoreabbrev q! BufDel!
+]]
+
 -- | Plugin world
 
 -- | ranger.vim
@@ -82,25 +85,20 @@ vim.api.nvim_set_keymap("v", "?",     "<plug>NERDCommenterSexy",   {})
 vim.api.nvim_set_keymap('n', 'f', '<cmd>lua require"hop".hint_words()<cr>', { noremap = true, silent = true })
 
 -- | gitgutter.vim
--- | Bind goto hunk and hunk preview 
-vim.api.nvim_set_keymap('n', 'gz', '<Plug>(GitGutterPreviewHunk)', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', 'g[', '<Plug>(GitGutterPrevHunk)',    { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', 'g]', '<Plug>(GitGutterNextHunk)',    { noremap = true, silent = true })
+-- | Bind goto hunk and hunk preview vnoremap // y/\V<C-R>=escape(@",'/\')<CR><CR>
+--vim.api.nvim_set_keymap('n', 'gz', '<Plug>(GitGutterPreviewHunk)', { noremap = true, silent = true })
+--vim.api.nvim_set_keymap('n', 'g[', '<Plug>(GitGutterPrevHunk)',    { noremap = true, silent = true })
+--vim.api.nvim_set_keymap('n', 'g]', '<Plug>(GitGutterNextHunk)',    { noremap = true, silent = true })
+--vim.api.nvim_set_keymap('n', 'g]', '<Plug>(GitGutterNextHunk)',    { noremap = true, silent = true })
 
 -- | vim-surround
 -- | Surround word
 vim.api.nvim_set_keymap('n', 'S', 'ysiw', { noremap = false, silent = true })
 
--- | gitsigns.nvim
--- | Prev hunk, next hunk, zoom hunk
-vim.api.nvim_set_keymap('n', 'g[', '<cmd>lua require"gitsigns".next_hunk()<cr>',    { noremap = false, silent = true })
-vim.api.nvim_set_keymap('n', 'g]', '<cmd>lua require"gitsigns".next_hunk()<cr>',    { noremap = false, silent = true })
-vim.api.nvim_set_keymap('n', 'gz', '<cmd>lua require"gitsigns".preview_hunk()<cr>', { noremap = false, silent = true })
-
 -- | telescope.nvim
 -- | Find files (Ctrl-P)
-vim.api.nvim_set_keymap('n', '<leader>ff', [[<cmd>lua require('telescope.builtin').find_files({previewer = false})<cr>]],  { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<C-p>',      '<cmd>lua require"telescope.builtin".find_files({previewer = false})<cr>',      { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<leader>ff', [[<cmd>lua require('telescope.builtin').find_files({ hidden = true })<cr>]],  { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<C-p>',      '<cmd>lua require"telescope.builtin".find_files({ hidden = true })<cr>',      { noremap = true, silent = true })
 -- | The rest junk
 vim.api.nvim_set_keymap('n', '<leader>fb', '<cmd>lua require"telescope.builtin".current_buffer_fuzzy_find()<cr>',          { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>fh', '<cmd>lua require"telescope.builtin".help_tags()<cr>',                          { noremap = true, silent = true })
@@ -121,3 +119,16 @@ vim.api.nvim_set_keymap('n', '<M-h>',  [[<cmd>lua require'tmux'.move_left()<cr>]
 vim.api.nvim_set_keymap('n', '<M-j>',  [[<cmd>lua require'tmux'.move_bottom()<cr>]] , { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<M-k>',  [[<cmd>lua require'tmux'.move_top()<cr>]]    , { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<M-l>',  [[<cmd>lua require'tmux'.move_right()<cr>]]  , { noremap = true, silent = true })
+
+--vim.api.nvim_set_keymap('v', '//', 'y/\\/<C-R>=escape(@",'/\\')<CR><CR>', { noremap = true, silent = true })
+--vim.cmd [[ vnoremap // y/\V<C-R>=escape(@",'/\')<CR><CR> ]]
+vim.cmd [[ vnoremap // "hy:%s/<C-r>h//gc<left><left><left> ]]
+
+-- | tmux.nvim
+vim.api.nvim_set_keymap('n', '<leader>trr',  [[<cmd>lua require'rest-nvim'.run()<cr>]]      , { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<leader>trp',  [[<cmd>lua require'rest-nvim'.preview()<cr>]]  , { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<leader>trl',  [[<cmd>lua require'rest-nvim'.run_last()<cr>]] , { noremap = true, silent = true })
+
+-- | rnvimr
+vim.api.nvim_set_keymap('n', '<leader>r',  [[<cmd>RnvimrToggle<cr>]] , { noremap = true, silent = true })
+
