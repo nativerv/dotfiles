@@ -1,0 +1,24 @@
+# Allow media programs
+include allow-mpv.inc
+include allow-sxiv.inc
+
+# Prevent crap creation
+ignore mkdir ${HOME}/.pki
+
+# Blacklist sus stuff
+blacklist ${HOME}/.bashrc
+
+## Allow downloads dir
+#noblacklist ${HOME}/dl
+#whitelist ${HOME}/dl/firefox
+
+# Allow programming dirs
+include allow-pr.inc
+
+# Allow screenshots dir
+include allow-scr.inc
+
+# Allow hydrus dir
+include allow-hydrus.inc
+
+# vim:syntax=firejail

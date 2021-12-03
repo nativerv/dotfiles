@@ -1,0 +1,29 @@
+# Prevent crap creation
+ignore mkdir ${HOME}/.pki
+
+# Allow only firefox folder in downloads
+nowhitelist ${HOME}/dl
+noblacklist ${HOME}/dl
+mkdir ${HOME}/dl/firefox
+whitelist ${HOME}/dl/firefox
+
+
+# Allow pywalfox
+ignore include disable-exec.inc
+include allow-python3.inc
+noblacklist ${HOME}/.local/lib
+whitelist ${HOME}/.local/lib
+whitelist ${HOME}/.local/lib/python3*
+whitelist ${HOME}/.cache/wal
+whitelist ${HOME}/.local/bin/pywalfox
+whitelist ${HOME}/.local/lib/python3.9/site-packages/pywalfox
+
+dbus-user.own org.mozilla.Firefox.*
+dbus-user.own org.mozilla.firefox.*
+dbus-user.own org.mpris.MediaPlayer2.firefox.*
+dbus-user.talk org.freedesktop.Notifications
+
+ignore private-tmp
+ignore protocol unix,inet,inet6,netlink
+
+# vim:syntax=firejail

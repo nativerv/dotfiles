@@ -1,0 +1,33 @@
+#include allow-steam.inc
+
+ignore noblacklist ${HOME}/Games
+ignore mkdir ${HOME}/Games
+ignore whitelist ${HOME}/Games
+
+ignore noblacklist ${DOWNLOADS}
+ignore whitelist ${DOWNLOADS}
+
+ignore seccomp
+#seccomp.keep modify_ldt
+ignore dbus-user filter
+ignore dbus-user.own net.lutris.Lutris
+ignore dbus-user.talk com.feralinteractive.GameMode
+ignore dbus-system none
+ignore caps.drop all
+ignore ipc-namespace
+
+noblacklist ${PATH}/openssl
+noblacklist ${PATH}/openssl-1.0
+
+noblacklist ${HOME}/vg
+whitelist ${HOME}/vg
+
+noblacklist /media/win_d_drive/Games
+whitelist /media/win_d_drive/Games
+
+noblacklist /media/win_d_drive/vg
+whitelist /media/win_d_drive/vg
+ 
+private-dev
+
+# vim:syntax=firejail

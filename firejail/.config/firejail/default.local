@@ -1,0 +1,5 @@
+include allow-python2.inc
+include allow-python3.inc
+include allow-ranger.inc
+
+whitelist ${HOME}
