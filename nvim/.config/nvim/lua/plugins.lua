@@ -6,7 +6,7 @@
 -- | Todo: install trouble.nvim
 -- | Todo: install barbar.nvim
 
-return require('packer').startup(function()
+return require'packer'.startup(function()
   -- | Packer
   use 'wbthomason/packer.nvim'
 
@@ -19,7 +19,11 @@ return require('packer').startup(function()
   use 'tpope/vim-surround'        -- | Vimscript (surround.nvim)
   use 'matze/vim-move'            -- | Vimscript (move.nvim)
   use 'mg979/vim-visual-multi'    -- | Vimscript
-  use 'preservim/nerdcommenter'   -- | Vimscript
+  --use 'preservim/nerdcommenter'   -- | Vimscript
+  use {
+    'numToStr/Comment.nvim',
+    --as = 'comment'
+  }
 
   use 'L3MON4D3/LuaSnip'          -- | Snippets plugin
   use 'hrsh7th/nvim-cmp'          -- | Autocompletion  core plugin
@@ -30,6 +34,8 @@ return require('packer').startup(function()
 
   -- | Treesitter
   use 'nvim-treesitter/nvim-treesitter'
+  use 'JoosepAlviste/nvim-ts-context-commentstring'
+  use 'nvim-treesitter/playground'
 
   -- | Language Server Protocol
   use 'neovim/nvim-lspconfig'     -- | Collection of configurations for
@@ -114,7 +120,7 @@ return require('packer').startup(function()
     'windwp/nvim-autopairs',
     as = 'nvim-autopairs',
     config = function()
-      require('nvim-autopairs').setup()
+      require'nvim-autopairs'.setup()
     end,
   }
   use {
@@ -128,5 +134,11 @@ return require('packer').startup(function()
   use 'folke/which-key.nvim'
   use 'dstein64/nvim-scrollview'
   use 'ojroques/nvim-bufdel'
-  
+
+  -- | print(vim.tbl_count(vim.tbl_filter(function(window)
+  -- |     return vim.api.nvim_win_get_config(window).relative == ""
+  -- |   end,
+  -- |   vim.api.nvim_list_wins()
+  -- | )))
+
 end)

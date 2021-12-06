@@ -24,6 +24,7 @@ vim.opt.colorcolumn    = '999999'       -- | 80 columns hint, or disable it (999
 vim.opt.wrap           = false          -- | Disable word wrap
 vim.opt.autochdir      = false          -- | Automatically cd to buffer's dir
 vim.opt.signcolumn     = 'yes:2'        -- | FIX FUCKING GITSIGNS JUMPING BACK AND FORTH
+vim.opt.formatoptions  = 'jql'          -- | Formatoptions -= cro - disable auto comment leader insertion
 
 -- | Plugin world
 

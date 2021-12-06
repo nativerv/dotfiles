@@ -2,17 +2,6 @@ require'lsp/custom_languages/glslls'
 
 -- | Neovim world
 
--- | Customize diagnostic signs
-vim.cmd [[
-  "       ﴫ כֿ   ﯦ         ⏼  𥉉    ﱥ ﯂         ﯇    﫝           ﯦ ﯧ     窱
-
-  " Same as in lualine.nvim
-  sign define LspDiagnosticsSignError text= texthl=LspDiagnosticsSignError linehl= numhl=
-  sign define LspDiagnosticsSignWarning text= texthl=LspDiagnosticsSignWarning linehl= numhl=
-  sign define LspDiagnosticsSignInformation text= texthl=LspDiagnosticsSignInformation linehl= numhl=
-  sign define LspDiagnosticsSignHint text= texthl=LspDiagnosticsSignHint linehl= numhl=
-]]
-
 -- | Plugin (normal plugin) world
 
 require'nvim-treesitter.configs'.setup {
@@ -21,13 +10,34 @@ require'nvim-treesitter.configs'.setup {
   ignore_install = { }, -- List of parsers to ignore installing
   highlight = {
     enable = true,              -- false will disable the whole extension
-    --disable = { 'typescript', 'typescriptreact' },  -- list of language that will be disabled
+    disable = { 'sh' },  -- list of language that will be disabled
     -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
     -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
     -- Using this option may slow down your editor, and you may see some duplicate highlights.
     -- Instead of true it can also be a list of languages
     additional_vim_regex_highlighting = false,
   },
+  context_commentstring = {
+    enable = true
+  },
+  playground = {
+    enable = true,
+    disable = {},
+    updatetime = 25, -- Debounced time for highlighting nodes in the playground from source code
+    persist_queries = false, -- Whether the query persists across vim sessions
+    keybindings = {
+      toggle_query_editor = 'o',
+      toggle_hl_groups = 'i',
+      toggle_injected_languages = 't',
+      toggle_anonymous_nodes = 'a',
+      toggle_language_display = 'I',
+      focus_language = 'f',
+      unfocus_language = 'F',
+      update = 'R',
+      goto_node = '<cr>',
+      show_help = '?',
+    },
+  }
 }
 
 require'indent_blankline'.setup {
@@ -74,7 +84,9 @@ require'lualine'.setup {
     lualine_c = {
       "os.data('%a')",
       'data',
-      require'lsp-status'.status,
+      -- | TODO: figure out what to do with this unused plugin, delete it or properly integrate
+      -- | Search for lsp-status and lsp_status
+      -- | require'lsp-status'.status,
     }
   }
 }
@@ -95,7 +107,8 @@ require'orgmode'.setup {}
 require'colorizer'.setup()
 require'nvim-autopairs'.setup()
 require'bufferline'.setup()
-require'lsp-status'.register_progress()
+-- | TODO: figure out what to do with this unused plugin, delete it or properly integrate
+-- | require'lsp-status'.register_progress()
 require'org-bullets'.setup()
 require'hop'.setup { keys = 'etovxqpdygfblzhckisuran' }
 require'stabilize'.setup {
@@ -135,12 +148,58 @@ require'lspsaga'.init_lsp_saga {
   },
 }
 --require'rust-tools'.setup {}
+require'Comment'.setup {
+  -- | LHS of toggle mappings in NORMAL + VISUAL mode
+  -- | type table
+  toggler = {
+      -- | line-comment keymap
+      line = 'gcc',
+      -- | block-comment keymap
+      block = 'gCC',
+  },
+
+  -- | LHS of operator-pending mappings in NORMAL + VISUAL mode
+  -- | @type table
+  opleader = {
+      -- | line-comment keymap
+      line = 'gc',
+      -- | block-comment keymap
+      block = 'gC',
+  },
+  -- | @param ctx Ctx
+  pre_hook = function(ctx)
+    -- | Only calculate commentstring for tsx filetypes
+    if vim.bo.filetype == 'typescriptreact' then
+      local U = require('Comment.utils')
+
+      -- | Detemine whether to use linewise or blockwise commentstring
+      local type = ctx.ctype == U.ctype.line and '__default' or '__multiline'
+
+      -- | Determine the location where to calculate commentstring from
+      local location = nil
+      if ctx.ctype == U.ctype.block then
+        location = require('ts_context_commentstring.utils').get_cursor_location()
+      elseif ctx.cmotion == U.cmotion.v or ctx.cmotion == U.cmotion.V then
+        location = require('ts_context_commentstring.utils').get_visual_start_location()
+      end
+
+      return require('ts_context_commentstring.internal').calculate_commentstring({
+        key = type,
+        location = location,
+      })
+    end
+  end,
+}
+-- | Customize comment strings
+require'Comment.ft'
+-- |            line comment  block comment
+  .set('lua', { '-- | %s',    '-- [[ %s ]]' })
 
 -- | Lsp world
 
 -- | nvim-lspconfig
 local lspconfig  = require'lspconfig'
-local lsp_status = require'lsp-status'
+-- | local lsp_status = require'lsp-status'
 local lsp_signature = require'lsp_signature'
 local null_ls = require'null-ls'
 
@@ -160,7 +219,8 @@ local on_attach = function(client, buffer)
   vim.api.nvim_buf_set_option(buffer, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
 
   -- | Attach lsp-status
-  lsp_status.on_attach(client)
+  -- | TODO: figure out what to do with this unused plugin, delete it or properly integrate
+  -- | lsp_status.on_attach(client)
 
   -- | Attach lsp_signature
   lsp_signature.on_attach({
@@ -186,7 +246,7 @@ local on_attach = function(client, buffer)
   --vim.api.nvim_buf_set_keymap(buffer, 'n', '<leader>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<cr>', mapping_options)
   vim.api.nvim_buf_set_keymap(buffer, 'n', 'gt', '<cmd>lua vim.lsp.buf.type_definition()<cr>',              mapping_options)
 
-  --vim.api.nvim_buf_set_keymap(buffer, 'n', '<F2>', '<cmd>lua vim.lsp.buf.rename()<cr>',                     mapping_options) 
+  --vim.api.nvim_buf_set_keymap(buffer, 'n', '<F2>', '<cmd>lua vim.lsp.buf.rename()<cr>',                     mapping_options)
   vim.api.nvim_buf_set_keymap(buffer, 'n', '<F2>', '<cmd>lua require("lspsaga.rename").rename()<cr>',       mapping_options)
 
   vim.api.nvim_buf_set_keymap(buffer, 'n', 'gr', '<cmd>lua vim.lsp.buf.references()<cr>',                   mapping_options)
@@ -198,19 +258,42 @@ local on_attach = function(client, buffer)
   vim.api.nvim_buf_set_keymap(buffer, 'n', 'gy', '<cmd>CodeActionMenu<cr>',                                 mapping_options)
   vim.api.nvim_buf_set_keymap(buffer, 'v', 'gy', '<cmd>CodeActionMenu<cr>',                                 mapping_options)
 
-  vim.api.nvim_buf_set_keymap(buffer, 'n', 'gK', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<cr>', mapping_options)
-  vim.api.nvim_buf_set_keymap(buffer, 'n', '[', '<cmd>lua vim.lsp.diagnostic.goto_prev()<cr>',              mapping_options)
-  vim.api.nvim_buf_set_keymap(buffer, 'n', ']', '<cmd>lua vim.lsp.diagnostic.goto_next()<cr>',              mapping_options)
-  --vim.api.nvim_buf_set_keymap(buffer, 'n', '<leader>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<cr>', mapping_options)
+  vim.api.nvim_buf_set_keymap(buffer, 'n', 'gK', '<cmd>lua vim.diagnostic.open_float()<cr>',            mapping_options)
+  vim.api.nvim_buf_set_keymap(buffer, 'n', '[', '<cmd>lua vim.diagnostic.goto_prev()<cr>',              mapping_options)
+  vim.api.nvim_buf_set_keymap(buffer, 'n', ']', '<cmd>lua vim.diagnostic.goto_next()<cr>',              mapping_options)
+  --vim.api.nvim_buf_set_keymap(buffer, 'n', '<leader>q', '<cmd>lua vim.diagnostic.set_loclist()<cr>', mapping_options)
   --vim.api.nvim_buf_set_keymap(buffer, 'n', '<leader>so', [[<cmd>lua require('telescope.builtin').lsp_document_symbols()<cr>]], mapping_options)
 
   -- | Formatting mapping
 
   -- | Format on save
   --vim.cmd [[ autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.graphql,*.md,*.vue,*.yaml,*.html Format ]]
+
+  -- | Configure diagnostics appearance
+  vim.diagnostic.config({
+    virtual_text = false,
+    signs = true,
+    underline = true,
+    update_in_insert = false,
+    severity_sort = true,
+  })
+
+  -- | Customize diagnostic signs
+  -- | "       ﴫ כֿ   ﯦ         ⏼  𥉉    ﱥ ﯂         ﯇    﫝           ﯦ ﯧ     窱
+  local signs = { Error = " ", Warn = " ", Hint = " ", Info = " " }
+  for type, icon in pairs(signs) do
+    local hl = "DiagnosticSign" .. type
+    vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
+  end
+
+
+  -- | Open diagnostic float automatically
+  vim.o.updatetime = 250
+  vim.cmd [[ autocmd CursorHold,CursorHoldI * lua vim.diagnostic.open_float(nil, { focus = false, source = 'always' }) ]]
 end
 
 -- | Create a command to get `lsp-status.nvim` output
+-- | TODO: figure out what to do with this unused plugin, delete it or properly integrate
 vim.cmd [[
   function! LspStatus() abort
     if luaeval('#vim.lsp.buf_get_clients() > 0')
@@ -223,10 +306,11 @@ vim.cmd [[
   command! LspStatus call LspStatus()
 ]]
 
+
 -- | Include capabilities from plugins
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = require'cmp_nvim_lsp'.update_capabilities(capabilities)
-capabilities = vim.tbl_extend('keep', capabilities or {}, lsp_status.capabilities)
+-- | capabilities = vim.tbl_extend('keep', capabilities or {}, lsp_status.capabilities)
 
 -- | Enable the following language servers
 local lsps = {
@@ -290,12 +374,29 @@ local lsps = {
   dockerls = {},
 }
 
+local border = {
+      {"🭽", "FloatBorder"},
+      {"▔", "FloatBorder"},
+      {"🭾", "FloatBorder"},
+      {"▕", "FloatBorder"},
+      {"🭿", "FloatBorder"},
+      {"▁", "FloatBorder"},
+      {"🭼", "FloatBorder"},
+      {"▏", "FloatBorder"},
+}
+
+-- | local handlers =  {
+-- |   ["textDocument/hover"]         =  vim.lsp.with(vim.lsp.handlers.hover,          {border = border}),
+-- |   ["textDocument/signatureHelp"] =  vim.lsp.with(vim.lsp.handlers.signature_help, {border = border }),
+-- | }
+
 -- | Execute all configs and inject common capabilities to them
 for lsp, lsp_config in pairs(lsps) do
   -- | Merge configs with custom function
   local default_config = {
     on_attach    = on_attach,
     capabilities = capabilities,
+    -- | handlers = handlers,
   }
   local config = merge(default_config, lsp_config)
 

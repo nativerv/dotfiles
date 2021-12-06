@@ -55,7 +55,7 @@ vim.api.nvim_set_keymap('n', '<F10>', [[
 -- | Move cursor on wrapped lines with j/k
 vim.cmd [[
   noremap <silent> <expr> j (v:count == 0 ? 'gj' : 'j')
-  noremap <silent> <expr> k (v:count == 0 ? 'gk' : 'k') 
+  noremap <silent> <expr> k (v:count == 0 ? 'gk' : 'k')
 ]]
 
 -- | Close current buffer instead of window
@@ -68,6 +68,8 @@ vim.cmd [[
   cnoreabbrev q! BufDel!
 ]]
 
+vim.api.nvim_set_keymap('n', 'p', ']p', { noremap = true, silent = true })
+
 -- | Plugin world
 
 -- | ranger.vim
@@ -76,9 +78,14 @@ vim.api.nvim_set_keymap('n', '<leader>v', ':Ranger<cr>', { noremap = true, silen
 
 -- | nerdcommenter
 -- | Comment line (selection of lines), comment block
-vim.api.nvim_set_keymap("n", "<C-_>", "<plug>NERDCommenterToggle", {})
-vim.api.nvim_set_keymap("v", "<C-_>", "<plug>NERDCommenterToggle", {})
-vim.api.nvim_set_keymap("v", "?",     "<plug>NERDCommenterSexy",   {})
+-- | vim.api.nvim_set_keymap("n", "<C-_>", "<cmd>lua require('Comment.api').gcc('V' --[[, cfg]])<cr>", { noremap = true, silent = true })
+-- | vim.api.nvim_set_keymap("v", "<C-_>", "<cmd>lua require('Comment.api').gcc('v' --[[, cfg]])<cr>", { noremap = true, silent = true })
+-- | vim.api.nvim_set_keymap("n", "?",     "<cmd>lua require('Comment.api').gbc('V' --[[, cfg]])<cr>", { noremap = true, silent = true })
+-- | vim.api.nvim_set_keymap("v", "?",     "<cmd>lua require('Comment.api').gbc('v' --[[, cfg]])<cr>", { noremap = true, silent = true })
+-- | vim.api.nvim_set_keymap("n", "<C-_>", "<cmd>lua require('Comment.api').toggle()<cr>", { noremap = true, silent = true })
+-- | vim.api.nvim_set_keymap("v", "<C-_>", "<cmd>lua require('Comment.api').toggle()<cr>", { noremap = true, silent = true })
+-- | vim.api.nvim_set_keymap("n", "?",     "<cmd>lua require('Comment.api').toggle()<cr>", { noremap = true, silent = true })
+-- | vim.api.nvim_set_keymap("v", "?",     "<cmd>lua require('Comment.api').toggle()<cr>", { noremap = true, silent = true })
 
 -- | hop.nvim
 -- | Display words
@@ -111,6 +118,8 @@ vim.api.nvim_set_keymap('n', '<leader>?',  '<cmd>lua require"telescope.builtin".
 -- | bufferline.nvim
 vim.api.nvim_set_keymap('n', '<M-i>',  '<cmd>BufferLineCyclePrev<cr>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<M-o>',  '<cmd>BufferLineCycleNext<cr>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<M-ш>',  '<cmd>BufferLineCyclePrev<cr>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<M-щ>',  '<cmd>BufferLineCycleNext<cr>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '(',      '<cmd>BufferLineMovePrev <cr>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', ')',      '<cmd>BufferLineMoveNext <cr>', { noremap = true, silent = true })
 
@@ -119,6 +128,10 @@ vim.api.nvim_set_keymap('n', '<M-h>',  [[<cmd>lua require'tmux'.move_left()<cr>]
 vim.api.nvim_set_keymap('n', '<M-j>',  [[<cmd>lua require'tmux'.move_bottom()<cr>]] , { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<M-k>',  [[<cmd>lua require'tmux'.move_top()<cr>]]    , { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<M-l>',  [[<cmd>lua require'tmux'.move_right()<cr>]]  , { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<M-р>',  [[<cmd>lua require'tmux'.move_left()<cr>]]   , { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<M-о>',  [[<cmd>lua require'tmux'.move_bottom()<cr>]] , { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<M-л>',  [[<cmd>lua require'tmux'.move_top()<cr>]]    , { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<M-д>',  [[<cmd>lua require'tmux'.move_right()<cr>]]  , { noremap = true, silent = true })
 
 --vim.api.nvim_set_keymap('v', '//', 'y/\\/<C-R>=escape(@",'/\\')<CR><CR>', { noremap = true, silent = true })
 --vim.cmd [[ vnoremap // y/\V<C-R>=escape(@",'/\')<CR><CR> ]]
