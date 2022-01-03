@@ -1,0 +1,16 @@
+#!/bin/sh
+
+# Reference:
+# ${0}   ${1}    ${2}    ${3} ${4} ${5}
+# script appname summary body icon urgency
+
+# Get app name:
+# zenity --info --text "'${1}' - '${2}' - '${3}' - '${4}' - '${5}'" &
+
+# Ignore list - play no sound for these
+[ "${1}" = "Telegram Desktop" ] && exit
+[ "${1}" = "flameshot" ] && exit
+[ "${1}" = "setwall" ] && exit
+
+paplay "${HOME}/.local/share/dunst/sounds/Iapetus.ogg"
+
