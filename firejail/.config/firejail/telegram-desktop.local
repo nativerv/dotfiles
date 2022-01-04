@@ -6,7 +6,7 @@ include /etc/firejail/allow-bin-sh.inc
 
 # Disable mic and cam access
 private-dev
-nosound
+#nosound
 novideo
 
 # Disable `${DOWNLOADS}`
@@ -14,8 +14,8 @@ ignore whitelist ${DOWNLOADS}
 
 # Allow `TelegramDesktop` inside `${DOWNLOADS}`
 noblacklist ${DOWNLOADS}
-mkdir ${HOME}/dl/Telegram Desktop
-whitelist ${HOME}/dl/Telegram Desktop
+mkdir ${HOME}/dl/telegram
+whitelist ${HOME}/dl/telegram
 
 # Allow `wal-telegram` folder
 ignore private-cache

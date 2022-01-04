@@ -1,6 +1,9 @@
 env GATSBY_TELEMETRY_DISABLED=1
 
-# 
+# Disable X11 
+blacklist ${HOME}/.Xauthority
+
+# Allow syscalls (i guess?)
 ignore seccomp
 ignore seccomp.block-secondary
 
@@ -9,10 +12,12 @@ ignore seccomp.block-secondary
 ignore noexec /tmp
 noblacklist /tmp
 
+ignore noexec ${RUNUSER}
+noblacklist ${RUNUSER} 
+
 # Allow my stuff
 noblacklist ${HOME}/pr
 whitelist ${HOME}/pr
-
 noblacklist ${HOME}/edu
 whitelist ${HOME}/edu
 

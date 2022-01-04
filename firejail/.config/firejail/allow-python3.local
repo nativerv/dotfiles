@@ -1,3 +1,5 @@
+ignore noexec ${HOME}
+
 noblacklist ${HOME}/.local/lib
 noblacklist ${HOME}/.local/lib/python3*
 whitelist ${HOME}/.local/lib

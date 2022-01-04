@@ -12,8 +12,6 @@ whitelist /opt/hydrus
 # Seen problems with xdg-open, so just in case:
 whitelist ${HOME}/.config/mimeapps.list
 read-only ${HOME}/.config/mimeapps.list
-whitelist ${HOME}/.local/applications
-read-only ${HOME}/.local/applications
 
 # Allow media folders
 noblacklist ${DOWNLOADS}
