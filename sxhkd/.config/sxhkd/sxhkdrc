@@ -38,16 +38,27 @@ super + control + period:
 super + period:
   dmenu_unicode -t
 
-### Music/Sound
-
-super + {minus,equal,m}
-  pulsemixer {--change-volume -5,--change-volume +5,--toggle-mute}
+### Music
 
 super + shift + {minus,equal}
   mpc {volume -5,volume +5}
 
 super + {F5,F6,F7,F8}
   mpc {prev,toggle,toggle,next}
+
+super + shift {F5,F8}
+  mpc seekthrough {-5,+5}
+
+### Sound
+
+super + {minus,equal}
+  pulsemixer {--change-volume -5,--change-volume +5}
+
+super + m:
+  amixer set Mic toggle
+
+super + shift + m:
+  pulsemixer --toggle-mute
 
 ### System
 
