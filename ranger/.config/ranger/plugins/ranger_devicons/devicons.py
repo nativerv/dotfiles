@@ -227,6 +227,7 @@ dir_node_exact_matches = {
     'vid'                              : '',
     'pr'                               : '',
     'dock'                             : 'פּ',
+    'vg'                               : '',
     'vms'                              : '',
     'edu'                              : '',
 # Spanish
