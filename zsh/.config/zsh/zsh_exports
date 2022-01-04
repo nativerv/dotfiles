@@ -19,7 +19,11 @@ export XDG_DATA_DIRS="/usr/local/share:/usr/share"
 export XDG_CONFIG_DIRS="/etc/xdg"
 [ -n "${PREFIX}" ] && export XDG_RUNTIME_DIR="${PREFIX}/var/run/${UID}"
 
- 
+### LC_* ===========================
+
+# Sort ls, nnn and others with dotfiles first
+export LC_COLLATE='C'
+
 ### Zsh history stuff ===========================
 
 HISTFILEDIR="${XDG_DATA_HOME}/zsh"
