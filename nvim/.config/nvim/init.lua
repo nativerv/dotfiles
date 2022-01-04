@@ -9,12 +9,13 @@
 -- | URL: https://github.com/nativerv/dotfiles
 
 -- | Preconfig
-require 'utils'      -- | Load util functions
+require 'utils'       -- | Load util functions
 
 -- | Begin config
-require 'bootstrap'  -- | Ensure `packer.nvim` is installed
-require 'plugins'    -- | Load plugins
-require 'options'    -- | Load options
-require 'mappings'   -- | Load mappings
-require 'autocmds'   -- | Load autocommands
-require 'rc'         -- | Load commands
+require 'bootstrap'   -- | Ensure `packer.nvim` is installed - for new systems
+require 'plugins'     -- | Load plugins
+require 'options'     -- | Load options
+require 'mappings'    -- | Load mappings
+require 'autocmds'    -- | Load autocommands
+require 'rc'          -- | Load commands & settings for various plugins
+require 'colorscheme' -- | Load colorscheme

@@ -1,3 +1,5 @@
+local undodir_path = vim.loop.os_homedir() .. '/.cache/nvim/undodir'
+
 -- | Outer world
 vim.opt.mouse          = 'a'            -- | Ebable mouse
 vim.opt.clipboard      = 'unnamedplus'  -- | Use system clipboard
@@ -25,49 +27,15 @@ vim.opt.wrap           = false          -- | Disable word wrap
 vim.opt.autochdir      = false          -- | Automatically cd to buffer's dir
 vim.opt.signcolumn     = 'yes:2'        -- | FIX FUCKING GITSIGNS JUMPING BACK AND FORTH
 vim.opt.formatoptions  = 'jql'          -- | Formatoptions -= cro - disable auto comment leader insertion
+vim.opt.undodir        = undodir_path   -- | Enable persistent undo
+vim.opt.undofile       = true           -- | Enable persistent undo
 
 -- | Plugin world
-
--- | onedark.vim:
--- | Don't set a background color when running in a terminal;
--- | just use the terminal's background color
--- | `gui` is the hex color code used in GUI mode/nvim true-color mode
--- | `cterm` is the color code used in 256-color mode
--- | `cterm16` is the color code used in 16-color mode
-
-vim.cmd [[
-  if (has("autocmd") && !has("gui_running"))
-    augroup colorset
-      autocmd!
-      let white = { "gui": "#ABB2BF", "cterm": "145", "cterm16" : "7" }
-
-      " | `bg` will not be styled since there is no `bg` setting
-      autocmd ColorScheme * call onedark#set_highlight(
-        \ "Normal",
-        \ { "fg": white }
-      \ ) 
-    augroup END
-  endif
-]]
-
-vim.g.onedark_color_overrides = {
-  cursor_grey = {
-    gui = "#2c1a1c",
-    --gui = "#3F521B",
-    --gui = "#1F290D",
-    --gui = "#0F1203",
-    cterm = 235,
-    cterm16 = 0
-  },
-}
-
+--
 -- | nerdcommenter
 -- | Disable creation of default mappings
 vim.g.NERDCreateDefaultMappings = 0
 vim.g.NERDSpaceDelims           = 0
-
--- | Set a colorscheme
-vim.cmd [[ colorscheme onedark ]]
 
 -- | camelcasemotion
 vim.g.camelcasemotion_key = '<leader>'

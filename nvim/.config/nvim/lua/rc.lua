@@ -1,4 +1,4 @@
-require'lsp/custom_languages/glslls'
+-- | require'lsp/custom_languages/glslls'
 
 -- | Neovim world
 
@@ -16,6 +16,14 @@ require'nvim-treesitter.configs'.setup {
     -- Using this option may slow down your editor, and you may see some duplicate highlights.
     -- Instead of true it can also be a list of languages
     additional_vim_regex_highlighting = false,
+  },
+  rainbow = {
+    enable = true,
+    -- disable = { "jsx", "cpp" }, list of languages you want to disable the plugin for
+    extended_mode = true, -- Also highlight non-bracket delimiters like html tags, boolean or table: lang -> boolean
+    max_file_lines = 10000, -- Do not enable for files with more than n lines, int
+    -- colors = {}, -- table of hex strings
+    -- termcolors = {} -- table of colour name strings
   },
   context_commentstring = {
     enable = true
@@ -41,16 +49,19 @@ require'nvim-treesitter.configs'.setup {
 }
 
 require'indent_blankline'.setup {
-    --char                           = '┊',
-    char                           = '│',
+    char                           = '┊',
+    -- | char                           = '│',
     show_trailing_blankline_indent = false,
-    buftype_exclude                = { 'terminal' }
+    buftype_exclude                = { 'terminal' },
+    show_current_context = true,
+    show_current_context_start = false,
 }
+local gitsigns_bar = '│'
 require'gitsigns'.setup {
   signs = {
-    add          = { hl = 'GitGutterAdd',    text = '│' },
-    change       = { hl = 'GitGutterChange', text = '│' },
-    changedelete = { hl = 'GitGutterChange', text = '│' },
+    add          = { hl = 'GitGutterAdd',    text = gitsigns_bar },
+    change       = { hl = 'GitGutterChange', text = gitsigns_bar },
+    changedelete = { hl = 'GitGutterChange', text = gitsigns_bar },
     delete       = { hl = 'GitGutterDelete', text = '' },
     topdelete    = { hl = 'GitGutterDelete', text = '' },
   },
@@ -74,11 +85,12 @@ require'gitsigns'.setup {
 
     --['o ih'] = ':<C-U>lua require"gitsigns".select_hunk()<cr>',
     --['x ih'] = ':<C-U>lua require"gitsigns".select_hunk()<cr>'
-  }
+  },
 }
 require'lualine'.setup {
   options = {
-    theme = 'pywal'
+    -- | theme = 'pywal'
+    theme = 'wal'
   },
   sections = {
     lualine_c = {
@@ -86,7 +98,7 @@ require'lualine'.setup {
       'data',
       -- | TODO: figure out what to do with this unused plugin, delete it or properly integrate
       -- | Search for lsp-status and lsp_status
-      -- | require'lsp-status'.status,
+      --require'lsp-status'.status,
     }
   }
 }
@@ -106,7 +118,11 @@ require'orgmode'.setup {}
 
 require'colorizer'.setup()
 require'nvim-autopairs'.setup()
-require'bufferline'.setup()
+require'bufferline'.setup {
+  options = {
+    indicator_icon = ' ',
+  }
+}
 -- | TODO: figure out what to do with this unused plugin, delete it or properly integrate
 -- | require'lsp-status'.register_progress()
 require'org-bullets'.setup()
@@ -195,6 +211,34 @@ require'Comment.ft'
 -- |            line comment  block comment
   .set('lua', { '-- | %s',    '-- [[ %s ]]' })
 
+local dap = require'dap'
+dap.adapters.lldb = {
+  type = 'executable',
+  command = '/usr/bin/lldb-vscode', -- adjust as needed
+  name = "lldb"
+}
+dap.configurations.rust = {
+  {
+    name = "Launch file",
+    type = "lldb",
+    request = "launch",
+    program = function()
+      return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
+    end,
+    cwd = '${workspaceFolder}',
+    stopOnEntry = true,
+  },
+}
+require'lsp-colors'.setup {
+  Error = "#db4b4b",
+  Warning = "#e0af68",
+  Information = "#0db9d7",
+  Hint = "#10B981"
+}
+require'onedark'.setup {
+  comment_style = 'NONE',
+}
+
 -- | Lsp world
 
 -- | nvim-lspconfig
@@ -203,7 +247,7 @@ local lspconfig  = require'lspconfig'
 local lsp_signature = require'lsp_signature'
 local null_ls = require'null-ls'
 
-null_ls.config {
+null_ls.setup {
   sources = {
     null_ls.builtins.diagnostics.shellcheck.with {
       diagnostics_format = '[#{c}] #{m} (#{s})',
@@ -236,33 +280,34 @@ local on_attach = function(client, buffer)
 
   -- | Diagnostic and goto mappings
   local mapping_options = { noremap = true, silent = true }
-  vim.api.nvim_buf_set_keymap(buffer, 'n', 'gd', '<cmd>lua vim.lsp.buf.definition()<cr>',                   mapping_options)
-  vim.api.nvim_buf_set_keymap(buffer, 'n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<cr>',                  mapping_options)
-  vim.api.nvim_buf_set_keymap(buffer, 'n', 'gh', '<cmd>lua vim.lsp.buf.hover()<cr>',                        mapping_options)
-  vim.api.nvim_buf_set_keymap(buffer, 'n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<cr>',               mapping_options)
-  vim.api.nvim_buf_set_keymap(buffer, 'n', 'gH', '<cmd>lua vim.lsp.buf.signature_help()<cr>',               mapping_options)
-  --vim.api.nvim_buf_set_keymap(buffer, 'n', '<leader>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<cr>', mapping_options)
-  --vim.api.nvim_buf_set_keymap(buffer, 'n', '<leader>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<cr>', mapping_options)
-  --vim.api.nvim_buf_set_keymap(buffer, 'n', '<leader>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<cr>', mapping_options)
-  vim.api.nvim_buf_set_keymap(buffer, 'n', 'gt', '<cmd>lua vim.lsp.buf.type_definition()<cr>',              mapping_options)
+  local map = vim.api.nvim_buf_set_keymap
+  map(buffer, 'n', 'gd', '<cmd>lua vim.lsp.buf.definition()<cr>',                   mapping_options)
+  map(buffer, 'n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<cr>',                  mapping_options)
+  map(buffer, 'n', 'gh', '<cmd>lua vim.lsp.buf.hover()<cr>',                        mapping_options)
+  map(buffer, 'n', 'gi', '<cmd>lua require"telescope.builtin".lsp_implementations({ initial_mode = "normal"})<cr>',               mapping_options)
+  map(buffer, 'n', 'gH', '<cmd>lua vim.lsp.buf.signature_help()<cr>',               mapping_options)
+  --map(buffer, 'n', '<leader>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<cr>', mapping_options)
+  --map(buffer, 'n', '<leader>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<cr>', mapping_options)
+  --map(buffer, 'n', '<leader>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<cr>', mapping_options)
+  map(buffer, 'n', 'gt', '<cmd>lua vim.lsp.buf.type_definition()<cr>',              mapping_options)
 
-  --vim.api.nvim_buf_set_keymap(buffer, 'n', '<F2>', '<cmd>lua vim.lsp.buf.rename()<cr>',                     mapping_options)
-  vim.api.nvim_buf_set_keymap(buffer, 'n', '<F2>', '<cmd>lua require("lspsaga.rename").rename()<cr>',       mapping_options)
+  --map(buffer, 'n', '<F2>', '<cmd>lua vim.lsp.buf.rename()<cr>',                     mapping_options)
+  map(buffer, 'n', '<F2>', '<cmd>lua require("lspsaga.rename").rename()<cr>',       mapping_options)
 
-  vim.api.nvim_buf_set_keymap(buffer, 'n', 'gr', '<cmd>lua vim.lsp.buf.references()<cr>',                   mapping_options)
+  map(buffer, 'n', 'gr', '<cmd>lua require"telescope.builtin".lsp_references({ initial_mode = "normal"})<cr>',                   mapping_options)
 
-  --vim.api.nvim_buf_set_keymap(buffer, 'n', 'gy', '<cmd>lua vim.lsp.buf.code_action()<cr>',                  mapping_options)
-  --vim.api.nvim_buf_set_keymap(buffer, 'v', 'gy', '<cmd>lua vim.lsp.buf.range_code_action()<cr>',            mapping_options)
-  --vim.api.nvim_buf_set_keymap(buffer, 'n', 'gy', '<cmd>lua require"lspsaga.codeaction".code_action()<cr>',                  mapping_options)
-  --vim.api.nvim_buf_set_keymap(buffer, 'v', 'gy', '<cmd>lua require"lspsaga.codeaction".range_code_action()<cr>',            mapping_options)
-  vim.api.nvim_buf_set_keymap(buffer, 'n', 'gy', '<cmd>CodeActionMenu<cr>',                                 mapping_options)
-  vim.api.nvim_buf_set_keymap(buffer, 'v', 'gy', '<cmd>CodeActionMenu<cr>',                                 mapping_options)
+  --map(buffer, 'n', 'gy', '<cmd>lua vim.lsp.buf.code_action()<cr>',                  mapping_options)
+  --map(buffer, 'v', 'gy', '<cmd>lua vim.lsp.buf.range_code_action()<cr>',            mapping_options)
+  --map(buffer, 'n', 'gy', '<cmd>lua require"lspsaga.codeaction".code_action()<cr>',                  mapping_options)
+  --map(buffer, 'v', 'gy', '<cmd>lua require"lspsaga.codeaction".range_code_action()<cr>',            mapping_options)
+  map(buffer, 'n', 'gy', '<cmd>lua require"telescope.builtin".lsp_code_actions(require"telescope.themes".get_cursor({ initial_mode = "normal"}))<cr>',                                 mapping_options)
+  map(buffer, 'v', 'gy', '<cmd>lua require"telescope.builtin".lsp_code_actions(require"telescope.themes".get_cursor({ initial_mode = "normal"}))<cr>',                                 mapping_options)
 
-  vim.api.nvim_buf_set_keymap(buffer, 'n', 'gK', '<cmd>lua vim.diagnostic.open_float()<cr>',            mapping_options)
-  vim.api.nvim_buf_set_keymap(buffer, 'n', '[', '<cmd>lua vim.diagnostic.goto_prev()<cr>',              mapping_options)
-  vim.api.nvim_buf_set_keymap(buffer, 'n', ']', '<cmd>lua vim.diagnostic.goto_next()<cr>',              mapping_options)
-  --vim.api.nvim_buf_set_keymap(buffer, 'n', '<leader>q', '<cmd>lua vim.diagnostic.set_loclist()<cr>', mapping_options)
-  --vim.api.nvim_buf_set_keymap(buffer, 'n', '<leader>so', [[<cmd>lua require('telescope.builtin').lsp_document_symbols()<cr>]], mapping_options)
+  map(buffer, 'n', 'gl', '<cmd>lua vim.diagnostic.open_float()<cr>',            mapping_options)
+  map(buffer, 'n', '[', '<cmd>lua vim.diagnostic.goto_prev()<cr>',              mapping_options)
+  map(buffer, 'n', ']', '<cmd>lua vim.diagnostic.goto_next()<cr>',              mapping_options)
+  --map(buffer, 'n', '<leader>q', '<cmd>lua vim.diagnostic.set_loclist()<cr>', mapping_options)
+  --map(buffer, 'n', '<leader>so', [[<cmd>lua require('telescope.builtin').lsp_document_symbols()<cr>]], mapping_options)
 
   -- | Formatting mapping
 
@@ -270,13 +315,13 @@ local on_attach = function(client, buffer)
   --vim.cmd [[ autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.graphql,*.md,*.vue,*.yaml,*.html Format ]]
 
   -- | Configure diagnostics appearance
-  vim.diagnostic.config({
+  vim.diagnostic.config {
     virtual_text = false,
     signs = true,
     underline = true,
     update_in_insert = false,
     severity_sort = true,
-  })
+  }
 
   -- | Customize diagnostic signs
   -- | "       ﴫ כֿ   ﯦ         ⏼  𥉉    ﱥ ﯂         ﯇    﫝           ﯦ ﯧ     窱
@@ -289,7 +334,8 @@ local on_attach = function(client, buffer)
 
   -- | Open diagnostic float automatically
   vim.o.updatetime = 250
-  vim.cmd [[ autocmd CursorHold,CursorHoldI * lua vim.diagnostic.open_float(nil, { focus = false, source = 'always' }) ]]
+  -- | TODO: fix this to manual toggling:
+  -- | vim.cmd [[ autocmd CursorHold,CursorHoldI * lua vim.diagnostic.open_float(nil, { focus = false, source = 'always' }) ]]
 end
 
 -- | Create a command to get `lsp-status.nvim` output
@@ -369,22 +415,14 @@ local lsps = {
   ['null-ls'] = {
     autostart = true,
   },
-  glslls = {},
-  phpactor = {},
+  -- | glslls = {},
+  -- | phpactor = {},
   dockerls = {},
 }
 
-local border = {
-      {"🭽", "FloatBorder"},
-      {"▔", "FloatBorder"},
-      {"🭾", "FloatBorder"},
-      {"▕", "FloatBorder"},
-      {"🭿", "FloatBorder"},
-      {"▁", "FloatBorder"},
-      {"🭼", "FloatBorder"},
-      {"▏", "FloatBorder"},
-}
-
+vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
+  border = 'rounded',
+})
 -- | local handlers =  {
 -- |   ["textDocument/hover"]         =  vim.lsp.with(vim.lsp.handlers.hover,          {border = border}),
 -- |   ["textDocument/signatureHelp"] =  vim.lsp.with(vim.lsp.handlers.signature_help, {border = border }),
@@ -433,12 +471,12 @@ cmp.setup {
     format = require'lspkind'.cmp_format { with_text = true, maxwidth = 50,  }
   },
   sources = {
-    { name = 'nvim_lua', },
-    { name = 'nvim_lsp', keyword_length = 3 },
-    { name = 'luasnip', },
-    { name = 'orgmode', keyword_length = 3 },
-    { name = 'path', keyword_length = 3 },
-    { name = 'buffer', keyword_length = 10 }, -- | keyword_length is for debouncing cmp for text until at least 5 symbols is typed
+    { name = 'nvim_lsp', keyword_length = 2, priority = 100, },
+    { name = 'nvim_lua', keyword_length = 2, priority = 99,  },
+    { name = 'luasnip',  keyword_length = 2, priority = 97,  },
+    { name = 'orgmode',  keyword_length = 3, priority = 96,  },
+    { name = 'path',     keyword_length = 3, priority = 95,  },
+    { name = 'buffer',   keyword_length = 5, priority = 94,  }, -- | keyword_length is for debouncing cmp for text until at least 5 symbols is typed
   },
   experimental = {
     native_menu = false,

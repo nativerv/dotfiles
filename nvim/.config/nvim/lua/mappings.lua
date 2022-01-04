@@ -110,10 +110,11 @@ vim.api.nvim_set_keymap('n', '<C-p>',      '<cmd>lua require"telescope.builtin".
 vim.api.nvim_set_keymap('n', '<leader>fb', '<cmd>lua require"telescope.builtin".current_buffer_fuzzy_find()<cr>',          { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>fh', '<cmd>lua require"telescope.builtin".help_tags()<cr>',                          { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>ft', '<cmd>lua require"telescope.builtin".tags()<cr>',                               { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>fd', '<cmd>lua require"telescope.builtin".grep_string()<cr>',                        { noremap = true, silent = true })
+-- | vim.api.nvim_set_keymap('n', '<leader>fd', '<cmd>lua require"telescope.builtin".grep_string()<cr>',                        { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>fp', '<cmd>lua require"telescope.builtin".live_grep()<cr>',                          { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>fo', '<cmd>lua require"telescope.builtin".tags{ only_current_buffer = true }<cr>',   { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>?',  '<cmd>lua require"telescope.builtin".oldfiles()<cr>',                           { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<leader>fd',  '<cmd>lua require"telescope.builtin".lsp_document_diagnostics({ initial_mode = "normal" })<cr>',                           { noremap = true, silent = true })
 
 -- | bufferline.nvim
 vim.api.nvim_set_keymap('n', '<M-i>',  '<cmd>BufferLineCyclePrev<cr>', { noremap = true, silent = true })

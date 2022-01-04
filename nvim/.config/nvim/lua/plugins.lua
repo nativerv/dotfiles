@@ -1,19 +1,24 @@
----@diagnostic disable: undefined-global
-
 -- | Todo: install vim-matchup
 -- | Todo: install lsp-status
 -- | Todo: install treesitter
 -- | Todo: install trouble.nvim
 -- | Todo: install barbar.nvim
 
-return require'packer'.startup(function()
+return require'packer'.startup(function(use)
   -- | Packer
   use 'wbthomason/packer.nvim'
 
   -- | Color Schemes
-  use 'joshdick/onedark.vim'
+  --use 'joshdick/onedark.vim'
   --use 'navarasu/onedark.nvim'
-  use 'morhetz/gruvbox'
+  use 'ful1e5/onedark.nvim'
+  -- | use 'morhetz/gruvbox'
+  use {
+    'ellisonleao/gruvbox.nvim',
+    requires = { 'rktjmp/lush.nvim' }
+  }
+  use 'folke/tokyonight.nvim'
+  use '~/pr/lualine-wal.nvim'
 
   -- | Editing
   use 'tpope/vim-surround'        -- | Vimscript (surround.nvim)
@@ -35,6 +40,7 @@ return require'packer'.startup(function()
   -- | Treesitter
   use 'nvim-treesitter/nvim-treesitter'
   use 'JoosepAlviste/nvim-ts-context-commentstring'
+  use 'p00f/nvim-ts-rainbow'
   use 'nvim-treesitter/playground'
 
   -- | Language Server Protocol
@@ -62,6 +68,11 @@ return require'packer'.startup(function()
       'neovim/nvim-lspconfig'
     }
   }
+  use {
+    'folke/lsp-colors.nvim',
+    config = function ()
+    end
+  }
 
   -- | Language-Specific Plugins
   use {
@@ -80,9 +91,7 @@ return require'packer'.startup(function()
     requires = { 'nvim-lua/plenary.nvim' }
   }
   use 'kevinhwang91/rnvimr'
-
-  -- | Syntax
-  use 'tikhomirov/vim-glsl' -- | Vimscript
+  use 'mfussenegger/nvim-dap'
 
   -- | Navigation
   use {
@@ -94,10 +103,11 @@ return require'packer'.startup(function()
     requires = { 'nvim-lua/plenary.nvim' }
   }
   use 'bkad/CamelCaseMotion'    -- | Vimscript
+  use 'aserowy/tmux.nvim'
 
   -- | Status
   use {
-    'shadmansaleh/lualine.nvim',
+    'nvim-lualine/lualine.nvim',
     requires = { 'kyazdani42/nvim-web-devicons', opt = true},
     options = { theme = 'pywal' },
   }
@@ -112,8 +122,6 @@ return require'packer'.startup(function()
     },
     tag = 'release'
   }
-  use 'lukas-reineke/indent-blankline.nvim'
-  use 'aserowy/tmux.nvim'
 
   -- | Quality of Life
   use {
@@ -134,6 +142,7 @@ return require'packer'.startup(function()
   use 'folke/which-key.nvim'
   use 'dstein64/nvim-scrollview'
   use 'ojroques/nvim-bufdel'
+  use 'lukas-reineke/indent-blankline.nvim'
 
   -- | print(vim.tbl_count(vim.tbl_filter(function(window)
   -- |     return vim.api.nvim_win_get_config(window).relative == ""
