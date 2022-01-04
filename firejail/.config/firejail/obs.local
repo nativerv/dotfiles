@@ -1,0 +1,14 @@
+include allow-bin-sh.inc
+
+# Whitelist config dir
+noblacklist ${HOME}/.config/obs-studio
+whitelist ${HOME}/.config/obs-studio
+
+# Whitelist video dir
+mkdir ${HOME}/vid/obs
+include allow-vid-obs.inc
+
+private-bin bash,obs,obs-ffmpeg-mux,python*,sh,ls,tree,ranger
+#ignore shell none
+
+# vim:syntax=firejail
