@@ -1,5 +1,7 @@
 #!/bin/sh
 
+set -e
+
 # This script does the following:
 #	setwall                ->  set the saved wallpaper (for use on X startup).
 #	setwall FILE           ->  set FILE as the new wallpaper.
@@ -7,12 +9,22 @@
 #	[ wal is installed ? ] -+> also generate and set a `wal` colorscheme.
 
 help() {
-	echo "usage: $(basename "${0}") [-l] [-s saturation] FILE"
-	echo ""
-	printf -- '-s saturation\tspecify wal saturation'
-  printf -- '-l\tgenerate linht theme'
-	# shellcheck disable=3045
-	printf -- '--help\tprint this message'
+	echo "usage: $(basename "${0}") [-l] [-s saturation] [FILE]"
+  # shellcheck disable=SC2016
+	echo '  set FILE as wallpaper and generate `wal` colorscheme if `wal` is installed.'
+  echo '  if  FILE is a directory, select random image from it and use it as wallpaper.'
+  # shellcheck disable=SC2016
+  echo '  if  FILE is not specified, use ${HOME}/.local/share/wallpaper, which is set by 2 previous cases.'
+  echo ''
+  echo 'flags:'
+  printf -- '  -l             generate light theme\n'
+	printf -- '  -s saturation  specify wal saturation\n'
+  # shellcheck disable=1078,1079,2016
+	printf -- '  -b backend     select custom backend
+                 one of `schemer2`, `colorz`, `colorthief`, `wal`
+                 default: wal\n'
+  # shellcheck disable=3045
+	printf -- '  -h             print this message\n'
 }
 
 die() {
@@ -23,15 +35,17 @@ die() {
 POSTRUN_FILE="${XDG_CONFIG_HOME:-$HOME/.config}/wal/postrun"
 
 saturation='0.5'
+backend='wal'
 
-while getopts 'ls:' option; do
+while getopts 'hls:b:' option; do
 	case "${option}" in
 	s) saturation="${OPTARG}" ;;
   l) light='true' ;;
+  b) backend=${OPTARG} ;;
 		# --help) help "$@" ;;
-	[?])
+	[?]|h)
 		help "$@"
-		exit 1
+		exit 0
 		;;
 	esac
 done
@@ -54,14 +68,14 @@ if [ ! -z "${1}" ]; then
 	case "$(file --mime-type -b "${input_true_location}")" in
 	image/*)
 		ln -sf "${input_true_location}" "${wallpaper_link}"
-		notify-send -i "${wallpaper_link}" "Changing wallpaper..."
+		notify-send -a "setwall" -i "${wallpaper_link}" "Changing wallpaper..."
 		;;
 	inode/directory)
 		ln -sf "$(find "${input_true_location}" -iregex '.*.\(jpg\|jpeg\|png\|gif\)' -type f | shuf -n 1)" "${wallpaper_link}"
-		notify-send -i "${wallpaper_link}" "Random Wallpaper chosen."
+		notify-send -a "setwall" -i "${wallpaper_link}" "Random Wallpaper chosen."
 		;;
 	*)
-		notify-send "Error" "Not a valid image."
+		notify-send -a "setwall" "Error" "Not a valid image."
 		die 'not a valid image'
 		;;
 	esac
@@ -71,17 +85,19 @@ fi
 xwallpaper --zoom "${wallpaper_link}"
 
 # If pywal is installed, use it
+
+# Guard for pywal
 command -v wal >/dev/null 2>&1 || exit 0
 
 wal \
+  --backend "${backend}" \
 	--saturate "${saturation}" \
   ${light:+-l} \
 	-i "$(readlink -f "${wallpaper_link}")" \
 	-o "${POSTRUN_FILE}" ||
 	{
 		# shellcheck disable=SC2016
-		echo 'Error running `wal`'
-		exit 1
+		die 'Error running `wal`'
 	}
 
 # Send signals/restart some programs that `wal`
@@ -89,3 +105,4 @@ wal \
 pidof nvim >/dev/null && killall -USR1 nvim
 pidof dwm >/dev/null && xdotool key super+F12
 pidof xmonad-x86_64-linux >/dev/null && xmonad --restart
+pidof telegram-desktop >/dev/null && killall telegram-desktop && setsid telegram-desktop -startintray >/dev/null 2>&1 &
