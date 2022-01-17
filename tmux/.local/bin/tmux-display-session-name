@@ -1,0 +1,13 @@
+#!/bin/sh
+
+session_name="$(tmux display-message -p '#S')"
+
+session_banner="$(figlet "${session_name}")"
+
+# shellcheck disable=2016
+#max_width="$(echo "${session_banner}" | awk '{ print length }' | sort -r | head -c1)"
+max_width="$(echo "${session_banner}" | head -n1 | wc -m | awk '{ print $1 + 1 }')"
+
+script="tput civis; figlet ${session_name}; sleep 0.3; exit 0"
+
+tmux popup -Ew "${max_width}" -h 9 sh -c "${script}"
