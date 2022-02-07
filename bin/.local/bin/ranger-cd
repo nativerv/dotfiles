@@ -1,0 +1,7 @@
+#!/bin/sh
+
+RANGER_DATA_HOME="${XDG_DATA_HOME:-$HOME/.local/share}/ranger"
+
+ranger --choosedir="${HOME}/.rangerdir"
+LASTDIR="$(cat "${RANGER_DATA_HOME}/ranger/lastdir")"
+cd "${LASTDIR}" || exit

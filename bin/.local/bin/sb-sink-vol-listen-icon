@@ -1,0 +1,25 @@
+#!/bin/sh
+
+# Author: nrv
+# Description: Map pulseaudio volume to corresponding volume icon (custom font - `nrv-icons.ttf`) 
+
+sb-sink-vol-listen | while read -r 'volume'; do
+  if pactl get-sink-mute @DEFAULT_SINK@ | grep -q 'yes'; then
+    # volume-mute-solid
+    env printf '\ue904'
+  elif [ "${volume}" = '0' ]; then
+    # volume-0-solid
+    env printf '\ue900'
+  elif [ "$((volume < 50))" = '1' ]; then
+    # volume-1-solid
+    env printf '\ue901'
+  elif [ "$((volume < 100))" = '1' ]; then
+    # volume-2-solid
+    env printf '\ue902'
+  elif [ "$((volume < 150))" = '1' ]; then
+    # volume-3-solid
+    env printf '\ue903'
+  fi
+  # Updates separated by newline
+  printf '\n'
+done

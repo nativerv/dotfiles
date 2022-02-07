@@ -1,0 +1,7 @@
+#!/bin/sh
+
+if command -v firejail; then
+  firejail --profile=~/.config/firejail/tlauncher.profile java -jar ~/.local/share/tlauncher/tlauncher.jar
+else
+  zenity --error --text 'you need to install firejail first'
+fi

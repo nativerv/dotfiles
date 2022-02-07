@@ -1,0 +1,4 @@
+#!/bin/sh
+
+xkblayout-state set +1
+ev emit xkblayout-state lang_change

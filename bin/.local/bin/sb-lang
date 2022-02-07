@@ -1,0 +1,4 @@
+#!/bin/sh
+
+# xkblayout-state print %s | tr a-z A-Z
+xkblayout-state print '%n' | cut -c 1-2 | tr a-z A-Z

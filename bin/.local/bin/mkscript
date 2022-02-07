@@ -1,0 +1,37 @@
+#!/bin/sh
+
+bin_name="${1}"
+user_bin_path="${XDG_BIN_HOME:-"${HOME}/.local/bin"}"
+dotfiles_bin_path="${DOTFILES_HOME}/bin/.local/bin"
+is_using_dotfiles='false'
+[ -d "${dotfiles_bin_path}" ] && is_using_dotfiles='true'
+[ "${is_using_dotfiles}" = 'true' ] && bin_path="${dotfiles_bin_path}" || bin_path="${user_bin_path}"
+
+guard_bin_exists() {
+  if [ -s "${1}/${bin_name}" ]; then
+    printf '%s: error: file `%s` already exists in %s' "$(basename "${0}")" "${bin_name}" "${bin_path}"
+    printf '\n'
+    exit 1
+  fi
+}
+
+if [ "${is_using_dotfiles}" ]; then
+ guard_bin_exists "${dotfiles_bin_path}"
+fi
+
+guard_bin_exists "${user_bin_path}"
+
+if [ "${is_using_dotfiles}" ]; then
+  printf '#!/bin/sh\n\n\n' > "${dotfiles_bin_path}/${1}"
+  "${EDITOR}" '+ normal G $' '+startinsert' "${dotfiles_bin_path}/${1}"
+else
+printf '#!/bin/sh\n\n\n' > "${user_bin_path}/${1}"
+  "${EDITOR}" '+ normal G $' '+startinsert' "${user_bin_path}/${1}"
+fi
+
+if [ "${is_using_dotfiles}" ]; then
+  stow -d "${DOTFILES_HOME}" -t "${HOME}" 'bin'
+fi
+
+chmod u+x "${user_bin_path}"/*
+

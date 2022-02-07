@@ -1,0 +1,14 @@
+#!/bin/sh
+
+# Author: nrv
+# Description: Listen for pulseaudio events, filter for sink events, map to volume percentage 
+
+print_volume () {
+  sb-source-vol
+  printf '\n'
+}
+
+print_volume
+pactl subscribe | grep --line-buffered 'source' | while read -r _; do
+  print_volume
+done

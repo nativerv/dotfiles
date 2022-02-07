@@ -1,0 +1,7 @@
+#!/bin/sh
+
+set -ex
+
+UPLOAD_URL="${UPLOAD_URL:-https://0x0.st}"
+
+curl -F "file=@${1}" "${UPLOAD_URL}"

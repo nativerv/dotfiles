@@ -1,0 +1,5 @@
+#!/bin/sh
+
+set -ue
+
+printf 'No\nYes' | dmenu -p "${1}"

@@ -1,0 +1,14 @@
+#!/usr/bin/env sh
+
+bssid=$(nmcli device wifi list | sed -n '1!p' | cut -c 9- | dmenu -p "Wifi:" -l 20 | cut -d' ' -f1)
+pass=$(dmenu_askpass)
+
+message=$(nmcli device wifi connect "${bssid}" password "${pass}" 2>&1)
+exit_code="${?}"
+
+echo "${bssid}"
+echo "${pass}"
+echo "${message}"
+echo "${exit_code}"
+
+notify-send "${message}"

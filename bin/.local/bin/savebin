@@ -1,0 +1,12 @@
+#!/bin/sh
+
+# usage: savebin <url> <name> - save file from url as local binary
+
+set -e
+
+new_bin_path="${HOME}/.local/bin/${2}"
+
+[ -e "${new_bin_path}" ] && (echo "savebin: file ${2} exists"; exit 1)
+
+curl "${1}" > "${new_bin_path}"
+chmod u+x "${new_bin_path}"

@@ -1,0 +1,23 @@
+#!/bin/sh
+
+mime_type="$(file --mime-type -b "${1}")"
+
+copy () {
+  xclip -in -selection clipboard -t "${mime_type}"
+}
+
+set -ue
+
+case "${mime_type}" in
+  image/png)
+    copy < "${1}"
+    ;; 
+  image/*) 
+    mime_type='image/png'
+    convert "${1}" png:- | copy
+    ;;
+  *)
+    copy < "${1}"
+    ;;
+esac
+

@@ -1,0 +1,16 @@
+#!/bin/sh
+
+# shellcheck disable=2236
+if [ ! -z "${2}" ]; then 
+  output_file_name="${2}"
+else 
+  output_file_name="${1}-splash.jpg"
+fi
+
+if [ -f "${output_file_name}" ]; then
+  echo "${0}: error: file '${output_file_name}' already exist"
+fi
+
+curl -L "https://lutris.net/games/${1}" \
+  | pup 'head > meta[property="og:image"] attr{content}' \
+  | xargs -I{} curl -L 'https:{}' > "${output_file_name}"

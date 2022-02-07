@@ -1,0 +1,6 @@
+#!/bin/sh
+
+sb-lang
+ev listen | grep --line-buffered 'lang_change' | while read -r _; do
+  sb-lang
+done
