@@ -6,11 +6,10 @@ cat <<EOF
 sxhkd\tsxhkd &
 dunst\tdunst &
 mpd\tmpd &
-nm-applet\tnm-applet &
 xautolock\txautolock -time 10 -locker lock &
-volumeicon\tvolumeicon &
 flameshot\tflameshot &
 picom\tpicom --config "$HOME/.config/picom/picom.jonaburg.conf" &
+ev\tev serve &
 EOF
 )
 

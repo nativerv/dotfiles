@@ -1,6 +1,27 @@
 #!/bin/sh
 
+# Enable us and ru keyboards with effectively no switch
+# as of [Swap control <-> altgr] section in this file;
+# Rely on `sxhkd` and `xkblayout-state` for layout switching instead.
 setxkbmap -layout "us,ru" -option "grp:switch" -variant qwerty
 
+# Map caps_lock -> escape
 xmodmap -e "clear lock"
 xmodmap -e "keycode 66 = Escape NoSymbol Escape"
+
+# Maps caps_lock -> control
+# Use with xcape -e 'Control_L=Escape' 
+# And remove the following above ^
+# xmodmap -e "keycode 66 = Escape NoSymbol Escape"
+#xmodmap -e "remove Lock = Caps_Lock"
+#xmodmap -e "remove Control = Control_L"
+#xmodmap -e "keysym Control_L = Caps_Lock"
+#xmodmap -e "keysym Caps_Lock = Control_L"
+#xmodmap -e "add Lock = Caps_Lock"
+#xmodmap -e "add Control = Control_L"
+
+# Map altgr -> control
+xmodmap -e "keycode 108 = Alt_R Meta_R Alt_R Meta_R"
+xmodmap -e "remove Mod1 = Alt_R"
+xmodmap -e "keycode 108 = Control_R"
+xmodmap -e "add Control = Control_R"
