@@ -1,6 +1,6 @@
 -- | VIM world
 
--- | FIX RUSSIAN ;;;;;->$$$$$$!!!111
+-- | FIX RUSSIAN ;->$
 vim.api.nvim_set_keymap('n', ';', '$', { unique = true });
 
 -- | Toggle 80 color column
@@ -27,6 +27,9 @@ vim.api.nvim_set_keymap('n', 'X', '"_X',                     { noremap = true, s
 vim.api.nvim_set_keymap('n', '<C-a>', '<esc>ggVG',           { noremap = true, silent = true })
 vim.api.nvim_set_keymap('i', '<C-a>', '<esc>ggVG',           { noremap = true, silent = true })
 vim.api.nvim_set_keymap('v', '<C-a>', '<esc>ggVG',           { noremap = true, silent = true })
+
+-- | Remap Ctrl-A functionality to something else then:
+vim.api.nvim_set_keymap('n', '<C-c>', '<C-a>',           { noremap = true, silent = true })
 
 -- | Reload config
 vim.api.nvim_set_keymap('n', '<leader>dr', ':so %<cr>',                       { noremap = true, silent = true })

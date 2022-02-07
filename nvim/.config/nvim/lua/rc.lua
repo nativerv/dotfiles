@@ -1,21 +1,30 @@
 -- | require'lsp/custom_languages/glslls'
+local util = require'utils'
 
 -- | Neovim world
 
 -- | Plugin (normal plugin) world
+require'nvim-treesitter.parsers'.get_parser_configs().org = {
+  install_info = {
+    url = 'https://github.com/milisims/tree-sitter-org',
+    revision = 'f110024d539e676f25b72b7c80b0fd43c34264ef',
+    files = { 'src/parser.c', 'src/scanner.cc' },
+  },
+  filetype = 'org',
+}
 
 require'nvim-treesitter.configs'.setup {
-  ensure_installed = "maintained", -- one of "all", "maintained" (parsers with maintainers), or a list of languages
+  ensure_installed = 'maintained', -- one of "all", "maintained" (parsers with maintainers), or a list of languages
   sync_install = false, -- install languages synchronously (only applied to `ensure_installed`)
   ignore_install = { }, -- List of parsers to ignore installing
   highlight = {
     enable = true,              -- false will disable the whole extension
-    disable = { 'sh' },  -- list of language that will be disabled
+    disable = { 'sh', 'org' },  -- list of language that will be disabled
     -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
     -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
     -- Using this option may slow down your editor, and you may see some duplicate highlights.
     -- Instead of true it can also be a list of languages
-    additional_vim_regex_highlighting = false,
+    additional_vim_regex_highlighting = { 'org' }, -- Required since TS highlighter doesn't support all syntax features (conceal)
   },
   rainbow = {
     enable = true,
@@ -114,10 +123,13 @@ require'telescope'.setup {
     },
   }
 }
-require'orgmode'.setup {}
+require'orgmode'.setup {
+  org_agenda_files = { os.capture('xdg-user-dir ' .. 'DOCUMENTS', false) .. '/notes/org/*' },            -- | Can contain multiple locations
+  org_default_notes_file = os.capture('xdg-user-dir ' .. 'DOCUMENTS', false) .. '/notes/org/refile.org',
+}
 
-require'colorizer'.setup()
-require'nvim-autopairs'.setup()
+require'colorizer'.setup ()
+require'nvim-autopairs'.setup ()
 require'bufferline'.setup {
   options = {
     indicator_icon = ' ',
@@ -125,7 +137,7 @@ require'bufferline'.setup {
 }
 -- | TODO: figure out what to do with this unused plugin, delete it or properly integrate
 -- | require'lsp-status'.register_progress()
-require'org-bullets'.setup()
+--require'org-bullets'.setup()
 require'hop'.setup { keys = 'etovxqpdygfblzhckisuran' }
 require'stabilize'.setup {
   ignore = {
@@ -133,7 +145,12 @@ require'stabilize'.setup {
     filetype = { "list", "Trouble" },
   }
 }
-require'tmux'.setup {}
+require'tmux'.setup {
+  navigation = {
+    -- | Cycles to opposite pane while navigating into the border
+    cycle_navigation = false,
+  },
+}
 require'which-key'.setup {}
 require'rest-nvim'.setup {
   -- Open request results in a horizontal split
@@ -162,6 +179,11 @@ require'lspsaga'.init_lsp_saga {
     --enable = false,
     sign = false,
   },
+  rename_action_keys = {
+    quit = "<C-c>",
+    exec = "<cr>",
+  },
+  -- | border_style = 'rounded',
 }
 --require'rust-tools'.setup {}
 require'Comment'.setup {
@@ -238,6 +260,7 @@ require'lsp-colors'.setup {
 require'onedark'.setup {
   comment_style = 'NONE',
 }
+require'neogit'.setup {}
 
 -- | Lsp world
 
@@ -303,7 +326,7 @@ local on_attach = function(client, buffer)
   map(buffer, 'n', 'gy', '<cmd>lua require"telescope.builtin".lsp_code_actions(require"telescope.themes".get_cursor({ initial_mode = "normal"}))<cr>',                                 mapping_options)
   map(buffer, 'v', 'gy', '<cmd>lua require"telescope.builtin".lsp_code_actions(require"telescope.themes".get_cursor({ initial_mode = "normal"}))<cr>',                                 mapping_options)
 
-  map(buffer, 'n', 'gl', '<cmd>lua vim.diagnostic.open_float()<cr>',            mapping_options)
+  map(buffer, 'n', 'gl', '<cmd>lua vim.diagnostic.open_float({ border = "rounded" })<cr>',            mapping_options)
   map(buffer, 'n', '[', '<cmd>lua vim.diagnostic.goto_prev()<cr>',              mapping_options)
   map(buffer, 'n', ']', '<cmd>lua vim.diagnostic.goto_next()<cr>',              mapping_options)
   --map(buffer, 'n', '<leader>q', '<cmd>lua vim.diagnostic.set_loclist()<cr>', mapping_options)
@@ -423,6 +446,7 @@ local lsps = {
 vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
   border = 'rounded',
 })
+
 -- | local handlers =  {
 -- |   ["textDocument/hover"]         =  vim.lsp.with(vim.lsp.handlers.hover,          {border = border}),
 -- |   ["textDocument/signatureHelp"] =  vim.lsp.with(vim.lsp.handlers.signature_help, {border = border }),

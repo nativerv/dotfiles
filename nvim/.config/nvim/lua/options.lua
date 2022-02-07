@@ -3,7 +3,7 @@ local undodir_path = vim.loop.os_homedir() .. '/.cache/nvim/undodir'
 -- | Outer world
 vim.opt.mouse          = 'a'            -- | Ebable mouse
 vim.opt.clipboard      = 'unnamedplus'  -- | Use system clipboard
-vim.opt.titlestring    = '%F - NeoVim'  -- | Title template
+vim.opt.titlestring    = '%t - NeoVim'  -- | Title template
 vim.opt.title          = true           -- | Enable title
 vim.opt.titleold       = ''             -- | ?
 
@@ -24,6 +24,7 @@ vim.opt.cursorline     = true           -- | Highlight line
 vim.opt.expandtab      = true           -- | Tabs -> Spaces
 vim.opt.colorcolumn    = '999999'       -- | 80 columns hint, or disable it (99999 is because of #59 in `lukas-reineke/indent-blankline.nvim`)
 vim.opt.wrap           = false          -- | Disable word wrap
+vim.opt.linebreak      = true           -- | Disable word wrap
 vim.opt.autochdir      = false          -- | Automatically cd to buffer's dir
 vim.opt.signcolumn     = 'yes:2'        -- | FIX FUCKING GITSIGNS JUMPING BACK AND FORTH
 vim.opt.formatoptions  = 'jql'          -- | Formatoptions -= cro - disable auto comment leader insertion
