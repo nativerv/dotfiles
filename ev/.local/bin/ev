@@ -1,0 +1,56 @@
+#!/bin/sh
+
+usage () {
+  echo "usage: $(basename "${0}") COMMAND ARGS"
+  echo "COMMANDS:"
+  echo "  ensure"
+  echo "  emit SOURCE TYPE PAYLOAD"
+  echo "  listen"
+  echo "EXAMPLES:"
+  echo "  ev ensure"
+  echo "  ev emit xkblayout-state lang_change _"
+  printf "  ev listen | grep -E '^xkblayout-state\tlang_change' | while read -r _; do echo 'lang is changed'; done\n"
+  echo "  ev listen xkblayout-state lang_change *"
+}
+
+set -e
+
+if [ "${#}" -lt 1 ]; then
+  usage
+  exit 1
+fi
+
+EV_TMP_HOME="/tmp/ev"
+EV_IN_FIFO="${EV_TMP_HOME}/in.fifo"
+EV_OUT_SOCK="${EV_TMP_HOME}/out.sock"
+
+die () {
+  printf '%s: error: %s' "${1}" "${2}"
+}
+
+case "${1}" in
+  serve)
+    # Ensure `in` fifo exist
+    [ ! -p "${EV_TMP_HOME}" ] && mkdir -p "${EV_TMP_HOME}"
+    [ ! -p "${EV_IN_FIFO}" ] && mkfifo "${EV_IN_FIFO}"
+    # If socket exists and responding, exit 
+    set +e
+    ncat -zw1 "${EV_OUT_SOCK}" >/dev/null 2>&1 && die 'already serving (socket is in use and responding)'
+    set -e
+    # Remove old `out` socket
+    rm -f "${EV_OUT_SOCK}"
+    # Keep the `in` fifo open
+    exec 8<>"${EV_IN_FIFO}"
+    # Serve messages from it to `out` socket
+    ncat --send-only -lkU "${EV_OUT_SOCK}" < "${EV_IN_FIFO}" 
+    ;;
+  emit) 
+    printf '%s\t%s\t%s\n' "${2}" "${3}" "${4}" > "${EV_IN_FIFO}"
+    ;;
+  listen)
+    ncat -U "${EV_OUT_SOCK}"
+    ;;
+  *)
+    usage
+    ;;
+esac
