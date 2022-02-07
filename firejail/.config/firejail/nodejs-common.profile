@@ -32,13 +32,6 @@ noblacklist ${HOME}/.local/share/npm
 
 include allow-bin-sh.inc
 
-include disable-common.inc
-#include disable-exec.inc
-include disable-passwdmgr.inc
-include disable-programs.inc
-#include disable-shell.inc
-include disable-xdg.inc
-
 # If you want whitelisting, change ${HOME}/Projects below to your node projects directory
 # and add the next lines to your nodejs-common.local.
 #mkdir ${HOME}/.node-gyp
@@ -76,6 +69,13 @@ whitelist /usr/share/systemtap/tapset/node.stp
 include whitelist-runuser-common.inc
 include whitelist-usr-share-common.inc
 include whitelist-var-common.inc
+
+include disable-common.inc
+#include disable-exec.inc
+include disable-passwdmgr.inc
+include disable-programs.inc
+#include disable-shell.inc
+include disable-xdg.inc
 
 #caps.drop all
 ipc-namespace
