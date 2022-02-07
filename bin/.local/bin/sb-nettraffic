@@ -33,11 +33,11 @@ update() {
 case "${1}" in
   rx)
     rx=$(update /sys/class/net/[ew]*/statistics/rx_bytes)
-    printf "%4sB" "$(numfmt --to=iec "${rx}")"
+    printf "%4s" "$(numfmt --to=iec "${rx}")"
     ;;
   tx)
     tx=$(update /sys/class/net/[e]*/statistics/tx_bytes)
-    printf "%4sB\\n" "$(numfmt --to=iec "${tx}")"
+    printf "%4s\\n" "$(numfmt --to=iec "${tx}")"
     ;;
   *) ;;
 esac

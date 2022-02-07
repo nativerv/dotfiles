@@ -1,26 +1,40 @@
 #!/bin/sh
 
-figlet -f slant System Upgrade
+# Author: nrv
+# Description: 
+#   Print fancy banner, list of upgradable packages
+#   and execute `sudo pacman -Syu` if that list is not
+#   empty
 
-updatable="$(unbuffer pacman -Qu)"
-updatable_count="$(echo "${updatable}" | wc -l)"
-updatable_count="$((updatable_count - 1))"
+set -e
 
-echo
-echo "Updatable packages (${updatable_count}): "
+ITALIC="\033[3m"
+NORMAL="\033[0m"
 
-if [ "${updatable_count}" -ne '0' ]; then
-  echo "${updatable}" | xargs -I{} printf '  '{}'\n'
+figlet -f slant 'System Upgrade'
+
+upgradable="$(unbuffer pacman -Qu || true)"
+upgradable_count="$(printf '%s' "${upgradable}" | wc -l)"
+upgradable_count="$((upgradable_count))"
+
+printf '\n'
+printf 'Upgradable packages (%s): ' "${upgradable_count}"
+printf '\n'
+
+if [ "${upgradable_count}" -ne '0' ]; then
+  printf '%s' "${upgradable}" | xargs -I{} printf '  {}\n'
 else
-  echo "  No packages is updatable at the moment."
+  # shellcheck disable=2059
+  printf "  ${ITALIC}No packages is upgradable at the moment.${NORMAL}"
 fi
 
-if [ "${updatable_count}" = '0' ]; then
-  echo 'Executing [1;32msudo pacman -Syu[0m...'
-  echo
+printf '\n\n'
+printf "Press any key to continue..."
+read -r '_'
+
+if [ "${upgradable_count}" -ne '0' ]; then
+  printf 'Executing [1;32msudo pacman -Syu[0m...'
+  printf '\n'
   sudo pacman -Syu
-else
-  echo
-  echo "Press any key to continue..."
-  read -r ""
 fi
+

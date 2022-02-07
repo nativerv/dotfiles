@@ -36,12 +36,15 @@ POSTRUN_FILE="${XDG_CONFIG_HOME:-$HOME/.config}/wal/postrun"
 
 saturation='0.5'
 backend='wal'
+is_backend_specified='false'
 
 while getopts 'hls:b:' option; do
 	case "${option}" in
 	s) saturation="${OPTARG}" ;;
   l) light='true' ;;
-  b) backend=${OPTARG} ;;
+  b) backend=${OPTARG}
+     is_backend_specified='true'
+     ;;
 		# --help) help "$@" ;;
 	[?]|h)
 		help "$@"
@@ -52,8 +55,19 @@ done
 
 shift $((OPTIND - 1))
 
+# This scritp's XDG_DATA_HOME directory
+wall_data_dir="${XDG_DATA_HOME:-$HOME/.local/share}/wall"
+
+# Ensure wall folder exists in XDG_DATA_HOME
+mkdir -p "${wall_data_dir}"
+
 # Location of link to wallpaper
-wallpaper_link="${XDG_DATA_HOME:-$HOME/.local/share}/wallpaper"
+wallpaper_link="${wall_data_dir}/wallpaper"
+
+# Location of backend used last time - for setwall with no arguments
+backend_file="${wall_data_dir}/backend"
+# Ensure backend_file exists and contains
+touch "${backend_file}"
 
 # Replace link with new image if provided; else just use the ond one behind link
 # shellcheck disable=2236
@@ -79,6 +93,20 @@ if [ ! -z "${1}" ]; then
 		die 'not a valid image'
 		;;
 	esac
+fi
+
+# If we're called *without* pos args - in restore mode,
+# and backend not specified explicitly with -b,
+# reuse backend saved to ${backend_file}
+if [ -z "${1}" ] && [ ! "${is_backend_specified}" = 'true' ]; then
+  backend=$(cat "${backend_file}")
+fi
+
+# If we're called *with* pos args - in set mode,
+# save new backend to the backend_file
+# shellcheck disable=2236
+if [ ! -z "${1}" ]; then
+  printf '%s' "${backend}" > "${backend_file}"
 fi
 
 # Set the wallpaper

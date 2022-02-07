@@ -11,10 +11,10 @@ esac
 
 case "${1}" in
   used) 
-    free --mebi | sed -n '2{p;q}' | awk '{ printf ("%2.2fGiB", ( $3 / 1024 )) }'
+    free --mebi | sed -n '2{p;q}' | awk '{ printf ("%2.2fG", ( $3 / 1024 )) }'
     ;;
   total) 
-    free --mebi | sed -n '2{p;q}' | awk '{ printf ("%2.2fGiB", ( $2 / 1024 )) }'
+    free --mebi | sed -n '2{p;q}' | awk '{ printf ("%2.2fG", ( $2 / 1024 )) }'
     ;;
   *) 
     ;;

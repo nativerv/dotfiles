@@ -6,9 +6,12 @@
 
 # DARK_MODE_ARGS='--enable-features=WebUIDarkMode --force-dark-mode'
 
+#enabled_features="WebUIDarkMode,VaapiVideoDecoder"
+enabled_features="WebUIDarkMode"
+
 if command -v 'firejail'; then
-  firejail --profile=chromium /usr/bin/chromium --enable-features=WebUIDarkMode --force-dark-mode "${@}"
+  firejail --profile=chromium /usr/bin/chromium --enable-features="${enabled_features}" --force-dark-mode "${@}"
 else
-  /bin/chromium --enable-features=WebUIDarkMode --force-dark-mode "${@}"
+  /bin/chromium --enable-features="${enabled_features}" --force-dark-mode "${@}"
 fi
 
