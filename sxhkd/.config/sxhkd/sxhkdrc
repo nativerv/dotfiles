@@ -17,6 +17,12 @@ super + shift + o ; h
 super + shift + o ; t ; {p}
   {QT_QPA_PLATFORMTHEME=qt5ct keepassxc}
 
+super + shift + o ; m ; {t}
+  {telegram-desktop}
+
+super + shift + o ; m ; {t}
+  {telegram-desktop}
+
 super + shift + o ; b ; {b,f,t}
   {chromium,firefox,torbrowser-launcher}
 
@@ -27,6 +33,11 @@ Print
 
 control + Print
   flameshot gui
+
+### Zoom
+
+super + z
+  boomer
 
 ### Dmenu
 
@@ -55,7 +66,7 @@ super + {minus,equal}
   pulsemixer {--change-volume -5,--change-volume +5}
 
 super + m:
-  amixer set Mic toggle
+  pactl set-source-mute @DEFAULT_SOURCE@ toggle 
 
 super + shift + m:
   pulsemixer --toggle-mute
@@ -69,7 +80,7 @@ super + q ; {q,r,s,h,l}
 # Change input language
 # super + `
 super + grave:
-  xkblayout-state set +1
+  switch-lang
 
 # Reload sxhkd config
 super + Pause
