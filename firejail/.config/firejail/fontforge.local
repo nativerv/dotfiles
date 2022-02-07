@@ -1,0 +1,7 @@
+whitelist ${HOME}/.config/FontForge
+
+noblacklist ${DOCUMENTS}
+mkdir ${HOME}/dox/fontforge
+whitelist ${HOME}/dox/fontforge
+
+# vim:syntax=firejail

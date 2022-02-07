@@ -1,0 +1,31 @@
+# Allow media programs
+#include allow-mpv.inc
+#include allow-sxiv.inc
+
+# Disable creating crap
+ignore mkdir ${HOME}/.pki
+
+# Blacklist sus stuff
+blacklist ${HOME}/.bashrc
+
+# Allow chromium download dir
+nowhitelist ${HOME}/dl
+noblacklist ${HOME}/dl
+mkdir ${HOME}/dl/vieb
+whitelist ${HOME}/dl/vieb
+
+machine-id
+
+# Allow programming dirs
+#include allow-pr.inc
+
+# Allow screenshots dir
+#include allow-pix-scr.inc
+
+# Allow screen recordings dir
+#include allow-vid-obs.inc
+
+# Allow hydrus dir
+#include allow-hydrus.inc
+
+# vim:syntax=firejail

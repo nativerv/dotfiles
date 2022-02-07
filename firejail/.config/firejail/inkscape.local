@@ -1,0 +1,15 @@
+# Whtelist/Noblacklist my stuff
+noblacklist ${PICTURES}
+mkdir ${HOME}/pix/inkscape
+whitelist ${HOME}/pix/inkscape
+
+# Whitelist all noblacklisted stuff from /etc/firejail/inkview.profile
+whitelist ${HOME}/.cache/inkscape
+whitelist ${HOME}/.config/inkscape
+whitelist ${HOME}/.inkscape
+whitelist ${HOME}/.config/GIMP
+whitelist ${HOME}/.gimp*
+
+include disable-xdg.inc
+
+# vim:syntax=firejail
