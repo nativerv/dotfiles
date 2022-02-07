@@ -13,6 +13,8 @@ alias lz="lazygit"
 alias muslyr="ncmpcpp --screen lyrics"
 alias musvis="ncmpcpp --screen visualizer"
 alias pac="pacman"
+alias pacown="pacman -Qo"
+alias pacname="pacman -F"
 alias bs="bullshit"
 alias r="ranger"
 alias nf="neofetch"
@@ -24,11 +26,19 @@ alias fj="firejail "
 alias nfj="firejail --noprofile "
 alias dfj="firejail --profile=default "
 alias pm="pulsemixer"
+alias tm="tmux"
+alias dnd="dragon-drag-and-drop"
+alias ng="nvim +0G"
+alias sc="systemctl"
+alias scu="systemctl --user"
+alias doc="docker"
 
-# Fix mkdir to create all dirs recursively
+# Mkdir and touch; also flag mkdir create nonexistent dirs
 alias md="mkdir -p"
 alias mt="touch"
-alias dnd="dragon-drag-and-drop"
+
+# Simulate plan9 `walk` util
+alias walk="find ."
 
 # Fix sudo to take another alias like `nv`
 alias sudo="sudo "
@@ -57,12 +67,12 @@ alias gb="git branch"
 alias gch="git checkout"
 alias gp="git push"
 alias gpall="git push origin --all"
-alias gpmaster="git push origin msater"
+alias gpmaster="git push origin master"
 
 # Aliases for updating environments
-alias renv="reset; exec zsh"
+alias renv="exec zsh"
+alias rs="reset"
 alias zshplug="find "${ZDOTDIR}/plugins" -type d -exec test -e '{}/.git' ';' -print0 | xargs -I {} -0 git -C {} pull -q"
-alias nvplug="nvim +PlugInstall"
 
 # Aliases for ls
 alias ls='ls --color=auto --group-directories-first' 
@@ -109,7 +119,7 @@ alias list_systemctl="systemctl list-unit-files --state=enabled"
 
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert
-# alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 
 # function mov(){
   # mkdir -p $2;
