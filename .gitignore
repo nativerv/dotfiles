@@ -72,3 +72,5 @@ ranger/.config/ranger/plugins/__init__.py
 
 nvim-lua/.config/nvim/plugin/packer_compiled.lua
 gtk/.config/gtk-2.0/gtkfilechooser.ini
+
+nvim/.config/nvim/plugin/packer_compiled.lua
