@@ -447,6 +447,14 @@ vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
   border = 'rounded',
 })
 
+-- | Set dafault window border (added because :LspInfo doesn't have borders by default)
+local default_windows_opts = require'lspconfig.ui.windows'.default_opts
+require'lspconfig.ui.windows'.default_opts = function(options)
+  local opts = default_windows_opts(options)
+  opts.border = 'single'
+  return opts
+end
+
 -- | local handlers =  {
 -- |   ["textDocument/hover"]         =  vim.lsp.with(vim.lsp.handlers.hover,          {border = border}),
 -- |   ["textDocument/signatureHelp"] =  vim.lsp.with(vim.lsp.handlers.signature_help, {border = border }),
