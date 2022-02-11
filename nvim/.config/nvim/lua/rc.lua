@@ -176,8 +176,8 @@ require'rest-nvim'.setup {
 require'lspsaga'.init_lsp_saga {
   use_saga_diagnostic_sign = false,
   code_action_prompt = {
-    --enable = false,
-    sign = false,
+    enable = false,
+    -- | sign = false,
   },
   rename_action_keys = {
     quit = "<C-c>",
@@ -268,18 +268,6 @@ require'neogit'.setup {}
 local lspconfig  = require'lspconfig'
 -- | local lsp_status = require'lsp-status'
 local lsp_signature = require'lsp_signature'
-local null_ls = require'null-ls'
-
-null_ls.setup {
-  sources = {
-    null_ls.builtins.diagnostics.shellcheck.with {
-      diagnostics_format = '[#{c}] #{m} (#{s})',
-      filetypes = { 'sh' },
-    },
-    null_ls.builtins.formatting.shfmt
-  },
-  debug = true
-}
 
 local on_attach = function(client, buffer)
   -- | Some bullshit
@@ -435,9 +423,6 @@ local lsps = {
       }
     }
   },
-  ['null-ls'] = {
-    autostart = true,
-  },
   -- | glslls = {},
   -- | phpactor = {},
   dockerls = {},
@@ -472,6 +457,21 @@ for lsp, lsp_config in pairs(lsps) do
 
   lspconfig[lsp].setup (config)
 end
+
+-- | Null-ls
+require'null-ls'.setup {
+  sources = {
+    require'null-ls'.builtins.diagnostics.shellcheck.with {
+      diagnostics_format = '[#{c}] #{m} (#{s})',
+      filetypes = { 'sh' },
+    },
+    require'null-ls'.builtins.formatting.shfmt
+  },
+  debug = true,
+  on_attach = on_attach,
+  capabilities = capabilities,
+  autostart = true,
+}
 
 -- | luasnip
 local luasnip = require'luasnip'
