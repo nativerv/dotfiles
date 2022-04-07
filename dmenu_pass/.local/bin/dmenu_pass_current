@@ -1,0 +1,30 @@
+#!/bin/sh
+
+# Author: nrv
+# License: https://www.gnu.org/licenses/gpl-3.0.en.html 
+# Description:
+#   In password-store,
+#   for a selected pass record of form:
+#     password
+#     key: value
+#     key: value
+#     key: value
+#   Yank value to clipboard or type it
+
+DMENU_PASS_CURRENT="${DMENU_PASS_CURRENT:-'dmenu_pass_current'}"
+
+value="$(
+  pass show "${DMENU_PASS_CURRENT}" \
+    | sed '1 s/^/password: /g' \
+    | dmenu -l 10 -p 'Select field: ' \
+    | sed 's/: /\t/g' \
+    | cut -f2
+)"
+
+if [ "${1}" = '--type' ]; then
+  xdotool type "${value}"
+elif [ "${1}" = '--copy' ]; then
+  printf '%s' "${value}" | xclip -in -sel clipboard
+else
+  printf '%s' "${value}"
+fi
