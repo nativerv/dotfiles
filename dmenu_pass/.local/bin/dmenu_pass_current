@@ -13,18 +13,26 @@
 
 DMENU_PASS_CURRENT="${DMENU_PASS_CURRENT:-'dmenu_pass_current'}"
 
-value="$(
+password_placeholder='****************                                                                                                '
+password="$(pass show "${DMENU_PASS_CURRENT}" | head -n1)"
+
+# Select value from password-store record
+selected_value="$(
   pass show "${DMENU_PASS_CURRENT}" \
-    | sed '1 s/^/password: /g' \
+    | sed "1 s/.*/password: ${password_placeholder}/g" \
     | dmenu -l 10 -p 'Select field: ' \
     | sed 's/: /\t/g' \
     | cut -f2
 )"
 
+# Replace placeholder with actual password if password was selected
+[ "${selected_value}" = "${password_placeholder}" ] && selected_value="${password}"
+
+# Perform action - type or copy
 if [ "${1}" = '--type' ]; then
-  xdotool type "${value}"
+  xdotool type "${selected_value}"
 elif [ "${1}" = '--copy' ]; then
-  printf '%s' "${value}" | xclip -in -sel clipboard
+  printf '%s' "${selected_value}" | xclip -in -sel clipboard
 else
-  printf '%s' "${value}"
+  printf '%s' "${selected_value}"
 fi
