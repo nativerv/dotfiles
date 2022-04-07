@@ -11,6 +11,8 @@
 #     key: value
 #   Yank value to clipboard or type it
 
+set -e
+
 DMENU_PASS_CURRENT="${DMENU_PASS_CURRENT:-'dmenu_pass_current'}"
 
 password_placeholder='****************                                                                                                '

@@ -6,6 +6,8 @@
 #   Select password from password-store, 
 #   write it to ${DMENU_PASS_CURRENT} record and run `dmenu_pass_current`
 
+set -e
+
 DMENU_PASS_CURRENT="${DMENU_PASS_CURRENT:-'dmenu_pass_current'}"
 
 cut_pass_dir="$(printf 's|^%s/||g; s|.gpg$||g' "${PASSWORD_STORE_DIR}")"
