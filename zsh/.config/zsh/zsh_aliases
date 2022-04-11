@@ -15,6 +15,7 @@ alias musvis="ncmpcpp --screen visualizer"
 alias pac="pacman"
 alias pacown="pacman -Qo"
 alias pacname="pacman -F"
+alias pacinfo="pacman -Qi"
 alias bs="bullshit"
 alias r="ranger"
 alias nf="neofetch"
@@ -27,11 +28,15 @@ alias nfj="firejail --noprofile "
 alias dfj="firejail --profile=default "
 alias pm="pulsemixer"
 alias tm="tmux"
+alias tmc="transmission-remote"
+alias tmd="transmission-daemon"
 alias dnd="dragon-drag-and-drop"
 alias ng="nvim +0G"
 alias sc="systemctl"
 alias scu="systemctl --user"
 alias doc="docker"
+alias bj="bubblejail"
+alias dt="date +%F_%H-%M-%S | head -c-1"
 
 # Mkdir and touch; also flag mkdir create nonexistent dirs
 alias md="mkdir -p"
@@ -53,10 +58,12 @@ alias yarn='yarn --use-yarnrc "${XDG_CONFIG_HOME}/yarn/config"'
 alias ncdu="ncdu -q --color dark --confirm-quit --exclude-kernfs"
 
 # Aliases for Git
+alias git="git --no-pager "
 alias g="git"
 alias gs="git status"
 alias gl="git log"
-alias gll="git log --graph --pretty=oneline"
+alias gll="git log --pretty=oneline"
+alias gllg="git log --graph --pretty=oneline"
 alias gd="git diff"
 alias ga="git add"
 alias gc="git commit"
@@ -66,8 +73,9 @@ alias gst="git stash"
 alias gb="git branch"
 alias gch="git checkout"
 alias gp="git push"
+alias gw="git switch"
 alias gpall="git push origin --all"
-alias gpmaster="git push origin master"
+alias gpmaster="git --no-pager push origin master"
 
 # Aliases for updating environments
 alias renv="exec zsh"
@@ -75,7 +83,7 @@ alias rs="reset"
 alias zshplug="find "${ZDOTDIR}/plugins" -type d -exec test -e '{}/.git' ';' -print0 | xargs -I {} -0 git -C {} pull -q"
 
 # Aliases for ls
-alias ls='ls --color=auto --group-directories-first' 
+alias ls='ls --time-style=long-iso --color=auto --group-directories-first ' 
 alias ll='ls -lF'    # Table with file type indicators
 alias lla='ls -alF'  # Table with all and file type indicators
 alias lld='ls -aldF' # Table with exact file (for looking at directories, not their contents)

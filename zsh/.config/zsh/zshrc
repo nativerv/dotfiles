@@ -31,12 +31,12 @@ zmodload zsh/zprof
 # it's escape sequences
 (cat ~/.cache/wal/sequences &)
 
+# Create files by default with 700 permissions
+umask 077
+
 ### Start X on login
 
-RED='\033[0;31m'
-NC='\033[0m' # No Color
-
-ERROR="${RED}ERROR: ${NC}"
+RED='\033[0;31m' NC='\033[0m' # No Color ERROR="${RED}ERROR: ${NC}"
 
 # Start/source ssh-agent
 if ! pgrep -u "${USER}" ssh-agent > /dev/null; then
@@ -53,6 +53,13 @@ maybe_startx () {
 
   # Continue to the terminal if in the pseudo terminal, not TTY
   tty | grep -q '^/dev/pts' && return
+
+  DISPLAY_TRIMMED="$(printf '%s' "$DISPLAY" | tr -d ':')"
+
+  # If running under systemd, try to start X only if xorg@.target is enabled for current screen (base 0, so -1 from vt/tty number)
+  command -v systemctl >/dev/null 2>&1 \
+    && ! systemctl --user is-enabled "xorg@$((${XDG_VTNR:-$(tty | tail -c2)} - 1)).target" >/dev/null 2>&1 \
+    && return
 
   echo "Starting X server...";
 
@@ -81,8 +88,9 @@ maybe_startx () {
   LOGDIR="${XDG_DATA_HOME}/xinitrc"
 
   [ ! -d "${LOGDIR}" ] && (mkdir "${LOGDIR}"; echo 'This is a custom `.xinitrc` log location. See `maybe_startx` in `~/.config/zsh/zshrc`' > "${LOGDIR}/README.md")
-  exec startx "${XDG_CONFIG_HOME}/x11/xinitrc" >>"${LOGDIR}/xinitrc.error.log" 2>>"${LOGDIR}/xinitrc.error.log"
+  startx "${XDG_CONFIG_HOME}/x11/xinitrc" >>"${LOGDIR}/xinitrc.error.log" 2>>"${LOGDIR}/xinitrc.error.log"
 }
 
 # Only start if `DISPLAY == "" && tty == tty1 && startx`
 maybe_startx
+

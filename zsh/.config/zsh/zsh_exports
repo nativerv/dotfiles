@@ -8,26 +8,14 @@ if_bin_exists() {
   command -v "${1}" >/dev/null 2>&1
 }
 
+#export "$(systemctl --user show-environment | xargs)"
+. <(cat ~/.config/environment.d/*.conf | sed -E "s/^([a-zA-Z])/export \1/g")
+# . <(systemctl --user show-environment | sed -E 's/^(.)/export \1/g' | grep -ve XDG_VTNR -e SYSTEMD_EXEC_PID)
 #### XDG stuff ====================================
 
-# Taken from https://wiki.archlinux.org/index.php/XDG_Base_Directory
-export XDG_CONFIG_HOME="${HOME}/.config"
-export XDG_CACHE_HOME="${HOME}/.cache"
-export XDG_DATA_HOME="${HOME}/.local/share"
-export XDG_STATE_HOME="${HOME}/.local/state"
-export XDG_BIN_HOME="${HOME}/.local/bin"
-export XDG_DATA_DIRS="/usr/local/share:/usr/share"
-export XDG_CONFIG_DIRS="/etc/xdg"
 [ -n "${PREFIX}" ] && export XDG_RUNTIME_DIR="${PREFIX}/var/run/${UID}"
 
 ### LC_* ===========================
-
-export DOTFILES_HOME="${HOME}/dot"
-
-### LC_* ===========================
-
-# Sort ls, nnn and others with dotfiles first
-export LC_COLLATE='C'
 
 ### Zsh history stuff ===========================
 
@@ -38,108 +26,46 @@ ensure_dir "${HISTFILEDIR}"
 export HISTSIZE=100000000
 export SAVEHIST=100000000
 
-### Path stuff ====================================
-
-# Add local binaries
-export PATH="${XDG_BIN_HOME}:${PATH}"
-
 ### Systemwide stuff        =======================
 
 # Default MANPAGER
-export MANPAGER='less'
 export MANWIDTH=999
 
 # Default EDITOR
 if_bin_exists 'nvim' && export EDITOR=/usr/bin/nvim
 
 # Less: enable color, disable history
-export LESS='-R --use-color -Dd+r$Du+b'
+export LESS='--mouse -R --use-color -Dd+r$Du+b'
 export LESSOPEN='| /usr/bin/source-highlight-esc.sh %s'
 export LESSHISTSIZE=0
-
-# QT theme
-export QT_QPA_PLATFORMTHEME='qt5ct'
 
 ### Move individual programs/applications' directories to XDG Base Dirs
 # Credit [ArchWiki](https://wiki.archlinux.org/title/XDG_Base_Directory)
 # for most of the following
 
-# X11
-export XINITRC="${XDG_CONFIG_HOME}/x11/xinitrc"
-export XSERVERRC="${XDG_CONFIG_HOME}/x11/xserverrc"
-#export XAUTHORITY="${XDG_RUNTIME_DIR}/x11/xauthority"
-
-# GTK2: Move config to XDG_CONFIG_HOME
-export GTK2_RC_FILES="${XDG_CONFIG_HOME}/gtk-2.0/gtkrc-2.0"
-
 # OpenSSL
-export OPENSSL_DATA_HOME="${XDG_DATA_HOME}/openssl"
-export RANDFILE="${OPENSSL_DATA_HOME}"
 if_bin_exists 'openssl' && ensure_dir "${OPENSSL_DATA_HOME}"
 
-# Pass
-export PASSWORD_STORE_DIR="${XDG_DATA_HOME}/pass"
-
 # NodeJS
-export NODE_DATA_DIR="${XDG_DATA_HOME}/nodejs"
-export NODE_REPL_HISTORY="${NODE_DATA_DIR}/node_repl_history" # This moves node_repl_history to XDG_DATA_HOME
-export NPM_PACKAGES="${XDG_DATA_HOME}/npm"
-export NPM_CONFIG_USERCONFIG="${XDG_CONFIG_HOME}/npm/npmrc"
 if_bin_exists 'node' && ensure_dir "${NODE_DATA_DIR}"
-export PATH="${XDG_DATA_HOME}/npm/bin:${PATH}"
 # if_bin_exists 'npm' && ensure_dir "${NPM_PACKAGES}" && ensure_dir "${NPM_CONFIG_USERCONFIG}"
 
 # ELinks
-export ELINKS_CONFDIR="${XDG_DATA_HOME}/elinks"
 if_bin_exists 'elinks' && ensure_dir "${XDG_DATA_HOME}/elinks"
 
 # PostgreSQL
-export PSQLRC="$XDG_CONFIG_HOME/pg/psqlrc"
-export PGPASSFILE="$XDG_CONFIG_HOME/pg/pgpass"
-export PGSERVICEFILE="$XDG_CONFIG_HOME/pg/pg_service.conf"
-export PSQL_HISTORY="$XDG_CACHE_HOME/pg/psql_history"
 if_bin_exists 'psql' && ensure_dir "$XDG_CONFIG_HOME/pg" && ensure_dir "$XDG_CACHE_HOME/pg"
 
 # Emacs 
 if_bin_exists 'emacs' && ensure_dir "${XDG_CONFIG_HOME}/emacs"
 
 # Calc
-export CALCHISTFILE="${XDG_DATA_HOME}/calc/history"
 if_bin_exists 'calc' && ensure_dir "${CALCHISTFILE%/*}"
-
-# Bash-completion
-export BASH_COMPLETION_USER_FILE="${XDG_CONFIG_HOME}/bash-completion/bash_completion"
-
-# TexLive
-export TEXMFHOME="${XDG_DATA_HOME}/texmf"
-export TEXMFVAR="${XDG_CACHE_HOME}/texlive/texmf-var"
-export TEXMFCONFIG="${XDG_CONFIG_HOME}/texlive/texmf-config"
-
-# Docker
-export DOCKER_CONFIG="${XDG_CONFIG_HOME}/docker"
 
 ### Language-specific stuff =======================
 
-# Setup DotNet
-export DOTNET_CLI_TELEMETRY_OPTOUT=1
-
-# Setup GO
-export GOPATH="${XDG_DATA_HOME}/go"
-export PATH="${XDG_DATA_HOME}/go/bin:${PATH}"
-
 # Setup Rust
-export RUSTUP_HOME="${XDG_DATA_HOME}/rustup"
-export CARGO_HOME="${XDG_DATA_HOME}/cargo"
 [ -s "${CARGO_HOME}/env" ] && source "${CARGO_HOME}/env"
-export PATH="${CARGO_HOME}/bin:${PATH}"
-
-# Setup Haskell
-export GHCUP_USE_XDG_DIRS='uwu' # They said set it to anything ¯\_(ツ)_/¯
-export STACK_ROOT="${XDG_DATA_HOME}/stack"
-export CABAL_CONFIG="${XDG_CONFIG_HOME}/cabal/config"
-export CABAL_DIR="${XDG_DATA_HOME}/cabal"
-export PATH="${STACK_ROOT}/bin:${PATH}"
-export PATH="${CABAL_DIR}/bin:${PATH}"
 
 # Setup NVM and NodeJS
 # export NVM_DIR="${XDG_DATA_HOME}/nvm"
@@ -147,9 +73,7 @@ export PATH="${CABAL_DIR}/bin:${PATH}"
 # [ -s "${NVM_DIR}/bash_completion" ] && source "${NVM_DIR}/bash_completion"  # This loads nvm bash_completion
 
 # Setup PyEnv and Python
-export PYENV_ROOT="$HOME/.pyenv"
-export PATH="$PYENV_ROOT/bin:$PATH"
+#export PYENV_ROOT="${HOME}/.pyenv"
+#export PATH="${PYENV_ROOT}/bin:${PATH}"
 # eval "$(pip completion --zsh)" # Enable zsh completion for pip 
 
-# Setup Gradle
-export GRADLE_USER_HOME="${XDG_DATA_HOME}/gradle"
