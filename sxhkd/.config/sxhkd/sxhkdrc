@@ -49,6 +49,14 @@ super + control + period:
 super + period:
   dmenu_unicode -t
 
+# Pass: type
+super + shift + p:
+  dmenu_pass
+
+# Pass: type from selected
+super + ctrl + p:
+  dmenu_pass_current
+
 ### Music
 
 super + shift + {minus,equal}
@@ -57,8 +65,14 @@ super + shift + {minus,equal}
 super + {F5,F6,F7,F8}
   mpc {prev,toggle,toggle,next}
 
-super + shift {F5,F8}
+super + shift + {F5,F8}
   mpc seekthrough {-5,+5}
+
+super + shift + {F6,F7}
+  playerctl --player=chromium play-pause
+
+super + ctrl + {F6,F7}
+  playerctl --player=mpv play-pause
 
 ### Sound
 
@@ -66,10 +80,18 @@ super + {minus,equal}
   pulsemixer {--change-volume -5,--change-volume +5}
 
 super + m:
-  pactl set-source-mute @DEFAULT_SOURCE@ toggle 
+  hk-toggle-source-mute
 
 super + shift + m:
-  pulsemixer --toggle-mute
+  hk-toggle-sink-mute
+
+### Tools
+
+super + backslash:
+  screenkey --position fixed --geometry 332x57+1557+69
+  
+super + bar:
+  killall screenkey
 
 ### System
 

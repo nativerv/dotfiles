@@ -1,0 +1,8 @@
+#!/bin/sh
+
+pactl set-source-mute @DEFAULT_SOURCE@ toggle
+if [ "$(pactl get-source-mute @DEFAULT_SOURCE@ | cut -d' ' -f2)" = 'yes' ]; then
+  paplay "${XDG_DATA_HOME:-$HOME/.local/share}/speech/micro-muted.wav"
+else
+  paplay "${XDG_DATA_HOME:-$HOME/.local/share}/speech/micro-unmuted.wav"
+fi
