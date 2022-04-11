@@ -1,4 +1,11 @@
 whitelist ${HOME}/.local/share/hydrus
 whitelist ${HOME}
 
+ignore private-bin
+ignore shell none
+ignore include disable-shell.inc
+ignore dbus-user none
+#ignore include disable-programs.inc
+#whitelist /etc/mpv
+
 # vim:syntax=firejail
