@@ -132,5 +132,6 @@ wal \
 # doesn't restart by itself
 pidof nvim >/dev/null && killall -USR1 nvim
 pidof dwm >/dev/null && xdotool key super+F12
-pidof xmonad-x86_64-linux >/dev/null && xmonad --restart
+# shellcheck disable=2236
+pidof xmonad-x86_64-linux >/dev/null && [ ! -z "${1}" ] && xmonad --restart
 pidof telegram-desktop >/dev/null && killall telegram-desktop && setsid telegram-desktop -startintray >/dev/null 2>&1 &

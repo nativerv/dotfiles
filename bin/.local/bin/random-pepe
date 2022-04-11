@@ -25,7 +25,7 @@ fi
 peepos=$(find "${pepes_dir}" -type f -iname "*.png" -o -type f -iname "*.jpg" -o -type f -iname "*.webp")
 
 # Exit if there is not a single peepo...
-if [ "$(wc -l "${peepos}")" = 0 ]; then
+if [ "$(echo "${peepos}" | wc -l)" = 0 ]; then
   echo 'No peepos there...'
   exit 1
 fi

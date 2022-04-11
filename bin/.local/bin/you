@@ -9,8 +9,11 @@ mkdir -p "${LOGDIR}"
 printf 'Enter a url: '
 read -r 'url'
 
-yt-dlp "${@}" "${url}"
+yt-dlp \
+  -o "%(extractor)s:%(id)s:%(title)s" \
+  "${@}" \
+  "${url}"
 
-printf "%s\t%s\n" "${url}" "${?}" > "${LOGDIR}/downloads.log"
+printf "%s\t%s\t%s\n" "${url}" "stub" "${?}" >> "${LOGDIR}/downloads.log"
 
 exit "${?}"
