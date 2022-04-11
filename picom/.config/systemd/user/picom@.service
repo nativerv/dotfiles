@@ -1,0 +1,34 @@
+[Unit]
+Description=Picom compositor fork on DISPLAY=:%i
+Documentation=man:picom(1)
+#PartOf=xorg@%i.target
+After=xsession@%i.target
+Requisite=xsession@%i.target
+# Try to restart up to 3 times
+StartLimitBurst=3
+# Don't try to restart after 60 seconds
+StartLimitIntervalSec=60
+
+[Service]
+Type=exec
+ExecStart=sh -c 'picom --config "${XDG_CONFIG_HOME}/picom/picom.jonaburg.conf"'
+ExecReload=/usr/bin/kill -SIGUSR1 $MAINPID
+# Try to restart no matter how the process ended
+Restart=always
+# Restart in 5 second intervals
+RestartSec=5
+
+# Sandboxing
+NoNewPrivileges=yes
+ProtectKernelTunables=yes
+ProtectControlGroups=yes
+RestrictNamespaces=yes
+LockPersonality=true
+MemoryDenyWriteExecute=true
+PrivateUsers=true
+RestrictNamespaces=true
+SystemCallArchitectures=native
+SystemCallFilter=@system-service
+
+[Install]
+WantedBy=xsession@%i.target

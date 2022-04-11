@@ -1,0 +1,23 @@
+[Unit]
+Description=Unix-way broadcast event manager
+Documentation=
+After=network.target
+
+[Service]
+Type=exec
+ExecStart=/bin/sh -c 'ev serve'
+
+# Sandboxing
+NoNewPrivileges=yes
+ProtectKernelTunables=yes
+ProtectControlGroups=yes
+RestrictNamespaces=yes
+LockPersonality=true
+MemoryDenyWriteExecute=true
+PrivateUsers=true
+RestrictNamespaces=true
+SystemCallArchitectures=native
+SystemCallFilter=@system-service 
+
+[Install]
+WantedBy=default.target

@@ -1,0 +1,26 @@
+[Unit]
+Description=Flameshot screenshotting tool on DISPLAY=:%i
+Documentation=man:flameshot(1)
+#PartOf=xsession@%i.target
+After=xsession@%i.target
+Requisite=xsession@%i.target
+
+[Service]
+Type=exec
+ExecStart=/usr/bin/flameshot
+Restart="on-abort"
+
+# Sandboxing
+NoNewPrivileges=yes
+ProtectKernelTunables=yes
+ProtectControlGroups=yes
+RestrictNamespaces=yes
+LockPersonality=true
+MemoryDenyWriteExecute=true
+PrivateUsers=true
+RestrictNamespaces=true
+SystemCallArchitectures=native
+SystemCallFilter=@system-service 
+
+[Install]
+WantedBy=xsession@%i.target

@@ -2,14 +2,17 @@
 
 ### Loads on X server start
 
+# Export DISPLAY to user's systemd
+#systemctl --user import-environment DISPLAY
+
 # Wallpaper
-setwall &
+#setwall &
 
 # Remaps: caps to escape, keyboard layout switch, etc
-xinit-remaps &
+#xinit-remaps &
 
 # Daemons: dunst, sxhkd, picom, etc
-xinit-daemons &
+#xinit-daemons &
 
 # Restart daemons on config change
 #xinit-config-hot-updaters &
@@ -17,6 +20,20 @@ xinit-daemons &
 # Load Xresources database
 xrdb -I"$HOME" "${XDG_CONFIG_HOME:-$HOME/.config}/x11/xresources"
 
-# Choose your Window Manager...
-exec xmonad 
+# Export DISPLAY and XAUTHORITY to systemd-user
+[ -x /etc/X11/xinit/xinitrc.d/50-systemd-user.sh ] \
+  && . /etc/X11/xinit/xinitrc.d/50-systemd-user.sh
+
+# Tell my systemd services that they can start
+command -v systemctl >/dev/null 2>&1 \
+  && systemctl --user start "xsession@$(echo "${DISPLAY}" | tr -d ':').target" >/dev/null 2>&1
+
+# Start WM
+"${HOME}/.xmonad/xmonad-x86_64-linux"
+
+# Tell my systemd services that they no longer can start
+command -v systemctl >/dev/null 2>&1 \
+  && systemctl --user stop "xsession@$(echo "${DISPLAY}" | tr -d ':').target" >/dev/null 2>&1
+
+
 #exec dwm 

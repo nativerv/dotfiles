@@ -1,0 +1,27 @@
+[Unit]
+Description=Dunst notification daemon at DISPLAY=:%i
+Documentation=man:dunst(1)
+#PartOf=xsession.target
+After=xsession@%i.target
+Requisite=xsession@%i.target
+
+[Service]
+Type=dbus
+BusName=org.freedesktop.Notifications
+ExecStart=/usr/bin/dunst
+Restart=on-failure
+
+# Sandboxing
+NoNewPrivileges=yes
+ProtectKernelTunables=yes
+ProtectControlGroups=yes
+RestrictNamespaces=yes
+LockPersonality=true
+MemoryDenyWriteExecute=true
+PrivateUsers=true
+RestrictNamespaces=true
+SystemCallArchitectures=native
+SystemCallFilter=@system-service 
+
+[Install]
+WantedBy=xsession@%i.target

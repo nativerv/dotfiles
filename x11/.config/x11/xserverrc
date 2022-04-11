@@ -1,1 +1,4 @@
 #!/bin/sh
+
+# exec /usr/bin/X -nolisten tcp -nolisten local -keeptty "vt${XDG_VTNR}" "$@"
+exec /usr/bin/X -nolisten tcp -nolisten local "$@"
