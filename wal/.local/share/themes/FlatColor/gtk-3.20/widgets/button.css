@@ -14,7 +14,7 @@ button {
 }
 
 button:focus {
-    border: @selected_bg_color 2px dotted;
+    border: @selected_bg_color 1px dotted;
     color: @fg_color;
 }
 
