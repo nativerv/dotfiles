@@ -1,0 +1,10 @@
+noblacklist ${HOME}/vg
+whitelist ${HOME}/vg
+
+noblacklist /media/win_d_drive/vg
+whitelist /media/win_d_drive/vg
+
+noblacklist /usr/share/wine
+whitelist /usr/share/wine
+
+include whitelist-usr-share-common.inc

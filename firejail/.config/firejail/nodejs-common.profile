@@ -2,10 +2,19 @@
 # Description: Asynchronous event-driven JavaScript runtime
 # This file is overwritten after every install/update
 # Persistent local customizations
-#include nodejs-common.local
+include nodejs-common.local
 # Persistent global definitions
 # added by caller profile
 #include globals.local
+
+# This fixes:
+# `Error: no suitable /tmp/yarn--1635026745180-0.7119542057973685/node executable found`
+blacklist ${HOME}/.ssh
+
+ignore noexec /tmp
+noblacklist /tmp
+
+ignore noexec ${HOME}
 
 blacklist /tmp/.X11-unix
 blacklist ${HOME}/.Xauthority
@@ -27,8 +36,6 @@ noblacklist ${HOME}/.yarncache
 noblacklist ${HOME}/.yarnrc
 noblacklist ${HOME}/.config/yarn/config
 noblacklist ${HOME}/.local/share/npm
-
-#ignore noexec ${HOME}
 
 include allow-bin-sh.inc
 
@@ -69,6 +76,9 @@ whitelist /usr/share/systemtap/tapset/node.stp
 include whitelist-runuser-common.inc
 include whitelist-usr-share-common.inc
 include whitelist-var-common.inc
+
+noblacklist ${RUNUSER}/npm
+whitelist ${RUNUSER}/npm
 
 include disable-common.inc
 #include disable-exec.inc

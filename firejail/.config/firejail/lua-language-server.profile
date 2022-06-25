@@ -23,22 +23,22 @@ blacklist ${RUNUSER}
 
 ignore noexec ${HOME}
 
-include /etc/firejail/allow-bin-sh.inc
-include /etc/firejail/allow-lua.inc
+include allow-bin-sh.inc
+include allow-lua.inc
 
-include /etc/firejail/disable-common.inc
-include /etc/firejail/disable-exec.inc
-include /etc/firejail/disable-passwdmgr.inc
-include /etc/firejail/disable-programs.inc
-include /etc/firejail/disable-shell.inc
-include /etc/firejail/disable-xdg.inc
+include disable-common.inc
+include disable-exec.inc
+include disable-passwdmgr.inc
+include disable-programs.inc
+include disable-shell.inc
+include disable-xdg.inc
 
 whitelist /usr/share/doc/lua
 whitelist /usr/share/lua*
 
-include /etc/firejail/whitelist-runuser-common.inc
-include /etc/firejail/whitelist-usr-share-common.inc
-include /etc/firejail/whitelist-var-common.inc
+include whitelist-runuser-common.inc
+include whitelist-usr-share-common.inc
+include whitelist-var-common.inc
 
 caps.drop all
 ipc-namespace

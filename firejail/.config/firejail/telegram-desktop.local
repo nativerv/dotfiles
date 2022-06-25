@@ -2,7 +2,8 @@
 
 # Allow xdg-open 
 ignore shell none
-include /etc/firejail/allow-bin-sh.inc
+ignore private-bin
+include allow-bin-sh.inc
 
 # Disable mic and cam access
 private-dev
@@ -28,3 +29,5 @@ whitelist ${HOME}/.local/share/hydrus
 
 # Prevent unused directory creation
 ignore mkdir ${HOME}/.TelegramDesktop
+
+# vim:syntax=firejail

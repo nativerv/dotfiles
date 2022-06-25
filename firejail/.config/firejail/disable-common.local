@@ -1,9 +1,15 @@
+include disable-passwdmgr.inc
+
 # Blacklist ~/.pki to force applications to use XDG_DATA_HOME/pki
 blacklist ${HOME}/.pki
 
 read-only ${HOME}/.config/zsh
+read-only ${HOME}/dot/zsh
 read-only ${HOME}/.config/bash
+read-only ${HOME}/dot/bash
 read-only ${HOME}/.config/shell
+read-only ${HOME}/dot/shell
 read-only ${HOME}/.config/firejail
+read-only ${HOME}/dot/firejail
 
 # vim:syntax=firejail

@@ -1,3 +1,7 @@
+# Allow libs - hack for error loading libicui18n.so
+#noblacklist /usr/lib/*
+#whitelist /usr/lib/*
+
 # Allow media programs
 include allow-mpv.inc
 include allow-sxiv.inc

@@ -1,0 +1,4 @@
+blacklist ${HOME}/.Xauthority
+blacklist /tmp/.X11-unix
+blacklist /tmp/.X*-lock
+blacklist /tmp/.ICE-unix

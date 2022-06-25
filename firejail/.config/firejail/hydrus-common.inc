@@ -29,20 +29,20 @@ whitelist ${HOME}/.local/share/torbrowser/tbb/x86_64/tor-browser_en-US/Browser/D
 
 include allow-mpv.inc
 include allow-sxiv.inc
-include /etc/firejail/allow-python2.inc
-include /etc/firejail/allow-python3.inc
+include allow-python2.inc
+include allow-python3.inc
 
-include /etc/firejail/disable-common.inc
-include /etc/firejail/disable-programs.inc
-include /etc/firejail/disable-xdg.inc
-include /etc/firejail/disable-passwdmgr.inc
+include disable-common.inc
+include disable-programs.inc
+include disable-xdg.inc
+include disable-passwdmgr.inc
 #include /etc/firejail/disable-exec.inc # breaks hydrus when you have python modules installed locally
-include /etc/firejail/disable-interpreters.inc
-include /etc/firejail/disable-devel.inc
+include disable-interpreters.inc
+include disable-devel.inc
 
-include /etc/firejail/whitelist-common.inc
-include /etc/firejail/whitelist-var-common.inc
-include /etc/firejail/whitelist-usr-share-common.inc
+include whitelist-common.inc
+include whitelist-var-common.inc
+include whitelist-usr-share-common.inc
 
 # Attempt to fix sound
 whitelist ${RUNUSER}/pulse/native

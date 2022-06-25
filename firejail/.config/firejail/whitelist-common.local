@@ -3,3 +3,8 @@
 
 whitelist ${HOME}/.local/share/applications/*
 read-only ${HOME}/.local/share/applications/*
+
+whitelist ${HOME}/.local/share/themes/*
+read-only ${HOME}/.local/share/themes/*
+whitelist ${HOME}/dot/wal
+read-only ${HOME}/dot/wal

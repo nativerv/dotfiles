@@ -1,5 +1,10 @@
 #include allow-steam.inc
 
+
+noblacklist /usr/share/zenity
+whitelist /usr/share/zenity
+whitelist /usr/lib/*
+
 ignore noblacklist ${HOME}/Games
 ignore mkdir ${HOME}/Games
 ignore whitelist ${HOME}/Games

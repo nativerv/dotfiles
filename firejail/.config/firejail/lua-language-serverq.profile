@@ -5,7 +5,7 @@ noblacklist ${HOME}/.config/nvim
 noblacklist ${HOME}/.config/firejail
 read-only ${HOME}/.config/firejail
 
-include /etc/firejail/allow-lua.inc
+include allow-lua.inc
 
 #include /etc/firejail/disable-common.inc
 #include /etc/firejail/disable-exec.inc

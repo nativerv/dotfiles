@@ -1,8 +1,12 @@
 ignore mkdir ${HOME}/.newsboat
 
-private-bin bash,curl,dmenu,ls,printf,sed,sh,sleep,st,stterm,surf,xargs,xprop
+#private-bin bash,curl,dmenu,ls,printf,sed,sh,sleep,st,stterm,surf,xargs,xprop,xdg-open,ev,grep,egrep,pgrep
+ignore private-bin
 private-etc alternatives,ca-certificates,crypto-policies,fonts,group,hosts,machine-id,passwd,pki,resolv.conf,ssl
 private-tmp
 
 include whitelist-common.inc
+include allow-ev.inc
+
 whitelist /usr/local/bin/surf
+#whitelist ${HOME}/.local/bin/ev

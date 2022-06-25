@@ -6,14 +6,14 @@ include vieb.local
 # Persistent global definitions
 include globals.local
 
-noblacklist ${HOME}/.cache/vieb
-noblacklist ${HOME}/.config/vieb
+noblacklist ${HOME}/.cache/Vieb
+noblacklist ${HOME}/.config/Vieb
 #noblacklist ${HOME}/.config/chromium-flags.conf
 
-mkdir ${HOME}/.cache/vieb
-mkdir ${HOME}/.config/vieb
-whitelist ${HOME}/.cache/vieb
-whitelist ${HOME}/.config/vieb
+mkdir ${HOME}/.cache/Vieb
+mkdir ${HOME}/.config/Vieb
+whitelist ${HOME}/.cache/Vieb
+whitelist ${HOME}/.config/Vieb
 #whitelist ${HOME}/.config/chromium-flags.conf
 whitelist /opt/Vieb
 

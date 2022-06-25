@@ -1,0 +1,17 @@
+mkdir ${HOME}/srv/viber
+private ${HOME}/srv/viber
+x11 xephyr
+
+blacklist ${HOME}/.Xauthority
+blacklist /tmp/.X11-unix
+blacklist /tmp/.X*-lock
+blacklist /tmp/.ICE-unix
+
+nogroups
+ignore include whitelist-common.inc
+
+blacklist /var
+blacklist /srv
+blacklist /media
+whitelist /run/user/1000
+blacklist /opt

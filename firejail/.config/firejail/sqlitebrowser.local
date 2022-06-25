@@ -1,4 +1,4 @@
 whitelist ${HOME}/.local/share/hydrus
-include /etc/firejail/whitelist-common.inc
+include whitelist-common.inc
 
 # vim:syntax=firejail

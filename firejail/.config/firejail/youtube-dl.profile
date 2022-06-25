@@ -14,7 +14,7 @@ whitelist ${PICTURES}
 noblacklist ${MUSIC}
 whitelist ${MUSIC}
 
-include /etc/firejail/allow-bin-sh.inc
+include allow-bin-sh.inc
 
 # Copied & Modified /etc/firejail/youtube-dl.profile, becouse .local file
 # can't ignore shell none without breaking stuff
@@ -44,13 +44,13 @@ include allow-python3.inc
 blacklist /tmp/.X11-unix
 blacklist ${RUNUSER}
 
-include /etc/firejail/disable-common.inc
-include /etc/firejail/disable-devel.inc
-include /etc/firejail/disable-exec.inc
-include /etc/firejail/disable-interpreters.inc
-include /etc/firejail/disable-passwdmgr.inc
-include /etc/firejail/disable-programs.inc
-include /etc/firejail/disable-shell.inc
+include disable-common.inc
+include disable-devel.inc
+include disable-exec.inc
+include disable-interpreters.inc
+include disable-passwdmgr.inc
+include disable-programs.inc
+include disable-shell.inc
 #include /etc/firejail/disable-xdg.inc
 
 include whitelist-usr-share-common.inc

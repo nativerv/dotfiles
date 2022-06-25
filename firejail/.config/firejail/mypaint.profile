@@ -23,8 +23,8 @@ whitelist ${PICTURES}
 ignore noexec ${HOME}
 
 # Allow python (blacklisted by disable-interpreters.inc)
-include /etc/firejail/allow-python2.inc
-include /etc/firejail/allow-python3.inc
+include allow-python2.inc
+include allow-python3.inc
 
 whitelist /usr/share/mypaint*
 include whitelist-usr-share-common.inc

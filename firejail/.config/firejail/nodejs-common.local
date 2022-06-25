@@ -1,11 +1,53 @@
 env GATSBY_TELEMETRY_DISABLED=1
 
+blacklist ${HOME}/.ssh
+#whitelist /usr/lib
+#whitelist /usr/bin
+
 # Disable X11 
 blacklist ${HOME}/.Xauthority
+
+# Allow nvim
+noblacklist ${HOME}/.config/nvim
+whitelist ${HOME}/.config/nvim
+noblacklist ${HOME}/.local/share/nvim
+whitelist ${HOME}/.local/share/nvim
+
+# Allow XDG dirs owned by node, npm and yarn
+noblacklist ${HOME}/.config/nodejs
+whitelist ${HOME}/.config/nodejs
+noblacklist ${HOME}/.cache/nodejs
+whitelist ${HOME}/.cache/nodejs
+noblacklist ${HOME}/.local/share/nodejs
+whitelist ${HOME}/.local/share/nodejs
+noblacklist ${RUNUSER}/nodejs
+whitelist ${RUNUSER}/nodejs
+#
+noblacklist ${HOME}/.config/npm
+whitelist ${HOME}/.config/npm
+noblacklist ${HOME}/.cache/npm
+whitelist ${HOME}/.cache/npm
+noblacklist ${HOME}/.local/share/npm
+whitelist ${HOME}/.local/share/npm
+noblacklist ${RUNUSER}/npm
+whitelist ${RUNUSER}/npm
+#
+noblacklist ${HOME}/.config/yarn
+whitelist ${HOME}/.config/yarn
+noblacklist ${HOME}/.cache/yarn
+whitelist ${HOME}/.cache/yarn
+noblacklist ${HOME}/.local/share/yarn
+whitelist ${HOME}/.local/share/yarn
+noblacklist ${RUNUSER}/yarn
+whitelist ${RUNUSER}/yarn
 
 # Allow syscalls (i guess?)
 ignore seccomp
 ignore seccomp.block-secondary
+
+# Allow shell and environment
+ignore shell none
+ignore include disable-shell.inc
 
 # This fixes:
 # `Error: no suitable /tmp/yarn--1635026745180-0.7119542057973685/node executable found`
@@ -15,16 +57,6 @@ noblacklist /tmp
 ignore noexec ${RUNUSER}
 noblacklist ${RUNUSER} 
 
-# Allow my stuff
-noblacklist ${HOME}/pr
-whitelist ${HOME}/pr
-noblacklist ${HOME}/edu
-whitelist ${HOME}/edu
-
-noblacklist ${HOME}/dot
-whitelist ${HOME}/dot
-read-only ${HOME}/dot
-
 noblacklist ${HOME}/.config/npm
 whitelist ${HOME}/.config/npm
 
@@ -33,8 +65,5 @@ whitelist ${HOME}/.config/yarn
 
 noblacklist ${HOME}/.local/share/npm
 whitelist ${HOME}/.local/share/npm
-
-noblacklist ${RUNUSER}/npm
-whitelist ${RUNUSER}/npm
 
 # vim:syntax=firejail

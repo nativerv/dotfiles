@@ -1,5 +1,10 @@
+noblacklist ${HOME}/.local/share/hydrus
 whitelist ${HOME}/.local/share/hydrus
+noblacklist ${HOME}/.local/share/Trash
+whitelist ${HOME}/.local/share/Trash
 whitelist ${HOME}
+
+blacklist ${HOME}/.ssh
 
 ignore private-bin
 ignore shell none

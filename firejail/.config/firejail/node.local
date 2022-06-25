@@ -1,0 +1,12 @@
+# Allow my stuff
+noblacklist ${HOME}/pr
+whitelist ${HOME}/pr
+noblacklist ${HOME}/edu
+whitelist ${HOME}/edu
+noblacklist ${HOME}/dot
+whitelist ${HOME}/dot
+read-only ${HOME}/dot
+ignore read-only ${HOME}/.local/share/nvim
+#read-only ${HOME}/.local/share/nvim/site/pack
+read-write ${HOME}/.local/share/nvim/tree-sitter*
+

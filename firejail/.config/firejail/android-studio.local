@@ -1,1 +1,28 @@
+ignore noexec ${HOME}
+ignore private-cache
+
 include disable-xdg.inc
+include allow-pr.inc
+#include allow-edu.inc
+
+noblacklist ${HOME}/.config/Google
+noblacklist ${HOME}/.cache/Google
+noblacklist ${HOME}/.AndroidStudio*
+noblacklist ${HOME}/.android
+noblacklist ${HOME}/.jack-server
+noblacklist ${HOME}/.jack-settings
+noblacklist ${HOME}/.local/share/JetBrains
+noblacklist ${HOME}/.tooling
+noblacklist ${HOME}/.local/share/android
+
+whitelist ${HOME}/.config/Google
+whitelist ${HOME}/.cache/Google
+whitelist ${HOME}/.AndroidStudio*
+whitelist ${HOME}/.android
+whitelist ${HOME}/.jack-server
+whitelist ${HOME}/.jack-settings
+whitelist ${HOME}/.local/share/JetBrains
+whitelist ${HOME}/.tooling
+whitelist ${HOME}/.local/share/android
+
+# vim:syntax=firejail
