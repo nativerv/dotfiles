@@ -25,10 +25,12 @@ Where `<name>` is name of a directory in the root of this repository.
 
 Here are some links to places where i got templates for my configs from:
 
-https://gitlab.com/dwt1/dotfiles - for his `xmonad`/`xmobar` configs, which is basically a miniature documentation of it
+<https://gitlab.com/dwt1/dotfiles> -- for his `xmonad`/`xmobar` configs, which is basically a miniature documentation of it
 
-https://github.com/ChristianChiarulli/Machfiles - for `zsh` config
+<https://github.com/ChristianChiarulli/Machfiles> -- for `zsh` config
 
-https://www.youtube.com/watch?v=gnupOrSEikQ - for (old/coc/vimscript) `nvim` config
+<https://www.youtube.com/watch?v=gnupOrSEikQ> -- for old (coc/vimscript) `nvim` config and getting me into vim in general
 
-https://github.com/hlissner/dotfiles/blob/master/modules/themes/alucard/config/dunstrc - for `dunstrc` config
+<https://github.com/hlissner/dotfiles/blob/master/modules/themes/alucard/config/dunstrc> - for `dunstrc` config
+
+<https://github.com/deviantfero/wpgtk-templates> -- for `FlatColor` gtk theme and `flattrcolor` icon theme, which power gtk part of my pywal theming

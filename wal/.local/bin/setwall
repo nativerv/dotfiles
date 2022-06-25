@@ -1,0 +1,145 @@
+#!/bin/sh
+
+set -e
+
+# This script does the following:
+#	setwall                ->  set the saved wallpaper (for use on X startup).
+#	setwall FILE           ->  set FILE as the new wallpaper.
+#	setwall DIRECTORY      ->  set random file from DIRECTORY as new wallpaper.
+#	[ wal is installed ? ] -+> also generate and set a `wal` colorscheme.
+
+help() {
+	echo "usage: $(basename "${0}") [-l] [-s saturation] [FILE]"
+  # shellcheck disable=SC2016
+	echo '  set FILE as wallpaper and generate `wal` colorscheme if `wal` is installed.'
+  echo '  if  FILE is a directory, select random image from it and use it as wallpaper.'
+  # shellcheck disable=SC2016
+  echo '  if  FILE is not specified, use ${HOME}/.local/share/wallpaper, which is set by 2 previous cases.'
+  echo ''
+  echo 'flags:'
+  printf -- '  -l             generate light theme\n'
+	printf -- '  -s saturation  specify wal saturation\n'
+  # shellcheck disable=1078,1079,2016
+	printf -- '  -b backend     select custom backend
+                 one of `schemer2`, `colorz`, `colorthief`, `wal`
+                 default: wal\n'
+  # shellcheck disable=3045
+	printf -- '  -h             print this message\n'
+}
+
+die() {
+	echo "${0}: error: ${1}"
+	exit 1
+}
+
+XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-"${HOME}/.config"}"
+XDG_DATA_HOME="${XDG_DATA_HOME:-"${HOME}/.local/share"}"
+POSTRUN_FILE="${XDG_CONFIG_HOME}/wal/postrun"
+
+saturation='0.5'
+backend='wal'
+is_backend_specified='false'
+
+while getopts 'hls:b:' option; do
+	case "${option}" in
+	s) saturation="${OPTARG}" ;;
+  l) light='true' ;;
+  b) backend=${OPTARG}
+     is_backend_specified='true'
+     ;;
+		# --help) help "$@" ;;
+	[?]|h)
+		help "$@"
+		exit 0
+		;;
+	esac
+done
+
+shift $((OPTIND - 1))
+
+# This scritp's XDG_DATA_HOME directory
+wall_data_dir="${XDG_DATA_HOME}/wall"
+
+# Ensure wall folder exists in XDG_DATA_HOME
+mkdir -p "${wall_data_dir}"
+
+# Location of link to wallpaper
+wallpaper_link="${wall_data_dir}/wallpaper"
+
+# Location of backend used last time - for setwall with no arguments
+backend_file="${wall_data_dir}/backend"
+# Ensure backend_file exists and contains
+touch "${backend_file}"
+
+# Replace link with new image if provided; else just use the ond one behind link
+# shellcheck disable=2236
+if [ ! -z "${1}" ]; then
+	# Readlink input location to ensure we can test its mime type
+	input_true_location="$(readlink -f "${1}")" || die 'could not readlink wallpaper location'
+
+	# Test mime type:
+	# image     -> set link to that image
+	# directory -> set link to a random image from that directory
+	# otherwise -> exit with error
+	case "$(file --mime-type -b "${input_true_location}")" in
+	image/*)
+		ln -sf "${input_true_location}" "${wallpaper_link}"
+		notify-send -a "setwall" -i "${wallpaper_link}" "Changing wallpaper..."
+		;;
+	inode/directory)
+		ln -sf "$(find "${input_true_location}" -iregex '.*.\(jpg\|jpeg\|png\|gif\)' -type f | shuf -n 1)" "${wallpaper_link}"
+		notify-send -a "setwall" -i "${wallpaper_link}" "Random Wallpaper chosen."
+		;;
+	*)
+		notify-send -a "setwall" "Error" "Not a valid image."
+		die 'not a valid image'
+		;;
+	esac
+fi
+
+# If we're called *without* pos args - in restore mode,
+# and backend not specified explicitly with -b,
+# reuse backend saved to ${backend_file}
+if [ -z "${1}" ] && [ ! "${is_backend_specified}" = 'true' ]; then
+  backend=$(cat "${backend_file}")
+fi
+
+# If we're called *with* pos args - in set mode,
+# save new backend to the backend_file
+# shellcheck disable=2236
+if [ ! -z "${1}" ]; then
+  printf '%s' "${backend}" > "${backend_file}"
+fi
+
+# Set the wallpaper
+xwallpaper --zoom "${wallpaper_link}"
+
+# If pywal is installed, use it
+
+# Guard for pywal
+command -v wal >/dev/null 2>&1 || exit 0
+
+wal \
+  --backend "${backend}" \
+	--saturate "${saturation}" \
+  ${light:+-l} \
+	-i "$(readlink -f "${wallpaper_link}")" \
+	-o "${POSTRUN_FILE}" ||
+	{
+		# shellcheck disable=SC2016
+		die 'Error running `wal`'
+	}
+
+# Send signals/restart some programs that `wal`
+# doesn't restart by itself
+pidof nvim >/dev/null && killall -USR1 nvim
+pidof dwm >/dev/null && xdotool key super+F12
+# shellcheck disable=2236
+pidof xmonad-x86_64-linux >/dev/null && [ ! -z "${1}" ] && xmonad --restart
+pidof telegram-desktop >/dev/null && killall telegram-desktop && setsid telegram-desktop -startintray >/dev/null 2>&1 &
+command -v pywalfox >/dev/null 2>&1 && pywalfox update >/dev/null 2>&1 &
+# xsettingsd as a daemon does not work at all or with firefox specifically
+# for some reason; it requires to be run every time gtk theme updates,
+# and older instance can recognize that another one was run and kill itself,
+# but firefox just don't care, so we kill xsettingsd then run a new one
+command -v xsettingsd >/dev/null 2>&1 && pkill xsettingsd >/dev/null 2>&1 && setsid xsettingsd -c "${XDG_CONFIG_HOME}/xsettingsd/xsettingsd.conf" >/dev/null 2>&1
