@@ -6,11 +6,11 @@ LOGDIR="${XDG_DATA_HOME:-$HOME/.local/share}/you"
 
 mkdir -p "${LOGDIR}"
 
-printf 'Enter a url: '
+printf 'Enter a url: ' >&2
 read -r 'url'
 
 yt-dlp \
-  -o "%(extractor)s:%(id)s:%(title)s" \
+  -o "%(extractor)s:%(id)s:%(title)s.%(ext)s" \
   "${@}" \
   "${url}"
 

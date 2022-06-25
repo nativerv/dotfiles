@@ -23,7 +23,7 @@ Where `<name>` is name of a directory in the root of this repository.
 
 ## Credits
 
-Here are some links to places where i got templates for my configs from:
+Here are some links to places where i got examples/templates, whole unedited configs and inspiration from:
 
 <https://gitlab.com/dwt1/dotfiles> -- for his `xmonad`/`xmobar` configs, which is basically a miniature documentation of it
 
@@ -32,5 +32,7 @@ Here are some links to places where i got templates for my configs from:
 <https://www.youtube.com/watch?v=gnupOrSEikQ> -- for old (coc/vimscript) `nvim` config and getting me into vim in general
 
 <https://github.com/hlissner/dotfiles/blob/master/modules/themes/alucard/config/dunstrc> - for `dunstrc` config
+
+<https://github.com/LukeSmithxyz/voidrice> -- for various stuff, like `newsboat` or `zathura` configs, and for general inspiration
 
 <https://github.com/deviantfero/wpgtk-templates> -- for `FlatColor` gtk theme and `flattrcolor` icon theme, which power gtk part of my pywal theming

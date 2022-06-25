@@ -1,15 +1,14 @@
 [Unit]
-Description=Dunst notification daemon at DISPLAY=:%i
-Documentation=man:dunst(1)
-#PartOf=xsession.target
+Description=Provides settings to X11 applications
+Documentation=man:xsettingsd(1)
+#PartOf=xsession@%i.target
 After=xsession@%i.target
 Requisite=xsession@%i.target
 
 [Service]
-Type=dbus
-BusName=org.freedesktop.Notifications
-ExecStart=/usr/bin/dunst
-Restart=always
+Type=exec
+ExecStart=/usr/bin/xsettingsd
+Restart="on-abort"
 
 # Sandboxing
 NoNewPrivileges=yes

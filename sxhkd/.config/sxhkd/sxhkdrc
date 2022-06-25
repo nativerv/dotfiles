@@ -69,7 +69,7 @@ super + shift + {F5,F8}
   mpc seekthrough {-5,+5}
 
 super + shift + {F6,F7}
-  playerctl --player=chromium play-pause
+  playerctl --player=firefox play-pause
 
 super + ctrl + {F6,F7}
   playerctl --player=mpv play-pause

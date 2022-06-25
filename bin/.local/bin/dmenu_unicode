@@ -1,15 +1,15 @@
 #!/bin/sh
 
-# The famous "get a menu of emojis to copy" script.
+# The famous "get a menu of symbols to copy" script.
 
-EMOJI_FILE="${XDG_DATA_HOME:-$HOME/.local/share}/dmenu_unicode/emoji"
+UNICODE_FILE="${XDG_DATA_HOME:-$HOME/.local/share}/dmenu_unicode/unicode"
 
-dmenu_prompt='Copy emoji:'
+dmenu_prompt='Copy symbol:'
 type_mode='false'
 
 while getopts t option; do
   case "${option}" in
-	  t)	dmenu_prompt="Paste emoji:"
+	  t)	dmenu_prompt="Paste symbol:"
         type_mode='true'
         ;;
 	[?])	print >&2 "usage: $0 [-t]"; exit 1 ;;
@@ -17,14 +17,14 @@ while getopts t option; do
 done
 shift $((OPTIND - 1))
 
-# Get user selection via dmenu from emoji file.
-chosen=$(cut -d ';' -f1 "${EMOJI_FILE}" | dmenu -p "${dmenu_prompt:-Emoji}" -i -l 30 | sed "s/ .*//")
+# Get user selection via dmenu from `unicode` file.
+chosen=$(cut -d ';' -f1 "${UNICODE_FILE}" | dmenu -p "${dmenu_prompt:-'Symbol:'}" -i -l 30 | sed "s/ .*//")
 
 # Exit if none chosen.
 [ -z "$chosen" ] && exit
 
 # If you run this command with an argument, it will automatically insert the
-# character. Otherwise, show a message that the emoji has been copied.
+# character. Otherwise, show a message that the symbol has been copied.
 if [ "${type_mode}" = "true" ]; then
 	xdotool type "${chosen}"
 else

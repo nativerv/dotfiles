@@ -16,7 +16,7 @@ sb-sink-vol-listen | while read -r 'volume'; do
   elif [ "$((volume < 100))" = '1' ]; then
     # volume-2-solid
     env printf '\ue902'
-  elif [ "$((volume < 150))" = '1' ]; then
+  elif [ "$((volume <= 150))" = '1' ]; then
     # volume-3-solid
     env printf '\ue903'
   fi
