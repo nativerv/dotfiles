@@ -1,0 +1,23 @@
+# Enable vi mode
+set editing-mode vi
+
+$if mode=vi
+
+# Esc timeout to 0 
+set keyseq-timeout 0
+
+# Mode-based cursor:
+# Normal -> Box
+# Insert -> Bar
+set show-mode-in-prompt on
+set vi-cmd-mode-string "\1\e[2 q\2"
+set vi-ins-mode-string "\1\e[6 q\2"
+
+# Switch to normal mode
+set keymap vi-command
+
+"gg": beginning-of-history
+"G": end-of-history
+
+# Switch to insert before giving readline to the user
+set keymap vi-insert
