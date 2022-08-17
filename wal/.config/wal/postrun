@@ -1,12 +1,19 @@
 #!/bin/sh
 
-XDG_CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache}"
-XDG_DATA_HOME="${XDG_DATA_HOME:-$HOME/.local/share}"
+XDG_CACHE_HOME="${XDG_CACHE_HOME:-"${HOME}/.cache"}"
+XDG_DATA_HOME="${XDG_DATA_HOME:-"${HOME}/.local/share"}"
 
 # Regenerate telegram theme
 wal-telegram
 
-# Regenerate gtk FlatColor theme
+# Copy generated gtk theme files
 cp -f "${XDG_CACHE_HOME}/wal/flatcolor-gtk-2.0.gtkrc" "${XDG_DATA_HOME}/themes/FlatColor/gtk-2.0/gtkrc"
 cp -f "${XDG_CACHE_HOME}/wal/flatcolor-gtk-3.0.css" "${XDG_DATA_HOME}/themes/FlatColor/gtk-3.0/gtk.css"
 cp -f "${XDG_CACHE_HOME}/wal/flatcolor-gtk-3.20.css" "${XDG_DATA_HOME}/themes/FlatColor/gtk-3.20/gtk.css"
+
+# Copy generated tridactyl theme file
+[ -e "${XDG_CONFIG_HOME}/tridactyl" ] && mkdir -p "${XDG_CONFIG_HOME}/tridactyl/themes"
+[ -e "${XDG_CONFIG_HOME}/tridactyl" ] && cp -f "${XDG_CACHE_HOME}/wal/tridactyl.css" "${XDG_CONFIG_HOME}/tridactyl/themes/wal.css"
+
+# Copy generated zathura theme file
+[ -e "${XDG_CONFIG_HOME}/zathura" ] && cp "${XDG_CACHE_HOME}/wal/zathurarc" "${XDG_CONFIG_HOME}/zathura/zathurarc-wal"

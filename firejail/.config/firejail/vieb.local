@@ -14,6 +14,12 @@ noblacklist ${HOME}/dl
 mkdir ${HOME}/dl/vieb
 whitelist ${HOME}/dl/vieb
 
+noblacklist ${HOME}/.cache/wal
+whitelist ${HOME}/.cache/wal
+
+nowhitelist ${HOME}/.config/gtk*
+blacklist ${HOME}/.config/gtk*
+
 machine-id
 
 # Allow programming dirs
@@ -27,5 +33,10 @@ machine-id
 
 # Allow hydrus dir
 #include allow-hydrus.inc
+
+# Allow ev
+#include allow-ev.inc
+whitelist ${HOME}/.local/bin/ev
+
 
 # vim:syntax=firejail

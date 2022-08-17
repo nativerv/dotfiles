@@ -32,7 +32,8 @@ export SAVEHIST=100000000
 export MANWIDTH=999
 
 # Default EDITOR
-if_bin_exists 'nvim' && export EDITOR=/usr/bin/nvim
+# (set in environment.d/25-programs.conf)
+#if_bin_exists 'nvim' && export EDITOR=/usr/bin/nvim
 
 # Less: enable color, disable history
 export LESS='--mouse -R --use-color -Dd+r$Du+b'

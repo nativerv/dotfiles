@@ -1,11 +1,11 @@
 ### ZSH KEYBINDINGS FILE
 
 # Key-bindings
-bindkey -s '^o' 'ranger\n'
-bindkey -s '^g' 'lazygit\n'
+# bindkey -s '^o' 'ranger\n'
+# bindkey -s '^g' 'lazygit\n'
 #bindkey -s '^f' 'zi\n'
 #bindkey -s '^s' 'ncdu\n'
-bindkey -s '^v' 'nvim\n'
+# bindkey -s '^v' 'nvim\n'
 #bindkey -s '^z' 'zi\n'
 bindkey '^[[P' delete-char
 bindkey -r "^u" up-history

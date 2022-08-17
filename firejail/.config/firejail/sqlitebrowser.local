@@ -1,4 +1,5 @@
 whitelist ${HOME}/.local/share/hydrus
+whitelist ${HOME}/desk/maybe-dark-reader-db.sqlite
 include whitelist-common.inc
 
 # vim:syntax=firejail

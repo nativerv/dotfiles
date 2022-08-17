@@ -33,7 +33,8 @@ command -v systemctl >/dev/null 2>&1 \
 
 # Tell my systemd services that they no longer can start
 command -v systemctl >/dev/null 2>&1 \
-  && systemctl --user stop "xsession@$(echo "${DISPLAY}" | tr -d ':').target" >/dev/null 2>&1
+  && systemctl --user stop "xsession@$(echo "${DISPLAY}" | tr -d ':').target" >/dev/null 2>&1 \
+  && systemctl --user unset-environment DISPLAY XAUTHORITY >/dev/null 2>&1
 
 
 #exec dwm 

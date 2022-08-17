@@ -57,6 +57,16 @@ alias yarn='yarn --use-yarnrc "${XDG_CONFIG_HOME}/yarn/config"'
 # Configure ncdu
 alias ncdu="ncdu -q --color dark --confirm-quit --exclude-kernfs"
 
+# Configure du
+alias du="du -h"
+
+# Configure df
+alias df="df -h"
+
+# Configure mitmproxy to use XDG
+alias mitmproxy="mitmproxy --set confdir=${XDG_CONFIG_HOME}/mitmproxy"
+alias mitmweb="mitmweb --set confdir=${XDG_CONFIG_HOME}/mitmproxy"
+
 # Aliases for Git
 alias git="git --no-pager "
 alias g="git"

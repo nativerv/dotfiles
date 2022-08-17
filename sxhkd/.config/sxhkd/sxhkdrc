@@ -26,6 +26,14 @@ super + shift + o ; m ; {t}
 super + shift + o ; b ; {b,f,t}
   {chromium,firefox,torbrowser-launcher}
 
+### Recording
+
+super + r ; r
+  musicfind record
+
+super + r ; t
+  musicfind send
+
 ### Screenshot 
 
 Print

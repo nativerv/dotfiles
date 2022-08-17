@@ -13,6 +13,10 @@ novideo
 # Disable `${DOWNLOADS}`
 ignore whitelist ${DOWNLOADS}
 
+# Allow public folder - for drag'n'drop
+noblacklist ${HOME}/pub
+whitelist ${HOME}/pub
+
 # Allow `TelegramDesktop` inside `${DOWNLOADS}`
 noblacklist ${DOWNLOADS}
 mkdir ${HOME}/dl/telegram
@@ -26,6 +30,9 @@ whitelist ${HOME}/.cache/wal-telegram
 # Allow `hydrus` folder
 noblacklist ${HOME}/.local/share/hydrus
 whitelist ${HOME}/.local/share/hydrus
+
+# Allow `ev`
+include allow-ev.inc
 
 # Prevent unused directory creation
 ignore mkdir ${HOME}/.TelegramDesktop

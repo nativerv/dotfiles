@@ -27,6 +27,7 @@ titlebar_fg_color:#a5a7b8
 menu_bg_color:#06060f
 menu_fg_color:#a5a7b8
 link_color:#4b2f8d"
+# Active: link_color, selected_bg_color
 gtk-auto-mnemonics	= 1
 
 # Default Style
@@ -224,9 +225,9 @@ style "murrine-button"  = "murrine-wider" {
 }
 
 style "murrine-scrollbar" {
-	bg[NORMAL] = @bg_color
+	bg[NORMAL] = @selected_bg_color # Thumb/Track/Thingie that you move bg color
 	bg[PRELIGHT] = mix (0.31, @text_color, @bg_color)
-	bg[ACTIVE] = @selected_bg_color
+	bg[ACTIVE] = @bg_color
 
 	engine "murrine" {
 		roundness = 0

@@ -9,6 +9,9 @@ include allow-sxiv.inc
 # Disable creating crap
 ignore mkdir ${HOME}/.pki
 
+#ignore netfilter
+#ignore apparmor
+
 # Blacklist sus stuff
 blacklist ${HOME}/.bashrc
 

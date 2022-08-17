@@ -1,4 +1,5 @@
 [Desktop Entry]
 Type=Application
 Name=Video player
-Exec=/usr/bin/mpv %F
+#Exec=/usr/bin/mpv %F
+Exec=ev emit opend video %u

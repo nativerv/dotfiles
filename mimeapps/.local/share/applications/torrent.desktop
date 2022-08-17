@@ -1,4 +1,5 @@
 [Desktop Entry]
 Type=Application
 Name=Torrent
-Exec=/usr/bin/env transadd %U
+#Exec=/usr/bin/env transadd %U
+Exec=ev emit opend torrent %u

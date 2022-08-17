@@ -3,6 +3,12 @@
   min-width: 10px !important;
 }
 
+@media only screen and (max-width: 47px) {
+  .tabbrowser-tab label {
+    display: none;
+  }
+}
+
 /* Hide close button on tabs */
 #tabbrowser-tabs .tabbrowser-tab .tab-close-button { display:none !important; }
 

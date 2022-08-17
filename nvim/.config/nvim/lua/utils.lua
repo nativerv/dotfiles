@@ -46,21 +46,6 @@ function ternary ( cond , T , F )
     end
 end
 
--- | Merge passed tables
-function merge(...)
-  local result = {}
-  for _, t in ipairs{...} do
-    for k, v in pairs(t) do
-      result[k] = v
-    end
-    local mt = getmetatable(t)
-    if mt then
-      setmetatable(result, mt)
-    end
-  end
-  return result
-end
-
 -- | See if the file exists
 function is_file_exists(file)
   local f = io.open(file, "rb")

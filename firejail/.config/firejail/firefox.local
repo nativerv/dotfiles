@@ -19,6 +19,10 @@ blacklist ${HOME}/.bashrc
 #noblacklist ${HOME}/dl
 #whitelist ${HOME}/dl/firefox
 
+# Allow public (drag'n'drop) dir
+noblacklist ${HOME}/pub
+whitelist ${HOME}/pub
+
 # Allow programming dirs
 include allow-pr.inc
 
@@ -37,6 +41,7 @@ whitelist ${HOME}/dl/firefox
 # Allow pywalfox
 ignore include disable-exec.inc
 ignore apparmor
+#ignore netfilter
 #ignore read-only ${HOME}/.local/bin
 include allow-python3.inc
 noblacklist ${HOME}/.local/lib
@@ -50,7 +55,12 @@ whitelist-ro ${HOME}/dot/wal
 include allow-nvim.inc
 
 # Allow tridactyl
+noblacklist ${HOME}/.config/tridactyl
 whitelist ${HOME}/.config/tridactyl
+
+# Allow mitmproxy
+noblacklist ${HOME}/.config/mitmproxy
+whitelist ${HOME}/.config/mitmproxy
 
 dbus-user.own org.mozilla.Firefox.*
 dbus-user.own org.mozilla.firefox.*

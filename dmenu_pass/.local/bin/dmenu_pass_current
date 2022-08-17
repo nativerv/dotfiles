@@ -30,10 +30,14 @@ selected_value="$(
 # Replace placeholder with actual password if password was selected
 [ "${selected_value}" = "${password_placeholder}" ] && selected_value="${password}"
 
+action="$(
+  printf 'Type\nYank' | dmenu -p 'Choose an antion: ' -l 2
+)"
+
 # Perform action - type or copy
-if [ "${1}" = '--type' ]; then
+if [ "${action}" = 'Type' ]; then
   xdotool type "${selected_value}"
-elif [ "${1}" = '--copy' ]; then
+elif [ "${action}" = 'Yank' ]; then
   printf '%s' "${selected_value}" | xclip -in -sel clipboard
 else
   printf '%s' "${selected_value}"

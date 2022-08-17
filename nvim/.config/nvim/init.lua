@@ -8,6 +8,10 @@
 -- | Author: nrv
 -- | URL: https://github.com/nativerv/dotfiles
 
+
+-- | Cache lua - needs to be loaded as early as possible
+pcall(require, 'impatient')
+
 -- | Preconfig
 require 'utils'       -- | Load util functions
 

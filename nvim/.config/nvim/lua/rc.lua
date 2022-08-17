@@ -1,25 +1,45 @@
 -- | require'lsp/custom_languages/glslls'
-local util = require'utils'
 
 -- | Neovim world
 
 -- | Plugin (normal plugin) world
-require'nvim-treesitter.parsers'.get_parser_configs().org = {
-  install_info = {
-    url = 'https://github.com/milisims/tree-sitter-org',
-    revision = 'f110024d539e676f25b72b7c80b0fd43c34264ef',
-    files = { 'src/parser.c', 'src/scanner.cc' },
-  },
-  filetype = 'org',
+-- | require'nvim-treesitter.parsers'.get_parser_configs().org = {
+-- |   install_info = {
+-- |     url = 'https://github.com/milisims/tree-sitter-org',
+-- |     revision = 'f110024d539e676f25b72b7c80b0fd43c34264ef',
+-- |     files = { 'src/parser.c', 'src/scanner.cc' },
+-- |   },
+-- |   filetype = 'org',
+-- | }
+-- |
+--
+local lsp_colors = {
+  Error = "#e86671",
+  Warning = "#e5c07b",
+  Information = "#61afef",
+  Hint = "#56b6c2",
+
+  --Error = "#db4b4b",
+  --Warning = "#e0af68",
+  --Information = "#0db9d7",
 }
 
 require'nvim-treesitter.configs'.setup {
-  ensure_installed = 'maintained', -- one of "all", "maintained" (parsers with maintainers), or a list of languages
-  sync_install = false, -- install languages synchronously (only applied to `ensure_installed`)
+  -- | ensure_installed = 'all',
+  --{
+  --  "bash",       "bibtex", "c",      "c_sharp",    "clojure", "cmake",   "comment",
+  --  "commonlisp", "cpp",    "css",    "dockerfile", "dot",     "glsl",    "go",         "graphql",
+  --  "haskell",    "help",   "hjson",  "html",       "http",    "java",    "javascript", "jsdoc",
+  --  "json",       "json5",  "jsonc",  "latex",      "lua",     "make",    "markdown",   "ninja", "nix",
+  --  "norg",       "perl",   "php",    "phpdoc",     "prisma",  "pug",     "python",     "ql", "regex",
+  --  "ruby",       "rust",   "scheme", "scss",       "svelte",  "todotxt", "toml",       "tsx",
+  --  "typescript", "vim",    "vue",    "wgsl",       "yaml",
+  --}, -- one of "all", "maintained" (parsers with maintainers), or a list of languages
+  sync_install = true, -- install languages synchronously (only applied to `ensure_installed`)
   ignore_install = { }, -- List of parsers to ignore installing
   highlight = {
     enable = true,              -- false will disable the whole extension
-    disable = { 'sh', 'org' },  -- list of language that will be disabled
+    disable = { 'sh', 'org', 'latex', },  -- list of language that will be disabled
     -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
     -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
     -- Using this option may slow down your editor, and you may see some duplicate highlights.
@@ -35,7 +55,7 @@ require'nvim-treesitter.configs'.setup {
     -- termcolors = {} -- table of colour name strings
   },
   context_commentstring = {
-    enable = true
+    enable = true,
   },
   playground = {
     enable = true,
@@ -54,52 +74,60 @@ require'nvim-treesitter.configs'.setup {
       goto_node = '<cr>',
       show_help = '?',
     },
-  }
+  },
 }
 
-require'indent_blankline'.setup {
-    char                           = '┊',
-    -- | char                           = '│',
-    show_trailing_blankline_indent = false,
-    buftype_exclude                = { 'terminal' },
-    show_current_context = true,
-    show_current_context_start = false,
-}
-local gitsigns_bar = '│'
+--require'indent_blankline'.setup {
+--    char                           = '┊',
+--    -- | char                           = '│',
+--    show_trailing_blankline_indent = false,
+--    buftype_exclude                = { 'terminal' },
+--    show_current_context = true,
+--    show_current_context_start = false,
+--}
+local git_signcolumn_change = '│'
+local git_signcolumn_remove = ''
 require'gitsigns'.setup {
   signs = {
-    add          = { hl = 'GitGutterAdd',    text = gitsigns_bar },
-    change       = { hl = 'GitGutterChange', text = gitsigns_bar },
-    changedelete = { hl = 'GitGutterChange', text = gitsigns_bar },
-    delete       = { hl = 'GitGutterDelete', text = '' },
-    topdelete    = { hl = 'GitGutterDelete', text = '' },
+    add          = { hl = 'GitGutterAdd',    text = git_signcolumn_change, },
+    change       = { hl = 'GitGutterChange', text = git_signcolumn_change, },
+    changedelete = { hl = 'GitGutterChange', text = git_signcolumn_change, },
+    delete       = { hl = 'GitGutterDelete', text = git_signcolumn_remove, },
+    topdelete    = { hl = 'GitGutterDelete', text = git_signcolumn_remove, },
   },
   keymaps = {
-    -- Default keymap options
     noremap = true,
 
+    -- Goto prev hunk
     ['n g['] = { expr = true, "&diff ? 'g[' : '<cmd>lua require\"gitsigns\".prev_hunk()<cr>'"},
+    -- Goto next hunk
     ['n g]'] = { expr = true, "&diff ? 'g]' : '<cmd>lua require\"gitsigns\".next_hunk()<cr>'"},
-
+    -- Stage under cursor
     ['n <leader>gs'] = '<cmd>lua require"gitsigns".stage_hunk()<cr>',
+    -- Stage under selection
     ['v <leader>gs'] = '<cmd>lua require"gitsigns".stage_hunk({vim.fn.line("."), vim.fn.line("v")})<cr>',
+    -- Unstage last
     ['n <leader>gu'] = '<cmd>lua require"gitsigns".undo_stage_hunk()<cr>',
+    -- Preview hunk (in floating window)
+    ['n gz'] = '<cmd>lua require"gitsigns".preview_hunk()<cr>',
+    -- Blame under cursor (show author of hunk)
+    ['n <leader>gb'] = '<cmd>lua require"gitsigns".blame_line(true)<cr>',
+    -- Word object - in hunk
+    ['o ih'] = ':<C-U>lua require"gitsigns".select_hunk()<cr>',
+    ['x ih'] = ':<C-U>lua require"gitsigns".select_hunk()<cr>'
+
     --['n <leader>hr'] = '<cmd>lua require"gitsigns".reset_hunk()<cr>',
     --['v <leader>hr'] = '<cmd>lua require"gitsigns".reset_hunk({vim.fn.line("."), vim.fn.line("v")})<cr>',
     --['n <leader>hR'] = '<cmd>lua require"gitsigns".reset_buffer()<cr>',
-    ['n gz'] = '<cmd>lua require"gitsigns".preview_hunk()<cr>',
-    --['n <leader>hb'] = '<cmd>lua require"gitsigns".blame_line(true)<cr>',
     --['n <leader>hS'] = '<cmd>lua require"gitsigns".stage_buffer()<cr>',
     --['n <leader>hU'] = '<cmd>lua require"gitsigns".reset_buffer_index()<cr>',
-
-    --['o ih'] = ':<C-U>lua require"gitsigns".select_hunk()<cr>',
-    --['x ih'] = ':<C-U>lua require"gitsigns".select_hunk()<cr>'
   },
 }
 require'lualine'.setup {
   options = {
     -- | theme = 'pywal'
-    theme = 'wal'
+    theme = 'wal',
+    globalstatus = true,
   },
   sections = {
     lualine_c = {
@@ -108,10 +136,46 @@ require'lualine'.setup {
       -- | TODO: figure out what to do with this unused plugin, delete it or properly integrate
       -- | Search for lsp-status and lsp_status
       --require'lsp-status'.status,
-    }
-  }
+    },
+    lualine_b = {
+      {
+        'branch'
+      },
+      {
+        'diff',
+        colored = true, -- Displays a colored diff status if set to true
+        diff_color = {
+          -- Same color values as the general color option can be used here.
+          added    = { fg = '#14a573', },
+          modified = { fg = '#deaf6c', },
+          removed  = { fg = '#af404a', },
+        },
+        symbols = { added = '+', modified = '~', removed = '-' }, -- Changes the symbols used by the diff.
+        source = nil, -- A function that works as a data source for diff.
+                      -- It must return a table as such:
+                      --   { added = add_count, modified = modified_count, removed = removed_count }
+                      -- or nil on failure. count <= 0 won't be displayed.
+      },
+      {
+        'diagnostics',
+        diagnostics_color = {
+          error = { fg = lsp_colors.Error, },        -- Changes diagnostics' error color, without touching theme's bgcolor.
+          warn  = { fg = lsp_colors.Warning, },      -- Changes diagnostics' warn color.
+          info  = { fg = lsp_colors.Information, },  -- Changes diagnostics' info color.
+          hint  = { fg = lsp_colors.Hint, },         -- Changes diagnostics' hint color.
+        },
+      },
+    },
+  },
 }
+
 require'telescope'.setup {
+  defaults = {
+    file_ignore_patterns = {
+      '.git'
+    },
+    prompt_prefix = ' ',
+  },
   pickers = {
     find_files = {
       hidden = true,
@@ -123,13 +187,49 @@ require'telescope'.setup {
     },
   }
 }
-require'orgmode'.setup {
-  org_agenda_files = { os.capture('xdg-user-dir ' .. 'DOCUMENTS', false) .. '/notes/org/*' },            -- | Can contain multiple locations
-  org_default_notes_file = os.capture('xdg-user-dir ' .. 'DOCUMENTS', false) .. '/notes/org/refile.org',
+
+-- | require'orgmode'.setup {
+-- |   org_agenda_files = { os.capture('xdg-user-dir ' .. 'DOCUMENTS', false) .. '/notes/org/*' },            -- | Can contain multiple locations
+-- |   org_default_notes_file = os.capture('xdg-user-dir ' .. 'DOCUMENTS', false) .. '/notes/org/refile.org',
+-- | }
+
+require'colorizer'.setup {
+  md = {
+    names = false,
+  },
 }
 
-require'colorizer'.setup ()
-require'nvim-autopairs'.setup ()
+require'nvim-autopairs'.setup {
+  check_ts = true,
+  ignored_next_char = "",
+}
+local Rule = require'nvim-autopairs.rule'
+require'nvim-autopairs'.add_rules {
+  Rule(' ', ' ')
+    :with_pair(function (opts)
+      local pair = opts.line:sub(opts.col - 1, opts.col)
+      return vim.tbl_contains({ '()', '[]', '{}' }, pair)
+    end),
+  Rule('( ', ' )')
+      :with_pair(function() return false end)
+      :with_move(function(opts)
+          return opts.prev_char:match('.%)') ~= nil
+      end)
+      :use_key(')'),
+  Rule('{ ', ' }')
+      :with_pair(function() return false end)
+      :with_move(function(opts)
+          return opts.prev_char:match('.%}') ~= nil
+      end)
+      :use_key('}'),
+  Rule('[ ', ' ]')
+      :with_pair(function() return false end)
+      :with_move(function(opts)
+          return opts.prev_char:match('.%]') ~= nil
+      end)
+      :use_key(']')
+}
+
 require'bufferline'.setup {
   options = {
     indicator_icon = ' ',
@@ -139,12 +239,12 @@ require'bufferline'.setup {
 -- | require'lsp-status'.register_progress()
 --require'org-bullets'.setup()
 require'hop'.setup { keys = 'etovxqpdygfblzhckisuran' }
-require'stabilize'.setup {
-  ignore = {
-    -- | Removing help from there not working for some reason
-    filetype = { "list", "Trouble" },
-  }
-}
+--require'stabilize'.setup {
+--  ignore = {
+--    -- | Removing help from there not working for some reason
+--    filetype = { "list", "Trouble" },
+--  }
+--}
 require'tmux'.setup {
   navigation = {
     -- | Cycles to opposite pane while navigating into the border
@@ -173,18 +273,18 @@ require'rest-nvim'.setup {
   env_file = '.env',
   custom_dynamic_variables = {},
 }
-require'lspsaga'.init_lsp_saga {
-  use_saga_diagnostic_sign = false,
-  code_action_prompt = {
-    enable = false,
-    -- | sign = false,
-  },
-  rename_action_keys = {
-    quit = "<C-c>",
-    exec = "<cr>",
-  },
-  -- | border_style = 'rounded',
-}
+-- | require'lspsaga'.init_lsp_saga {
+-- |   use_saga_diagnostic_sign = false,
+-- |   code_action_prompt = {
+-- |     enable = false,
+-- |     -- | sign = false,
+-- |   },
+-- |   rename_action_keys = {
+-- |     quit = "<C-c>",
+-- |     exec = "<cr>",
+-- |   },
+-- |   -- | border_style = 'rounded',
+-- | }
 --require'rust-tools'.setup {}
 require'Comment'.setup {
   -- | LHS of toggle mappings in NORMAL + VISUAL mode
@@ -231,43 +331,62 @@ require'Comment'.setup {
 -- | Customize comment strings
 require'Comment.ft'
 -- |            line comment  block comment
-  .set('lua', { '-- | %s',    '-- [[ %s ]]' })
+  .set('lua', { '-- %s',    '-- [[ %s ]]' })
 
-local dap = require'dap'
-dap.adapters.lldb = {
-  type = 'executable',
-  command = '/usr/bin/lldb-vscode', -- adjust as needed
-  name = "lldb"
-}
-dap.configurations.rust = {
-  {
-    name = "Launch file",
-    type = "lldb",
-    request = "launch",
-    program = function()
-      return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
-    end,
-    cwd = '${workspaceFolder}',
-    stopOnEntry = true,
+-- | local dap = require'dap'
+-- | dap.adapters.lldb = {
+-- |   type = 'executable',
+-- |   command = '/usr/bin/lldb-vscode', -- adjust as needed
+-- |   name = "lldb"
+-- | }
+-- | dap.configurations.rust = {
+-- |   {
+-- |     name = "Launch file",
+-- |     type = "lldb",
+-- |     request = "launch",
+-- |     program = function()
+-- |       return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
+-- |     end,
+-- |     cwd = '${workspaceFolder}',
+-- |     stopOnEntry = true,
+-- |   },
+-- | }
+
+-- | require'lsp-colors'.setup (lsp_colors)
+-- | require'onedark'.setup {
+-- |   comment_style = 'NONE',
+-- | }
+
+-- | require'neogit'.setup {}
+require'nnn'.setup {
+  -- mappings = {
+  --   { '<M-h>',  require'tmux'.move_left }   ,
+  --   { '<M-j>',  require'tmux'.move_bottom } ,
+  --   { '<M-k>',  require'tmux'.move_top }    ,
+  --   { '<M-l>',  require'tmux'.move_right }  ,
+  --   { '<M-р>',  require'tmux'.move_left }   ,
+  --   { '<M-о>',  require'tmux'.move_bottom } ,
+  --   { '<M-л>',  require'tmux'.move_top }    ,
+  --   { '<M-д>',  require'tmux'.move_right }  ,
+  -- },
+  windownav = {
+    left = '<M-h>',
+    -- down = '<M-j>',
+    -- left = '<M-k>',
+    right = '<M-l>',
+    -- left = '<M-р>',
+    -- left = '<M-о>',
+    -- left = '<M-л>',
+    -- left = '<M-д>',
   },
 }
-require'lsp-colors'.setup {
-  Error = "#db4b4b",
-  Warning = "#e0af68",
-  Information = "#0db9d7",
-  Hint = "#10B981"
-}
-require'onedark'.setup {
-  comment_style = 'NONE',
-}
-require'neogit'.setup {}
 
 -- | Lsp world
 
 -- | nvim-lspconfig
 local lspconfig  = require'lspconfig'
 -- | local lsp_status = require'lsp-status'
-local lsp_signature = require'lsp_signature'
+-- | local lsp_signature = require'lsp_signature'
 
 local on_attach = function(client, buffer)
   -- | Some bullshit
@@ -278,9 +397,9 @@ local on_attach = function(client, buffer)
   -- | lsp_status.on_attach(client)
 
   -- | Attach lsp_signature
-  lsp_signature.on_attach({
-    use_lspsaga = true,
-  }, client)
+-- |   lsp_signature.on_attach({
+-- |     use_lspsaga = true,
+-- |   }, client)
 
   -- | Define commands
 
@@ -292,7 +411,7 @@ local on_attach = function(client, buffer)
   -- | Diagnostic and goto mappings
   local mapping_options = { noremap = true, silent = true }
   local map = vim.api.nvim_buf_set_keymap
-  map(buffer, 'n', 'gd', '<cmd>lua vim.lsp.buf.definition()<cr>',                   mapping_options)
+  map(buffer, 'n', 'gd', '<cmd>lua require"telescope.builtin".lsp_definitions({ initial_mode = "normal"})<cr>',                   mapping_options)
   map(buffer, 'n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<cr>',                  mapping_options)
   map(buffer, 'n', 'gh', '<cmd>lua vim.lsp.buf.hover()<cr>',                        mapping_options)
   map(buffer, 'n', 'gi', '<cmd>lua require"telescope.builtin".lsp_implementations({ initial_mode = "normal"})<cr>',               mapping_options)
@@ -303,7 +422,7 @@ local on_attach = function(client, buffer)
   map(buffer, 'n', 'gt', '<cmd>lua vim.lsp.buf.type_definition()<cr>',              mapping_options)
 
   --map(buffer, 'n', '<F2>', '<cmd>lua vim.lsp.buf.rename()<cr>',                     mapping_options)
-  map(buffer, 'n', '<F2>', '<cmd>lua require("lspsaga.rename").rename()<cr>',       mapping_options)
+  map(buffer, 'n', '<F2>', '<cmd>lua vim.lsp.buf.rename()<cr>',       mapping_options)
 
   map(buffer, 'n', 'gr', '<cmd>lua require"telescope.builtin".lsp_references({ initial_mode = "normal"})<cr>',                   mapping_options)
 
@@ -426,6 +545,7 @@ local lsps = {
   -- | glslls = {},
   -- | phpactor = {},
   dockerls = {},
+  texlab = {},
 }
 
 vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
@@ -453,7 +573,8 @@ for lsp, lsp_config in pairs(lsps) do
     capabilities = capabilities,
     -- | handlers = handlers,
   }
-  local config = merge(default_config, lsp_config)
+
+  local config = vim.tbl_extend('force', default_config, lsp_config)
 
   lspconfig[lsp].setup (config)
 end
@@ -479,25 +600,25 @@ local luasnip = require'luasnip'
 -- | nvim-cmp
 local cmp = require'cmp'
 
-cmp.setup {
+require'cmp'.setup {
   snippet = {
     expand = function(args)
       luasnip.lsp_expand(args.body)
     end,
   },
   mapping = {
-    ['<C-k>'] = cmp.mapping.select_prev_item(),
-    ['<C-j>'] = cmp.mapping.select_next_item(),
-    ['<C-d>'] = cmp.mapping.scroll_docs(4),
-    ['<C-u>'] = cmp.mapping.scroll_docs(-4),
-    ['<C-Space>'] = cmp.mapping(cmp.mapping.complete(), { 'i', 's' }),
-    ['<C-e>'] = cmp.mapping.close(),
-    ['<cr>'] = cmp.mapping.confirm {
-      behavior = cmp.ConfirmBehavior.Replace,
-      select = true,
+    ['<C-k>'] = require'cmp'.mapping.select_prev_item(),
+    ['<C-j>'] = require'cmp'.mapping.select_next_item(),
+    ['<C-d>'] = require'cmp'.mapping.scroll_docs(4),
+    ['<C-u>'] = require'cmp'.mapping.scroll_docs(-4),
+    ['<C-Space>'] = require'cmp'.mapping(require'cmp'.mapping.complete(), { 'i', 's' }),
+    ['<C-e>'] = require'cmp'.mapping.close(),
+    ['<cr>'] = require'cmp'.mapping.confirm {
+      behavior = require'cmp'.ConfirmBehavior.Replace,
+      select = false,
     },
-    ['<Tab>'] = cmp.mapping(cmp.mapping.select_next_item(), { 'i', 's' }),
-    ['<S-Tab>'] = cmp.mapping(cmp.mapping.select_prev_item(), { 'i', 's' }),
+    ['<Tab>'] = require'cmp'.mapping(require'cmp'.mapping.select_next_item(), { 'i', 's' }),
+    ['<S-Tab>'] = require'cmp'.mapping(require'cmp'.mapping.select_prev_item(), { 'i', 's' }),
   },
   formatting = {
     format = require'lspkind'.cmp_format { with_text = true, maxwidth = 50,  }

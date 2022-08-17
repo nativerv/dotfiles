@@ -1,0 +1,4 @@
+#!/bin/sh
+
+#ip a | awk '/state UP/ {print $2}' | sed 's/://g'
+nmcli device status | grep connected | awk '{print $1}'

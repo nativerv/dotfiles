@@ -47,6 +47,15 @@ PYGMENTIZE_STYLE=${PYGMENTIZE_STYLE:-autumn}
 OPENSCAD_IMGSIZE=${RNGR_OPENSCAD_IMGSIZE:-1000,1000}
 OPENSCAD_COLORSCHEME=${RNGR_OPENSCAD_COLORSCHEME:-Tomorrow Night}
 
+PYWAL_COLORS_FILE="${XDG_CACHE_HOME:-"${HOME}/.cache"}/wal/colors.sh"
+# Source pywal colors. ignore file existance checking bullshit, check manually instead.
+# Ignore bash options bullshit, because colors.sh may contain unset global variables.
+set +o noclobber +o noglob +o nounset +o pipefail
+# shellcheck disable=1091,1090
+[ -f "${PYWAL_COLORS_FILE}" ] && source "${PYWAL_COLORS_FILE}"
+set -o noclobber -o noglob -o nounset -o pipefail
+
+
 handle_extension() {
     case "${FILE_EXTENSION_LOWER}" in
         ## Archive
@@ -144,6 +153,11 @@ handle_image() {
             orientation="$( identify -format '%[EXIF:Orientation]\n' -- "${FILE_PATH}" )"
             ## If orientation data is present and the image actually
             ## needs rotating ("1" means no rotation)...
+
+            # Replace transparency with pywal background color
+            # shellcheck disable=2154 # sourced from pywal colors.sh file
+            convert -- "${FILE_PATH}" -background "${background}" -flatten "${IMAGE_CACHE_PATH}"
+
             if [[ -n "$orientation" && "$orientation" != 1 ]]; then
                 ## ...auto-rotate the image according to the EXIF data.
                 convert -- "${FILE_PATH}" -auto-orient "${IMAGE_CACHE_PATH}" && exit 6
@@ -151,7 +165,7 @@ handle_image() {
 
             ## `w3mimgdisplay` will be called for all images (unless overriden
             ## as above), but might fail for unsupported types.
-            exit 7;;
+            exit 6;;
 
         ## Video
         video/*)

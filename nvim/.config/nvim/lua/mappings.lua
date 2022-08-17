@@ -3,6 +3,9 @@
 -- | FIX RUSSIAN ;->$
 vim.api.nvim_set_keymap('n', ';', '$', { unique = true });
 
+-- | Open with xdg-open
+-- vim.api.nvim_set_keymap('n', 'gx', '<cmd>silent :execute "!xdg-open " .. shellescape("%:p:h/<cfile>")<cr>', { noremap = true, silent = true, });
+
 -- | Toggle 80 color column
 vim.api.nvim_set_keymap('n', '<leader>ul', [[<cmd>lua if vim.opt.colorcolumn == '80' then vim.opt.colorcolumn = '0' else vim.opt.colorcolumn = '80' end<cr>]], { noremap = true, silent = true })
 
@@ -12,9 +15,10 @@ vim.api.nvim_set_keymap('n', '<leader>uw', '<cmd>set wrap!<cr>',             { n
 -- | Unmap <space> so it don't interfere with the leader>
 vim.api.nvim_set_keymap('n', '<space>', '<nop>',             { noremap = true, silent = true })
 
--- | Unmap annoying q:/Q
+-- | Unmap annoying q:/Q/gQ
 vim.api.nvim_set_keymap('n', 'q:', '<nop>',                  { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', 'Q',  '<nop>',                  { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', 'gQ', '<nop>',                  { noremap = true, silent = true })
 
 -- | Make db adequate (not actually works in this form)
 vim.api.nvim_set_keymap('n', 'db', 'dvb',                    { noremap = true, silent = true })
@@ -24,9 +28,7 @@ vim.api.nvim_set_keymap('n', 'x', '"_x',                     { noremap = true, s
 vim.api.nvim_set_keymap('n', 'X', '"_X',                     { noremap = true, silent = true })
 
 -- | Select all: Ctrl-A
-vim.api.nvim_set_keymap('n', '<C-a>', '<esc>ggVG',           { noremap = true, silent = true })
-vim.api.nvim_set_keymap('i', '<C-a>', '<esc>ggVG',           { noremap = true, silent = true })
-vim.api.nvim_set_keymap('v', '<C-a>', '<esc>ggVG',           { noremap = true, silent = true })
+vim.api.nvim_set_keymap('', '<C-a>', '<esc>ggVG',           { noremap = true, silent = true })
 
 -- | Remap Ctrl-A functionality to something else then:
 vim.api.nvim_set_keymap('n', '<C-c>', '<C-a>',           { noremap = true, silent = true })
@@ -73,6 +75,25 @@ vim.cmd [[
 
 vim.api.nvim_set_keymap('n', 'p', ']p', { noremap = true, silent = true })
 
+-- | Latex
+-- | Toggle compile on save
+vim.api.nvim_set_keymap('n', '<leader>ll', [[<cmd>lua vim.g.compile_tex = not vim.g.compile_tex<cr>]], { noremap = true, silent = true })
+-- | Open preview
+vim.api.nvim_set_keymap('n', '<leader>lp', [[<cmd>!zathura $(printf % \| sed 's/tex$/pdf/g') & disown<cr>]], { noremap = true, silent = true })
+
+-- | Stay selected when shifting line with < >
+vim.api.nvim_set_keymap('v', '<', '<gv', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('v', '>', '>gv', { noremap = true, silent = true })
+
+-- | More undo checkpoints in insert mode - on punctuation marks
+vim.keymap.set('i', ',', '<C-g>u,', { silent = true, noremap = true })
+vim.keymap.set('i', '.', '<C-g>u.', { silent = true, noremap = true })
+vim.keymap.set('i', '!', '<C-g>u!', { silent = true, noremap = true })
+vim.keymap.set('i', '?', '<C-g>u?', { silent = true, noremap = true })
+vim.keymap.set('i', ';', '<C-g>u;', { silent = true, noremap = true })
+vim.keymap.set('i', ':', '<C-g>u:', { silent = true, noremap = true })
+vim.keymap.set('i', '/', '<C-g>u/', { silent = true, noremap = true })
+
 -- | Plugin world
 
 -- | ranger.vim
@@ -107,7 +128,7 @@ vim.api.nvim_set_keymap('n', 'S', 'ysiw', { noremap = false, silent = true })
 
 -- | telescope.nvim
 -- | Find files (Ctrl-P)
-vim.api.nvim_set_keymap('n', '<leader>ff', [[<cmd>lua require('telescope.builtin').find_files({ hidden = true })<cr>]],  { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<leader>ff', '<cmd>lua require"telescope.builtin".find_files({ hidden = true })<cr>',  { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<C-p>',      '<cmd>lua require"telescope.builtin".find_files({ hidden = true })<cr>',      { noremap = true, silent = true })
 -- | The rest junk
 vim.api.nvim_set_keymap('n', '<leader>fb', '<cmd>lua require"telescope.builtin".current_buffer_fuzzy_find()<cr>',          { noremap = true, silent = true })
@@ -117,7 +138,7 @@ vim.api.nvim_set_keymap('n', '<leader>ft', '<cmd>lua require"telescope.builtin".
 vim.api.nvim_set_keymap('n', '<leader>fp', '<cmd>lua require"telescope.builtin".live_grep()<cr>',                          { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>fo', '<cmd>lua require"telescope.builtin".tags{ only_current_buffer = true }<cr>',   { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>?',  '<cmd>lua require"telescope.builtin".oldfiles()<cr>',                           { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>fd',  '<cmd>lua require"telescope.builtin".lsp_document_diagnostics({ initial_mode = "normal" })<cr>',                           { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<leader>fd', '<cmd>lua require"telescope.builtin".diagnostics()<cr>',                           { noremap = true, silent = true }) --{ initial_mode = "normal" }
 
 -- | bufferline.nvim
 vim.api.nvim_set_keymap('n', '<M-i>',  '<cmd>BufferLineCyclePrev<cr>', { noremap = true, silent = true })
@@ -128,14 +149,14 @@ vim.api.nvim_set_keymap('n', '(',      '<cmd>BufferLineMovePrev <cr>', { noremap
 vim.api.nvim_set_keymap('n', ')',      '<cmd>BufferLineMoveNext <cr>', { noremap = true, silent = true })
 
 -- | tmux.nvim
-vim.api.nvim_set_keymap('n', '<M-h>',  [[<cmd>lua require'tmux'.move_left()<cr>]]   , { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<M-j>',  [[<cmd>lua require'tmux'.move_bottom()<cr>]] , { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<M-k>',  [[<cmd>lua require'tmux'.move_top()<cr>]]    , { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<M-l>',  [[<cmd>lua require'tmux'.move_right()<cr>]]  , { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<M-р>',  [[<cmd>lua require'tmux'.move_left()<cr>]]   , { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<M-о>',  [[<cmd>lua require'tmux'.move_bottom()<cr>]] , { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<M-л>',  [[<cmd>lua require'tmux'.move_top()<cr>]]    , { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<M-д>',  [[<cmd>lua require'tmux'.move_right()<cr>]]  , { noremap = true, silent = true })
+vim.api.nvim_set_keymap('', '<M-h>',  [[<cmd>lua require'tmux'.move_left()<cr>]]   , { noremap = true, silent = true })
+vim.api.nvim_set_keymap('', '<M-j>',  [[<cmd>lua require'tmux'.move_bottom()<cr>]] , { noremap = true, silent = true })
+vim.api.nvim_set_keymap('', '<M-k>',  [[<cmd>lua require'tmux'.move_top()<cr>]]    , { noremap = true, silent = true })
+vim.api.nvim_set_keymap('', '<M-l>',  [[<cmd>lua require'tmux'.move_right()<cr>]]  , { noremap = true, silent = true })
+vim.api.nvim_set_keymap('', '<M-р>',  [[<cmd>lua require'tmux'.move_left()<cr>]]   , { noremap = true, silent = true })
+vim.api.nvim_set_keymap('', '<M-о>',  [[<cmd>lua require'tmux'.move_bottom()<cr>]] , { noremap = true, silent = true })
+vim.api.nvim_set_keymap('', '<M-л>',  [[<cmd>lua require'tmux'.move_top()<cr>]]    , { noremap = true, silent = true })
+vim.api.nvim_set_keymap('', '<M-д>',  [[<cmd>lua require'tmux'.move_right()<cr>]]  , { noremap = true, silent = true })
 
 --vim.api.nvim_set_keymap('v', '//', 'y/\\/<C-R>=escape(@",'/\\')<CR><CR>', { noremap = true, silent = true })
 --vim.cmd [[ vnoremap // y/\V<C-R>=escape(@",'/\')<CR><CR> ]]
@@ -147,5 +168,11 @@ vim.api.nvim_set_keymap('n', '<leader>trp',  [[<cmd>lua require'rest-nvim'.previ
 vim.api.nvim_set_keymap('n', '<leader>trl',  [[<cmd>lua require'rest-nvim'.run_last()<cr>]] , { noremap = true, silent = true })
 
 -- | rnvimr
-vim.api.nvim_set_keymap('n', '<leader>r',  [[<cmd>RnvimrToggle<cr>]] , { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<leader>r',  [[<cmd>NnnExplorer<cr>]] , { noremap = true, silent = true })
+
+vim.cmd [[
+  let g:VM_maps = {}
+  let g:VM_maps["Add Cursor Down"] = '<C-Down>'
+  let g:VM_maps["Add Cursor Up"]   = '<C-Up>'
+]]
 

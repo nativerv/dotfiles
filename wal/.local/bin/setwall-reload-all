@@ -3,6 +3,8 @@
 # Send signals/restart some programs that `wal`
 # doesn't restart automativally
 
+reload_wm="${1}"
+
 # Nvim - send signal
 pidof nvim >/dev/null && killall -USR1 nvim
 
@@ -11,7 +13,7 @@ pidof dwm >/dev/null && xdotool key super+F12
 
 # Xmonad - call xmonad --reload
 # shellcheck disable=2236
-pidof xmonad-x86_64-linux >/dev/null && [ ! -z "${1}" ] && xmonad --restart
+pidof xmonad-x86_64-linux >/dev/null && [ ! -z "${reload_wm}" ] && xmonad --restart
 
 # Kill and restart telegram-desktop
 pidof telegram-desktop >/dev/null && killall telegram-desktop && setsid telegram-desktop -startintray >/dev/null 2>&1 &

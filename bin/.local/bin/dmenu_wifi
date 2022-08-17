@@ -1,5 +1,7 @@
 #!/usr/bin/env sh
 
+set -eu
+
 bssid=$(nmcli device wifi list | sed -n '1!p' | cut -c 9- | dmenu -p "Wifi:" -l 20 | cut -d' ' -f1)
 pass=$(dmenu_askpass)
 

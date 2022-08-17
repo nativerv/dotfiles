@@ -1,29 +1,75 @@
 # [Added Associations]
-# application/x-bittorrent=transmission-gtk.desktop;
-# x-scheme-handler/tg=userapp-Telegram Desktop-JU6970.desktop;
 # image/jpeg=sxiv.desktop;
 # 
 # [Default Applications]
-# x-scheme-handler/tg=userapp-Telegram Desktop-JU6970.desktop
-# image/jpeg=sxiv.desktop
+# x-scheme-handler/tg=userapp-Telegram Desktop-JU6970.desktop;
+# image/jpeg=sxiv.desktop;
 
 [Default Applications]
 
 # xdg-open will use these settings to determine how to open filetypes.
 # These .desktop entries can also be seen and changed in ~/.local/share/applications/
 
+# Files
 text/x-shellscript=text.desktop;
-x-scheme-handler/magnet=torrent.desktop;
-application/x-bittorrent=torrent.desktop;
-x-scheme-handler/mailto=mail.desktop;
 text/plain=text.desktop;
-application/postscript=pdf.desktop;
-application/pdf=pdf.desktop;
+inode/directory=file.desktop;
+
+# Images
 image/png=img.desktop;
 image/jpeg=img.desktop;
 image/gif=img.desktop;
 image/webp=img.desktop;
-application/rss+xml=rss.desktop;
+image/x-xcf=gimp.desktop;
+
+# Videos
 video/x-matroska=video.desktop;
+
+# Application-specific
+application/postscript=pdf.desktop;
+application/pdf=pdf.desktop;
+application/rss+xml=rss.desktop;
+application/x-bittorrent=torrent.desktop;
+
+# Protocols
+x-scheme-handler/http=web.desktop;
+x-scheme-handler/https=web.desktop;
+x-scheme-handler/magnet=torrent.desktop;
+x-scheme-handler/mailto=mail.desktop;
 x-scheme-handler/lbry=lbry.desktop;
-inode/directory=file.desktop;
+x-scheme-handler/tg=telegram.desktop;
+
+# # [Added Associations]
+# # application/x-bittorrent=transmission-gtk.desktop;
+# # x-scheme-handler/tg=userapp-Telegram Desktop-JU6970.desktop;
+# # image/jpeg=sxiv.desktop;
+# # 
+# # [Default Applications]
+# # x-scheme-handler/tg=userapp-Telegram Desktop-JU6970.desktop;
+# # image/jpeg=sxiv.desktop;
+# 
+# [Default Applications]
+# 
+# # xdg-open will use these settings to determine how to open filetypes.
+# # These .desktop entries can also be seen and changed in ~/.local/share/applications/
+# 
+# text/x-shellscript=text.desktop;
+# x-scheme-handler/magnet=torrent.desktop;
+# application/x-bittorrent=torrent.desktop;
+# x-scheme-handler/mailto=mail.desktop;
+# text/plain=text.desktop;
+# application/postscript=pdf.desktop;
+# application/pdf=pdf.desktop;
+# image/png=img.desktop;
+# image/jpeg=img.desktop;
+# image/gif=img.desktop;
+# image/webp=img.desktop;
+# application/rss+xml=rss.desktop;
+# video/x-matroska=video.desktop;
+# x-scheme-handler/lbry=lbry.desktop;
+# inode/directory=file.desktop;
+# text/html=chromium.desktop;
+# x-scheme-handler/http=chromium.desktop;
+# x-scheme-handler/https=chromium.desktop;
+# x-scheme-handler/about=chromium.desktop;
+# x-scheme-handler/unknown=chromium.desktop;

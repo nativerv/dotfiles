@@ -132,4 +132,4 @@ wal \
 
 # Send signals/restart some programs that `wal`
 # doesn't restart automatically
-setwall-reload-all
+setwall-reload-all "${1}"

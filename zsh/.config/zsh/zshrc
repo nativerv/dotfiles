@@ -31,12 +31,18 @@ zmodload zsh/zprof
 # it's escape sequences
 (cat ~/.cache/wal/sequences &)
 
+# Enable pywal colors in terminal by pasting 
+# it's escape sequences
+. "${XDG_CACHE_HOME:-$HOME/.cache}/wal/colors-tty.sh"
+
 # Create files by default with 700 permissions
 umask 077
 
 ### Start X on login
 
-RED='\033[0;31m' NC='\033[0m' # No Color ERROR="${RED}ERROR: ${NC}"
+RED='\033[0;31m' NC='\033[0m' # No Color 
+ERROR="${RED}ERROR${NC}"
+FATAL="${RED}FATAL${NC}"
 
 # Start/source ssh-agent
 if ! pgrep -u "${USER}" ssh-agent > /dev/null; then
@@ -57,15 +63,20 @@ maybe_startx () {
   DISPLAY_TRIMMED="$(printf '%s' "$DISPLAY" | tr -d ':')"
 
   # If running under systemd, try to start X only if xorg@.target is enabled for current screen (base 0, so -1 from vt/tty number)
-  command -v systemctl >/dev/null 2>&1 \
-    && ! systemctl --user is-enabled "xorg@$((${XDG_VTNR:-$(tty | tail -c2)} - 1)).target" >/dev/null 2>&1 \
-    && return
+  #command -v systemctl >/dev/null 2>&1 \
+  #  && ! systemctl --user is-enabled "xorg@$((${XDG_VTNR:-$(tty | tail -c2)} - 1)).target" >/dev/null 2>&1 \
+  #  && return
+  
+  if [ ! -d "/usr/lib/modules/$(uname -r)" ]; then
+    echo "${FATAL}: /usr/lib/modules/$(uname -r) not found! Dropping you to the shell." \
+    return
+  fi
 
   echo "Starting X server...";
 
   # Trow to shell if not on first TTY
   if [ ! "$(tty)" = '/dev/tty1' ]; then
-    echo "${ERROR}You are not in the first TTY. X server won't start."
+    echo "${ERROR}: You are not in the first TTY. X server won't start."
     echo "Leaving you in the shell."
     return;
   fi
@@ -73,7 +84,7 @@ maybe_startx () {
   # Throw to shell if `DISPLAY` is already set
   # shellcheck disable=2237
   if ! [ -z "${DISPLAY}" ]; then
-    echo "${ERROR}ERROR: \`DISPLAY\` is already set. X server already running on this TTY and you seeng this message. Something wrong."
+    echo "${ERROR}: \`DISPLAY\` is already set. X server already running on this TTY and you seeng this message. Something wrong."
     echo "Leaving you in the shell."
     return
   fi

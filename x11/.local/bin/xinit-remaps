@@ -25,3 +25,4 @@ xmodmap -e "keycode 108 = Alt_R Meta_R Alt_R Meta_R"
 xmodmap -e "remove Mod1 = Alt_R"
 xmodmap -e "keycode 108 = Control_R"
 xmodmap -e "add Control = Control_R"
+
