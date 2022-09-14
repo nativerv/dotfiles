@@ -8,9 +8,14 @@ if_bin_exists() {
   command -v "${1}" >/dev/null 2>&1
 }
 
-#export "$(systemctl --user show-environment | xargs)"
-. <(cat ~/.config/environment.d/*.conf | sed -E "s/^([a-zA-Z])/export \1/g")
-# . <(systemctl --user show-environment | sed -E 's/^(.)/export \1/g' | grep -ve XDG_VTNR -e SYSTEMD_EXEC_PID)
+# Ensure XDG vars
+XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-"${HOME}/.config"}"
+XDG_DATA_HOME="${XDG_DATA_HOME:-"${HOME}/.local/share"}"
+XDG_CACHE_HOME="${XDG_CACHE_HOME:-"${HOME}/.cache"}"
+
+# Export environment.d env vars to zsh hacky way
+. <(cat "${XDG_CONFIG_HOME}"/environment.d/*.conf | sed -E "s/^([a-zA-Z])/export \1/g")
+
 #### XDG stuff ====================================
 
 [ -n "${PREFIX}" ] && export XDG_RUNTIME_DIR="${PREFIX}/var/run/${UID}"
@@ -45,23 +50,23 @@ export LESSHISTSIZE=0
 # for most of the following
 
 # OpenSSL
-if_bin_exists 'openssl' && ensure_dir "${OPENSSL_DATA_HOME}"
+if_bin_exists 'openssl' && ! [ -z "${OPENSSL_DATA_HOME+false}" ] && ensure_dir "${OPENSSL_DATA_HOME}"
 
 # NodeJS
-if_bin_exists 'node' && ensure_dir "${NODE_DATA_DIR}"
+if_bin_exists 'node' && ! [ -z "${NODE_DATA_DIR+false}" ] && ensure_dir "${NODE_DATA_DIR}"
 # if_bin_exists 'npm' && ensure_dir "${NPM_PACKAGES}" && ensure_dir "${NPM_CONFIG_USERCONFIG}"
 
 # ELinks
 if_bin_exists 'elinks' && ensure_dir "${XDG_DATA_HOME}/elinks"
 
 # PostgreSQL
-if_bin_exists 'psql' && ensure_dir "$XDG_CONFIG_HOME/pg" && ensure_dir "$XDG_CACHE_HOME/pg"
+if_bin_exists 'psql' && ensure_dir "${XDG_CONFIG_HOME}/pg" && ensure_dir "${XDG_CACHE_HOME}/pg"
 
 # Emacs 
 if_bin_exists 'emacs' && ensure_dir "${XDG_CONFIG_HOME}/emacs"
 
 # Calc
-if_bin_exists 'calc' && ensure_dir "${CALCHISTFILE%/*}"
+if_bin_exists 'calc' && ! [ -z "${CALCHISTFILE+false}" ] && ensure_dir "${CALCHISTFILE%/*}"
 
 ### Language-specific stuff =======================
 
