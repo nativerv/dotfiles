@@ -38,6 +38,10 @@ alias doc="docker"
 alias bj="bubblejail"
 alias dt="date +%F_%H-%M-%S | head -c-1"
 
+# Noglobs
+alias tl='noglob tl'
+alias cl='noglob calc'
+
 # Mkdir and touch; also flag mkdir create nonexistent dirs
 alias md="mkdir -p"
 alias mt="touch"
