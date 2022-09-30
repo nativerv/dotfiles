@@ -14,11 +14,11 @@ return require'packer'.startup(function (use)
       require("filetype").setup {
         overrides = {
           extensions = {
-            service = "systemd",
-            target  = "systemd",
-            timer   = "systemd",
-            slice   = "systemd",
-            profile = "firejail",
+            service     = "systemd",
+            target      = "systemd",
+            timer       = "systemd",
+            slice       = "systemd",
+            profile     = "firejail",
             ['local']   = "firejail",
           },
         },
@@ -65,9 +65,10 @@ return require'packer'.startup(function (use)
 
   -- | Treesitter
   use { 'nvim-treesitter/nvim-treesitter', }
-  use { 'JoosepAlviste/nvim-ts-context-commentstring', }
-  use { 'p00f/nvim-ts-rainbow', }
-  use { 'nvim-treesitter/playground', }
+  use { 'JoosepAlviste/nvim-ts-context-commentstring', requires = 'nvim-treesitter/nvim-treesitter', }
+  use { 'p00f/nvim-ts-rainbow', requires = 'nvim-treesitter/nvim-treesitter', }
+  use { 'nvim-treesitter/playground', requires = 'nvim-treesitter/nvim-treesitter', }
+  use { 'nvim-treesitter/nvim-treesitter-textobjects', requires = 'nvim-treesitter/nvim-treesitter', }
 
   -- | Language Server Protocol
   use { 'neovim/nvim-lspconfig' }     -- | Collection of configurations for
@@ -127,7 +128,7 @@ return require'packer'.startup(function (use)
   use { 'aserowy/tmux.nvim', commit = '2535a67a78da737207c918106cade1ba016d9f6a', }
 
   -- | Status
-  use { 'akinsho/bufferline.nvim', requires = { 'kyazdani42/nvim-web-devicons', }, }
+  -- use { 'akinsho/bufferline.nvim', requires = { 'kyazdani42/nvim-web-devicons', }, }
   use {
     'nvim-lualine/lualine.nvim',
     requires = { 'kyazdani42/nvim-web-devicons', },
@@ -137,7 +138,7 @@ return require'packer'.startup(function (use)
   use { 'lewis6991/gitsigns.nvim', requires = { 'nvim-lua/plenary.nvim', }, tag = 'release' }
 
   -- | Quality of Life
-  use { 'windwp/nvim-autopairs'  }
+  use { 'windwp/nvim-autopairs' }
   use { 'norcalli/nvim-colorizer.lua', commit = '36c610a9717cc9ec426a07c8e6bf3b3abcb139d6' }
   use { 'powerman/vim-plugin-ruscmd', commit = 'e952abbea092e420b128936a0c284fb522612c3a' }
   --use { 'luukvbaal/stabilize.nvim' }

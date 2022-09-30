@@ -75,6 +75,34 @@ require'nvim-treesitter.configs'.setup {
       show_help = '?',
     },
   },
+  textobjects = {
+    select = {
+      enable = true,
+
+      -- Automatically jump forward to textobj, similar to targets.vim
+      lookahead = true,
+
+      keymaps = {
+        -- You can use the capture groups defined in textobjects.scm
+        ["af"] = "@function.outer",
+        ["if"] = "@function.inner",
+        ["ac"] = "@class.outer",
+        -- you can optionally set descriptions to the mappings (used in the desc parameter of nvim_buf_set_keymap
+        ["ic"] = { query = "@class.inner", desc = "Select inner part of a class region" },
+      },
+      -- You can choose the select mode (default is charwise 'v')
+      selection_modes = {
+        ['@parameter.outer'] = 'v', -- charwise
+        ['@function.outer'] = 'V', -- linewise
+        ['@class.outer'] = '<c-v>', -- blockwise
+      },
+      -- If you set this to `true` (default is `false`) then any textobject is
+      -- extended to include preceding xor succeeding whitespace. Succeeding
+      -- whitespace has priority in order to act similarly to eg the built-in
+      -- `ap`.
+      include_surrounding_whitespace = true,
+    },
+  },
 }
 
 --require'indent_blankline'.setup {
@@ -85,6 +113,7 @@ require'nvim-treesitter.configs'.setup {
 --    show_current_context = true,
 --    show_current_context_start = false,
 --}
+
 local git_signcolumn_change = '│'
 local git_signcolumn_remove = ''
 require'gitsigns'.setup {
@@ -230,11 +259,11 @@ require'nvim-autopairs'.add_rules {
       :use_key(']')
 }
 
-require'bufferline'.setup {
-  options = {
-    indicator_icon = ' ',
-  }
-}
+-- require'bufferline'.setup {
+--   options = {
+--     indicator_icon = ' ',
+--   }
+-- }
 -- | TODO: figure out what to do with this unused plugin, delete it or properly integrate
 -- | require'lsp-status'.register_progress()
 --require'org-bullets'.setup()
@@ -388,10 +417,12 @@ local lspconfig  = require'lspconfig'
 -- | local lsp_status = require'lsp-status'
 -- | local lsp_signature = require'lsp_signature'
 
-local on_attach = function(client, buffer)
-  -- | Some bullshit
-  vim.api.nvim_buf_set_option(buffer, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+-- | More logs
+vim.lsp.set_log_level("debug")
 
+local on_attach = function(client, buffer)
+  -- Enable completion triggered by <c-x><c-o>
+  vim.api.nvim_buf_set_option(buffer, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
   -- | Attach lsp-status
   -- | TODO: figure out what to do with this unused plugin, delete it or properly integrate
   -- | lsp_status.on_attach(client)
@@ -408,41 +439,23 @@ local on_attach = function(client, buffer)
 
   -- | Define mappings (for lsp buffers only)
 
-  -- | Diagnostic and goto mappings
-  local mapping_options = { noremap = true, silent = true }
-  local map = vim.api.nvim_buf_set_keymap
-  map(buffer, 'n', 'gd', '<cmd>lua require"telescope.builtin".lsp_definitions({ initial_mode = "normal"})<cr>',                   mapping_options)
-  map(buffer, 'n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<cr>',                  mapping_options)
-  map(buffer, 'n', 'gh', '<cmd>lua vim.lsp.buf.hover()<cr>',                        mapping_options)
-  map(buffer, 'n', 'gi', '<cmd>lua require"telescope.builtin".lsp_implementations({ initial_mode = "normal"})<cr>',               mapping_options)
-  map(buffer, 'n', 'gH', '<cmd>lua vim.lsp.buf.signature_help()<cr>',               mapping_options)
-  --map(buffer, 'n', '<leader>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<cr>', mapping_options)
-  --map(buffer, 'n', '<leader>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<cr>', mapping_options)
-  --map(buffer, 'n', '<leader>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<cr>', mapping_options)
-  map(buffer, 'n', 'gt', '<cmd>lua vim.lsp.buf.type_definition()<cr>',              mapping_options)
-
-  --map(buffer, 'n', '<F2>', '<cmd>lua vim.lsp.buf.rename()<cr>',                     mapping_options)
-  map(buffer, 'n', '<F2>', '<cmd>lua vim.lsp.buf.rename()<cr>',       mapping_options)
-
-  map(buffer, 'n', 'gr', '<cmd>lua require"telescope.builtin".lsp_references({ initial_mode = "normal"})<cr>',                   mapping_options)
-
-  --map(buffer, 'n', 'gy', '<cmd>lua vim.lsp.buf.code_action()<cr>',                  mapping_options)
-  --map(buffer, 'v', 'gy', '<cmd>lua vim.lsp.buf.range_code_action()<cr>',            mapping_options)
-  --map(buffer, 'n', 'gy', '<cmd>lua require"lspsaga.codeaction".code_action()<cr>',                  mapping_options)
-  --map(buffer, 'v', 'gy', '<cmd>lua require"lspsaga.codeaction".range_code_action()<cr>',            mapping_options)
-  map(buffer, 'n', 'gy', '<cmd>lua require"telescope.builtin".lsp_code_actions(require"telescope.themes".get_cursor({ initial_mode = "normal"}))<cr>',                                 mapping_options)
-  map(buffer, 'v', 'gy', '<cmd>lua require"telescope.builtin".lsp_code_actions(require"telescope.themes".get_cursor({ initial_mode = "normal"}))<cr>',                                 mapping_options)
-
-  map(buffer, 'n', 'gl', '<cmd>lua vim.diagnostic.open_float({ border = "rounded" })<cr>',            mapping_options)
-  map(buffer, 'n', '[', '<cmd>lua vim.diagnostic.goto_prev()<cr>',              mapping_options)
-  map(buffer, 'n', ']', '<cmd>lua vim.diagnostic.goto_next()<cr>',              mapping_options)
-  --map(buffer, 'n', '<leader>q', '<cmd>lua vim.diagnostic.set_loclist()<cr>', mapping_options)
-  --map(buffer, 'n', '<leader>so', [[<cmd>lua require('telescope.builtin').lsp_document_symbols()<cr>]], mapping_options)
-
-  -- | Formatting mapping
-
-  -- | Format on save
-  --vim.cmd [[ autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.graphql,*.md,*.vue,*.yaml,*.html Format ]]
+  -- Diagnostic and goto mappings
+  local map = vim.keymap.set
+  local map_opts = { noremap = true, silent = true }
+  map('n', 'gD', vim.lsp.buf.declaration, map_opts)
+  map('n', 'gh', vim.lsp.buf.hover,                        map_opts)
+  map('n', 'gH', vim.lsp.buf.signature_help, map_opts)
+  map('n', 'gt', vim.lsp.buf.type_definition, map_opts)
+  map('n', '<F2>', vim.lsp.buf.rename, map_opts)
+  map('n', 'gn', vim.lsp.buf.rename, map_opts)
+  map('n', 'gd', function() require"telescope.builtin".lsp_definitions({ initial_mode = "normal"}) end, map_opts)
+  map('n', 'gi', function() require"telescope.builtin".lsp_implementations({ initial_mode = "normal"}) end, map_opts)
+  map('n', 'gr', function() require"telescope.builtin".lsp_references({ initial_mode = "normal"}) end, map_opts)
+  map('n', 'gy', vim.lsp.buf.code_action, map_opts)
+  map('v', 'gy', vim.lsp.buf.range_code_action, map_opts)
+  map('n', 'gl', function() vim.diagnostic.open_float({ border = 'rounded', }) end, map_opts)
+  map('n', '[', vim.diagnostic.goto_prev, map_opts)
+  map('n', ']', vim.diagnostic.goto_next, map_opts)
 
   -- | Configure diagnostics appearance
   vim.diagnostic.config {
@@ -453,40 +466,24 @@ local on_attach = function(client, buffer)
     severity_sort = true,
   }
 
+  -- | Format on save
+  --vim.cmd [[ autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.graphql,*.md,*.vue,*.yaml,*.html Format ]]
+
   -- | Customize diagnostic signs
   -- | "       ﴫ כֿ   ﯦ         ⏼  𥉉    ﱥ ﯂         ﯇    﫝           ﯦ ﯧ     窱
-  local signs = { Error = " ", Warn = " ", Hint = " ", Info = " " }
-  for type, icon in pairs(signs) do
-    local hl = "DiagnosticSign" .. type
-    vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
-  end
-
-
-  -- | Open diagnostic float automatically
-  vim.o.updatetime = 250
-  -- | TODO: fix this to manual toggling:
-  -- | vim.cmd [[ autocmd CursorHold,CursorHoldI * lua vim.diagnostic.open_float(nil, { focus = false, source = 'always' }) ]]
+  local hl_error = 'DiagnosticSignError'
+  local hl_warn = 'DiagnosticSignWarn'
+  local hl_hint = 'DiagnosticSignHint'
+  local hl_info = 'DiagnosticSignInfo'
+  vim.fn.sign_define(hl_error, { text = " ", texthl = hl_error, numhl = hl_error, })
+  vim.fn.sign_define(hl_warn, { text = " ", texthl = hl_warn, numhl = hl_warn, })
+  vim.fn.sign_define(hl_hint, { text = " ", texthl = hl_hint, numhl = hl_hint, })
+  vim.fn.sign_define(hl_info, { text = " ", texthl = hl_info, numhl = hl_info, })
 end
-
--- | Create a command to get `lsp-status.nvim` output
--- | TODO: figure out what to do with this unused plugin, delete it or properly integrate
-vim.cmd [[
-  function! LspStatus() abort
-    if luaeval('#vim.lsp.buf_get_clients() > 0')
-      return luaeval("require'lsp-status'.status()")
-    endif
-
-    return ''
-  endfunction
-
-  command! LspStatus call LspStatus()
-]]
-
 
 -- | Include capabilities from plugins
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = require'cmp_nvim_lsp'.update_capabilities(capabilities)
--- | capabilities = vim.tbl_extend('keep', capabilities or {}, lsp_status.capabilities)
 
 -- | Enable the following language servers
 local lsps = {
@@ -497,7 +494,18 @@ local lsps = {
     cmd = { "typescript-language-server", "--stdio", "--tsserver-log-file", vim.loop.os_homedir() .. "/.cache/nvim/tsserver.log" }
     --cmd = { "tsserver" }
   },
-  hls = {},
+  hls = {
+    settings = {
+      haskell = {
+        formattingProvider = 'ormolu',
+        plugin = {
+          ["hls-haddock-comments-plugin"] = {   
+            globalOn = true,
+          },
+        },
+      },
+    },
+  },
   bashls = {
     cmd = { 'bash-language-server', 'start' },
     filetypes = { 'sh', 'zsh' }
@@ -585,6 +593,7 @@ require'null-ls'.setup {
     require'null-ls'.builtins.diagnostics.shellcheck.with {
       diagnostics_format = '[#{c}] #{m} (#{s})',
       filetypes = { 'sh' },
+      extra_args = { '-o', 'all' },
     },
     require'null-ls'.builtins.formatting.shfmt
   },
