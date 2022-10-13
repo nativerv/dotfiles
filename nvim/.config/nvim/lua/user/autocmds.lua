@@ -77,6 +77,9 @@ vim.cmd [[
     " autocmd ColorScheme * highlight NormalNC ctermbg=NONE guibg=NONE
     " autocmd ColorScheme * highlight NormalFloat ctermbg=NONE guibg=NONE
 
+    " LspInfo float border
+    autocmd ColorScheme * highlight link LspInfoBorder FloatBorder
+
     " Line numbers
     autocmd ColorScheme * highlight LineNr ctermbg=NONE guibg=NONE
     autocmd ColorScheme * highlight CursorLineNr ctermbg=NONE guibg=NONE
