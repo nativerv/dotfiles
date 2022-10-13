@@ -267,7 +267,7 @@ vim.cmd [[
 vim.cmd [[
   augroup nrv#packer_compile_config
     autocmd!
-    autocmd BufWritePost plugins.lua source <afile> | PackerCompile
+    autocmd BufWritePost */nvim/*.lua source <afile> | PackerCompile
   augroup end
 ]]
 

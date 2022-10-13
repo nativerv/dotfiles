@@ -10,27 +10,26 @@ return require'packer'.startup(function (use)
   use { 'lewis6991/impatient.nvim', }
   use {
     'nathom/filetype.nvim',
-    config = function ()
-      require("filetype").setup {
-        overrides = {
-          extensions = {
-            service     = "systemd",
-            target      = "systemd",
-            timer       = "systemd",
-            slice       = "systemd",
-            profile     = "firejail",
-            ['local']   = "firejail",
-          },
-        },
-      }
-    end,
+    config = require'user.plugin.filetype',
   }
   use {
     "antoinemadec/FixCursorHold.nvim",
-    config = function ()
-      vim.g.curshold_updatime = 1000
-    end,
+    config = require'user.plugin.fixcursorhold',
     commit = '1bfb32e7ba1344925ad815cb0d7f901dbc0ff7c1',
+  }
+
+  -- | Status
+  -- use { 'akinsho/bufferline.nvim', requires = { 'kyazdani42/nvim-web-devicons', }, }
+  use {
+    'nvim-lualine/lualine.nvim',
+    requires = { 'kyazdani42/nvim-web-devicons', },
+    config = require'user.plugin.lualine',
+  }
+  use {
+    'lewis6991/gitsigns.nvim',
+    requires = { 'nvim-lua/plenary.nvim', },
+    tag = 'release',
+    config = require'user.plugin.gitsigns',
   }
 
   -- Docs
@@ -42,19 +41,18 @@ return require'packer'.startup(function (use)
   -- | Color Schemes
   use { 'ful1e5/onedark.nvim' }
   --use { 'ellisonleao/gruvbox.nvim', requires = { 'rktjmp/lush.nvim' } }
-  --use { 'folke/tokyonight.nvim' }
+  use { 'folke/tokyonight.nvim' }
   use { '~/pr/lualine-wal.nvim' }
 
   -- | Visuals
-  --
   use { 'kyazdani42/nvim-web-devicons', commit = '09e62319974d7d7ec7e53b974724f7942470ef78', }
 
   -- | Editing
   use { 'tpope/vim-repeat', commit = '24afe922e6a05891756ecf331f39a1f6743d3d5a' }          -- | Vimscript (surround.nvim)
-  use { 'tpope/vim-surround' }        -- | Vimscript (surround.nvim)
-  use { 'matze/vim-move', commit = '97fc86064eaa95384b5b00f6253e339fba44da5d' }            -- | Vimscript (move.nvim)
-  use { 'mg979/vim-visual-multi' }    -- | Vimscript
-  use { 'numToStr/Comment.nvim', }
+  use { 'tpope/vim-surround', }        -- | Vimscript (surround.nvim)
+  use { 'matze/vim-move', commit = '97fc86064eaa95384b5b00f6253e339fba44da5d', }            -- | Vimscript (move.nvim)
+  use { 'mg979/vim-visual-multi', config = require'user.plugin.vim-visual-multi', commit = '724bd53adfbaf32e129b001658b45d4c5c29ca1a', }    -- | Vimscript
+  use { 'numToStr/Comment.nvim', config = require'user.plugin.comment', }
 
   use { 'hrsh7th/nvim-cmp' }          -- | Autocompletion....core plugin
   use { 'hrsh7th/cmp-buffer' }        -- | Buffer word.......source for nvim-cmp
@@ -64,7 +62,7 @@ return require'packer'.startup(function (use)
   use { 'saadparwaiz1/cmp_luasnip' }  -- | Snippets..........source for nvim-cmp
 
   -- | Treesitter
-  use { 'nvim-treesitter/nvim-treesitter', }
+  use { 'nvim-treesitter/nvim-treesitter', config = require'user.plugin.treesitter' }
   use { 'JoosepAlviste/nvim-ts-context-commentstring', requires = 'nvim-treesitter/nvim-treesitter', }
   use { 'p00f/nvim-ts-rainbow', requires = 'nvim-treesitter/nvim-treesitter', }
   use { 'nvim-treesitter/playground', requires = 'nvim-treesitter/nvim-treesitter', }
@@ -75,13 +73,7 @@ return require'packer'.startup(function (use)
   --                                  -- | built-in LSP client
   use {
     '~/pr/dressing.nvim',
-    config = function ()
-      require'dressing'.setup {
-        input = {
-          insert_only = false,
-        },
-      }
-    end
+    config = require'user.plugin.dressing',
   }
   -- | use { 'ray-x/lsp_signature.nvim' }
   use { 'hrsh7th/cmp-nvim-lsp', commit = 'ebdfc204afb87f15ce3d3d3f5df0b8181443b5ba', }      -- | LSP source for nvim-cmp
@@ -111,39 +103,27 @@ return require'packer'.startup(function (use)
   use {
     'NTBBloodbath/rest.nvim',
     requires = { 'nvim-lua/plenary.nvim' },
-    commit = '2826f6960fbd9adb1da9ff0d008aa2819d2d06b3'
+    config = require'user.plugin.rest',
+    commit = '2826f6960fbd9adb1da9ff0d008aa2819d2d06b3',
   }
   --use { 'mfussenegger/nvim-dap' }
-  use { 'luukvbaal/nnn.nvim' }
-  use {
-    'dstein64/vim-startuptime',
-    commit = '61f122ebc41e9bcf1793c752a728db59feee77bb',
-    cmd = { 'StartupTime', },
-  }
+  use { 'luukvbaal/nnn.nvim', config = require'user.plugin.nnn', commit = '6b048ba5ccab93d05ca77e1b405fef1f74f4bb27', }
+  use { 'dstein64/vim-startuptime', commit = '61f122ebc41e9bcf1793c752a728db59feee77bb', cmd = { 'StartupTime', }, }
 
   -- | Navigation
-  use { 'phaazon/hop.nvim', as = 'hop', commit = 'e2f978b50c2bd9ae2c6a4ebdf2222c0f299c85c3' }
-  use { 'nvim-telescope/telescope.nvim', requires = { 'nvim-lua/plenary.nvim' } }
+  use { 'phaazon/hop.nvim', config = require'user.plugin.hop', commit = 'e2f978b50c2bd9ae2c6a4ebdf2222c0f299c85c3', }
+  use { 'nvim-telescope/telescope.nvim', requires = { 'nvim-lua/plenary.nvim' }, config = require'user.plugin.telescope', }
   use { 'bkad/CamelCaseMotion', commit = 'de439d7c06cffd0839a29045a103fe4b44b15cdc', }    -- | Vimscript
-  use { 'aserowy/tmux.nvim', commit = '2535a67a78da737207c918106cade1ba016d9f6a', }
-
-  -- | Status
-  -- use { 'akinsho/bufferline.nvim', requires = { 'kyazdani42/nvim-web-devicons', }, }
-  use {
-    'nvim-lualine/lualine.nvim',
-    requires = { 'kyazdani42/nvim-web-devicons', },
-    config = function ()
-    end
-  }
-  use { 'lewis6991/gitsigns.nvim', requires = { 'nvim-lua/plenary.nvim', }, tag = 'release' }
+  use { 'aserowy/tmux.nvim', config = require'user.plugin.tmux', commit = '2535a67a78da737207c918106cade1ba016d9f6a', }
 
   -- | Quality of Life
-  use { 'windwp/nvim-autopairs' }
-  use { 'norcalli/nvim-colorizer.lua', commit = '36c610a9717cc9ec426a07c8e6bf3b3abcb139d6' }
+  use { 'windwp/nvim-autopairs', config = require'user.plugin.autopairs', commit = '14cc2a4fc6243152ba085cc2059834113496c60a' }
+  -- use { 'norcalli/nvim-colorizer.lua', commit = '36c610a9717cc9ec426a07c8e6bf3b3abcb139d6' }
+  use { 'NvChad/nvim-colorizer.lua', config = require'user.plugin.colorizer', commit = '36c610a9717cc9ec426a07c8e6bf3b3abcb139d6' }
   use { 'powerman/vim-plugin-ruscmd', commit = 'e952abbea092e420b128936a0c284fb522612c3a' }
   --use { 'luukvbaal/stabilize.nvim' }
-  use { 'folke/which-key.nvim' }
-  use { 'dstein64/nvim-scrollview' }
+  use { 'folke/which-key.nvim', config = require'user.plugin.which-key', commit = '6885b669523ff4238de99a7c653d47b081b5506d' }
+  use { 'dstein64/nvim-scrollview', commit = '25c23219db8b2b932a595b4d2b661406ce4459fe' }
   use { 'ojroques/nvim-bufdel', commit = 'af537a915b8c60c6dcb6416e0e9382a5bed94bb3' }
   --use { 'lukas-reineke/indent-blankline.nvim' }
 end)

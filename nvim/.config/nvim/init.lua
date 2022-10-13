@@ -10,16 +10,16 @@
 
 
 -- | Cache lua - needs to be loaded as early as possible
-pcall(require, 'impatient')
+pcall(require, 'user.impatient')
 
 -- | Preconfig
-require 'utils'       -- | Load util functions
+require 'user.utils'       -- | Load util functions
 
 -- | Begin config
-require 'bootstrap'   -- | Ensure `packer.nvim` is installed - for new systems
-require 'plugins'     -- | Load plugins
-require 'options'     -- | Load options
-require 'mappings'    -- | Load mappings
-require 'autocmds'    -- | Load autocommands
-require 'rc'          -- | Load commands & settings for various plugins
-require 'colorscheme' -- | Load colorscheme
+require 'user.bootstrap'   -- | Ensure `packer.nvim` is installed - for new systems
+require 'user.plugins'     -- | Load plugins
+require 'user.options'     -- | Load options
+require 'user.mappings'    -- | Load mappings
+require 'user.autocmds'    -- | Load autocommands
+require 'user.rc'          -- | Load commands & settings for various plugins
+require 'user.colorscheme' -- | Load colorscheme
