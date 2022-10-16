@@ -1,4 +1,6 @@
-return function ()
+local M = {}
+
+M.setup = function ()
   local configs = {};
   local captures = {};
   -- | ensure_installed = 'all',
@@ -89,3 +91,5 @@ return function ()
   require'nvim-treesitter.configs'.setup (configs)
   require"nvim-treesitter.highlight".set_custom_captures (captures)
 end
+
+return M

@@ -1,4 +1,6 @@
-return function ()
+local M = {}
+
+M.setup = function ()
   require'filetype'.setup {
     overrides = {
       extensions = {
@@ -12,3 +14,5 @@ return function ()
     },
   }
 end
+
+return M

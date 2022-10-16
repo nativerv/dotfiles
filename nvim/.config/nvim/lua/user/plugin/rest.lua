@@ -1,4 +1,6 @@
-return function ()
+local M = {}
+
+M.setup = function ()
   require'rest-nvim'.setup {
     -- Open request results in a horizontal split
     result_split_horizontal = false,
@@ -21,3 +23,5 @@ return function ()
     custom_dynamic_variables = {},
   }
 end
+
+return M

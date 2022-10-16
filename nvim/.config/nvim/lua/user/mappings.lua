@@ -1,5 +1,7 @@
 -- | VIM world
 
+-- | TODO: refactor mappings
+
 -- | FIX RUSSIAN ;->$
 vim.api.nvim_set_keymap('n', ';', '$', { unique = true });
 

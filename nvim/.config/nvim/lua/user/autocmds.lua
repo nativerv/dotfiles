@@ -1,58 +1,52 @@
 -- | Vim world
-vim.cmd [[
-  augroup nrv#mkdir_if_not_exists
-    autocmd!
-    autocmd BufWritePre * call mkdir(expand("<afile>:p:h"), "p")
-  augroup END
-]]
+-- Ensure dir for current file exists (for new files)
+vim.api.nvim_create_autocmd({ 'BufWritePre' }, {
+  pattern = '*',
+  group = vim.api.nvim_create_augroup(
+    'nrv#mkdir_if_not_exists',
+    { clear = true }
+  ),
+  callback = function()
+    vim.fn.mkdir(vim.fn.expand '<afile>:p:h', 'p')
+  end,
+})
 
--- | Get highlight under cursor
-vim.cmd [[
-  function! SynStack()
-    if !exists("*synstack")
-      return
-    endif
-    echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
-  endfunc
-
-  function! SynGroup()                                                            
-    let l:s = synID(line('.'), col('.'), 1)                                       
-    echo synIDattr(l:s, 'name') . ' -> ' . synIDattr(synIDtrans(l:s), 'name')
-  endfun
-]]
-
--- | Disable conceallevel (does not fully work)
-vim.cmd [[
-  augroup nrv#set_conceallevel_0
-    autocmd!
-    autocmd BufEnter * set conceallevel=0
-  augroup END
-]]
+-- Disable conceallevel (does not fully work)
+--
+-- vim.api.nvim_create_autocmd({ 'BufEnter' }, {
+--   pattern = '*',
+--   group = vim.api.nvim_create_augroup(
+--     'nrv#set_conceallevel_0',
+--     { clear = true }
+--   ),
+--   callback = function()
+--     vim.wo.conceallevel = 0
+--   end,
+-- })
 
 -- | Enable highlighting of yanked text
-vim.cmd [[
-  augroup nrv#highlight_yanked
-    autocmd!
-    autocmd TextYankPost * silent! lua vim.highlight.on_yank { higroup="IncSearch", timeout=150 }
-  augroup END
-]]
-
+vim.api.nvim_create_autocmd({ 'TextYankPost' }, {
+  pattern = '*',
+  group = vim.api.nvim_create_augroup(
+    'nrv#highlight_yanked',
+    { clear = true }
+  ),
+  callback = function()
+    vim.highlight.on_yank { higroup = 'IncSearch', timeout = 150 }
+  end,
+})
 
 -- | Enable remembering of cursor position between nvim restarts
--- | Start at previous position centered
-vim.cmd [[
-  function! ResCur()
-    if line("'\"") <= line("$")
-      normal! g`"zz
-      return 1
-    endif
-  endfunction
-
-  augroup nrv#restore_cursor_after_restart
-    autocmd!
-    autocmd BufWinEnter * call ResCur()
-  augroup END
-]]
+vim.api.nvim_create_autocmd({ 'BufWinEnter' }, {
+  pattern = '*',
+  group = vim.api.nvim_create_augroup(
+    'nrv#restore_cursor_after_restart',
+    { clear = true }
+  ),
+  callback = function()
+    vim.cmd [[ normal! g`"zz ]]
+  end,
+})
 
 -- Don't set a background color when running in a terminal;
 -- just use the terminal's background color
@@ -65,8 +59,24 @@ vim.cmd [[
 -- FIXME:
 
 -- *this `autocmd` must be set before `colorscheme` call*
+local function hl_clear_bg(hl_group)
+  vim.api.nvim_create_autocmd({ 'ColorScheme' }, {
+    pattern = '*',
+    group = vim.api.nvim_create_augroup(
+      'nrv#uniform_background_color',
+      { clear = true }
+    ),
+    callback = function()
+      vim.api.nvim_set_hl(0, hl_group, {
+        bg = 'NONE',
+        ctermbg = 'NONE',
+      })
+    end,
+  })
+end
+
 vim.cmd [[
-  augroup nrv#uniform_background_color
+  augroup nrv#remove_background_color
     autocmd!
     autocmd ColorScheme * highlight Normal ctermbg=NONE guibg=NONE
     autocmd ColorScheme * highlight NormalNC ctermbg=NONE guibg=NONE
@@ -76,9 +86,6 @@ vim.cmd [[
     autocmd ColorScheme * highlight FloatBorder ctermbg=NONE guibg=NONE
     " autocmd ColorScheme * highlight NormalNC ctermbg=NONE guibg=NONE
     " autocmd ColorScheme * highlight NormalFloat ctermbg=NONE guibg=NONE
-
-    " LspInfo float border
-    autocmd ColorScheme * highlight link LspInfoBorder FloatBorder
 
     " Line numbers
     autocmd ColorScheme * highlight LineNr ctermbg=NONE guibg=NONE
@@ -194,6 +201,9 @@ vim.cmd [[
 
     autocmd ColorScheme * highlight Todo ctermbg=NONE guibg=NONE guifg='#e5c07b'
 
+    " LspInfo border
+    autocmd ColorScheme * highlight link LspInfoBorder FloatBorder
+
     " Gitsigns/Gitgutter - always use red/green/yellow
     autocmd ColorScheme * highlight GitGutterAdd guifg='#14a573'
     autocmd ColorScheme * highlight GitGutterChange guifg='#deaf6c'
@@ -217,63 +227,45 @@ vim.cmd [[
   augroup END
 ]]
 
--- | Latex
-vim.cmd [[
-  augroup nrv#compile_latex_on_save
-    autocmd!
-    autocmd BufWritePost *.tex :lua if vim.g.compile_tex then os.execute('pdflatex -output-directory=' .. vim.fn.expand('%:h') .. ' ' .. vim.fn.expand('%')) end
-  augroup END
-]]
+-- | Compile latex on save
+vim.api.nvim_create_autocmd({ 'BufWritePost' }, {
+  pattern = '*.tex',
+  group = vim.api.nvim_create_augroup(
+    'nrv#compile_latex_on_save',
+    { clear = true }
+  ),
+  callback = function()
+    if vim.g.compile_tex then
+      local compile_cmd = string.format(
+        'pdflatex -output-directory=%s %s',
+        vim.fn.expand '%:h',
+        vim.fn.expand '%'
+      )
+      os.execute(compile_cmd)
+    end
+  end,
+})
 
 -- | Open help in full screen - `H` command
-vim.cmd [[
-  function! s:help(subject)
-    let buftype = &buftype
-    let &buftype = 'help'
-    let v:errmsg = ''
-    let cmd = "help " . a:subject
-    silent! execute  cmd
-    if v:errmsg != ''
-      let &buftype = buftype
-      return cmd
-    else
-      call setbufvar('#', '&buftype', buftype)
-    endif
-  endfunction
+vim.api.nvim_create_user_command('H', function(opts)
+  local help_cmd = string.format('help %s', opts.args[1])
+  vim.cmd(help_cmd)
+end, {
+  nargs = '?',
+  complete = 'help',
+  bar = true,
+})
 
-  command! -nargs=? -bar -complete=help H execute <SID>help(<q-args>)
-]]
-
--- | Plugin world
-
--- | Refresh `lualine`'s `pywal` theme on SIGUSR1 (`setwall` sends it)
-vim.cmd [[
-  augroup nrv#lualine_sigusr1_refresh_wal_theme
-    autocmd!
-    autocmd Signal SIGUSR1 call LualineRefreshWalTheme()
-  augroup END
-
-  function! LualineRefreshWalTheme()
-    lua require'lualine'.setup {}
-    :redraw
-  endfunction
-]]
-
--- | Move vimspector's crap from ${HOME}
-vim.cmd [[
-  augroup nrv#move_vimspector_crap_from_home
-    autocmd!
-    autocmd User VimspectorDebugEnded call system("mv ~/.vimspector.log " . exists('$XDG_CACHE_HOME') ? $XDG_CACHE_HOME : '~/.cache' . "/nvim/vimspector.log")
-  augroup END
-]]
-
-vim.cmd [[
-  augroup nrv#packer_compile_config
-    autocmd!
-    autocmd BufWritePost */nvim/*.lua source <afile> | PackerCompile
-  augroup end
-]]
-
--- | -- | Help fullscreen
--- | local nrv_help_fullscreen = vim.api.nvim_create_augroup("nrv#open_help_in_fullscreen", { clear = true, })
--- |
+-- Set formatoptions - overwrite the default ftplugin, which overwrites options.lua
+vim.api.nvim_create_autocmd({ 'BufWinEnter', 'BufRead', 'BufNewFile' }, {
+  pattern = '*',
+  group = vim.api.nvim_create_augroup(
+    'nrv#set_formatoptions',
+    { clear = true }
+  ),
+  callback = function()
+    vim.api.nvim_set_option_value('formatoptions', 'jnq', {
+      scope = 'local',
+    })
+  end,
+})

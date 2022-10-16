@@ -1,4 +1,6 @@
-return function ()
+local M = {}
+
+M.setup = function ()
   require'nnn'.setup {
     -- mappings = {
     --   { '<M-h>',  require'tmux'.move_left }   ,
@@ -22,3 +24,5 @@ return function ()
     },
   }
 end
+
+return M

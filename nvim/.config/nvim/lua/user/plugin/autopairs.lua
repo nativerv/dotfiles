@@ -1,4 +1,6 @@
-return function ()
+local M = {}
+
+M.setup = function ()
   require'nvim-autopairs'.setup {
     check_ts = true,
     ignored_next_char = "",
@@ -36,3 +38,5 @@ return function ()
         :use_key(']')
   }
 end
+
+return M

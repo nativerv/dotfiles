@@ -1,4 +1,6 @@
-return function ()
+local M = {}
+
+M.setup = function ()
   local gitsigns_icon_change = '│'
   local gitsigns_icon_remove = ''
   require'gitsigns'.setup {
@@ -39,3 +41,5 @@ return function ()
   }
 end
 
+
+return M

@@ -1,4 +1,6 @@
-return function ()
+local M = {}
+
+M.setup = function ()
   vim.cmd [[
     " Set colors to look like visual mode
     let g:VM_Extend_hl = 'Visual'
@@ -82,3 +84,5 @@ return function ()
     let g:VM_maps["Toggle Multiline"]            = '\\M'
   ]]
 end
+
+return M

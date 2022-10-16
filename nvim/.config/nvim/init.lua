@@ -4,22 +4,21 @@
 --  _/ // /|  // /  / /  _ / /___/ /_/ / ___ |
 -- /___/_/ |_/___/ /_/  (_)_____/\____/_/  |_|
 --
--- | Description: A NeoVim configuration written in Lua
--- | Author: nrv
--- | URL: https://github.com/nativerv/dotfiles
+-- Description: A NeoVim configuration written in Lua
+-- Author: nrv
+-- URL: https://github.com/nativerv/dotfiles
 
+-- Cache lua to improve startuptime - needs to be loaded as early as possible
+pcall(require, 'impatient')
 
--- | Cache lua - needs to be loaded as early as possible
-pcall(require, 'user.impatient')
+-- Preconfig
+-- require 'user.utils'       -- Load util functions
 
--- | Preconfig
-require 'user.utils'       -- | Load util functions
-
--- | Begin config
-require 'user.bootstrap'   -- | Ensure `packer.nvim` is installed - for new systems
-require 'user.plugins'     -- | Load plugins
-require 'user.options'     -- | Load options
-require 'user.mappings'    -- | Load mappings
-require 'user.autocmds'    -- | Load autocommands
-require 'user.rc'          -- | Load commands & settings for various plugins
-require 'user.colorscheme' -- | Load colorscheme
+-- Begin config
+require 'user.bootstrap'   -- Ensure `packer.nvim` is installed - for new systems
+require 'user.plugins'     -- Load plugins
+require 'user.options'     -- Load options
+require 'user.mappings'    -- Load mappings
+require 'user.autocmds'    -- Load autocommands
+require 'user.rc'          -- Load commands & settings for various plugins
+require 'user.colorscheme' -- Load colorscheme
