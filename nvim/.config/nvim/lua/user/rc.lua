@@ -1,17 +1,9 @@
-
--- | Null-ls
-require'null-ls'.setup {
-  sources = {
-    require'null-ls'.builtins.diagnostics.shellcheck.with {
-      diagnostics_format = '[#{c}] #{m} (#{s})',
-      filetypes = { 'sh' },
-      extra_args = { '-o', 'all' },
-    },
-    require'null-ls'.builtins.formatting.shfmt,
-    require'null-ls'.builtins.formatting.stylua,
-  },
-  debug = true,
-  on_attach = on_attach,
-  capabilities = capabilities,
-  autostart = true,
-}
+-- Expose treesitter-rainbow hl groups 
+-- to treesitter queries 
+for i = 0, 6 do
+  vim.api.nvim_set_hl(
+    0,
+    string.format('@text.h%d', i),
+    { link = string.format('rainbowcol%d', i) }
+  )
+end

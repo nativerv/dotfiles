@@ -1,13 +1,29 @@
 local M = {}
 
+M.server_configs = {}
+
+M.configure_servers = function()
+  -- Execute all configs and inject common capabilities to them
+  for lsp, lsp_config in pairs(M.server_configs) do
+    -- Merge configs with custom function
+    local default_config = {
+      on_attach = M.on_attach,
+      capabilities = M.capabilities,
+    }
+
+    local config = vim.tbl_extend('force', default_config, lsp_config)
+    require('lspconfig')[lsp].setup(config)
+  end
+end
+
 M.setup = function()
   -- More logs
   vim.lsp.set_log_level 'debug'
 
   ---@diagnostic disable-next-line: unused-local
-  M.on_attach = function(client, buffer)
+  M.on_attach = function(client, bufnr)
     -- Enable completion triggered by <c-x><c-o>
-    vim.api.nvim_buf_set_option(buffer, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+    vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
 
     -- Define commands
     vim.api.nvim_create_user_command('Format', vim.lsp.buf.formatting, {})
@@ -52,13 +68,15 @@ M.setup = function()
     vim.fn.sign_define(hl_hint,  { text = " ", texthl = hl_hint,  numhl = hl_hint,  })
     vim.fn.sign_define(hl_info,  { text = " ", texthl = hl_info,  numhl = hl_info,  })
     -- stylua: ignore end
+
+    -- require('nvim-navic').attach(client, bufnr)
   end
 
   -- Include capabilities from plugins
   M.capabilities = vim.lsp.protocol.make_client_capabilities()
 
   -- Enable the following language servers
-  local lsps = {
+  M.server_configs = {
     clangd = {},
     rust_analyzer = {},
     pyright = {},
@@ -82,10 +100,10 @@ M.setup = function()
         },
       },
     },
-    bashls = {
-      cmd = { 'bash-language-server', 'start' },
-      filetypes = { 'sh', 'zsh' },
-    },
+    -- bashls = {
+    --   cmd = { 'bash-language-server', 'start' },
+    --   filetypes = { 'sh', 'zsh' },
+    -- },
     sumneko_lua = {
       cmd = {
         'lua-language-server',
@@ -134,6 +152,7 @@ M.setup = function()
     -- phpactor = {},
     dockerls = {},
     texlab = {},
+    marksman = {},
   }
 
   vim.lsp.handlers['textDocument/hover'] =
@@ -144,17 +163,7 @@ M.setup = function()
   -- Set dafault window border (added because :LspInfo doesn't have borders by default)
   require('lspconfig.ui.windows').default_options.border = 'rounded'
 
-  -- Execute all configs and inject common capabilities to them
-  for lsp, lsp_config in pairs(lsps) do
-    -- Merge configs with custom function
-    local default_config = {
-      on_attach = M.on_attach,
-      capabilities = M.capabilities,
-    }
-
-    local config = vim.tbl_extend('force', default_config, lsp_config)
-    require('lspconfig')[lsp].setup(config)
-  end
+  M.configure_servers()
 end
 
 return M

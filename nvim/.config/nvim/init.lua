@@ -18,7 +18,7 @@ pcall(require, 'impatient')
 require 'user.bootstrap'   -- Ensure `packer.nvim` is installed - for new systems
 require 'user.plugins'     -- Load plugins
 require 'user.options'     -- Load options
-require 'user.mappings'    -- Load mappings
+require 'user.mappings'    -- Load keymaps
 require 'user.autocmds'    -- Load autocommands
-require 'user.rc'          -- Load commands & settings for various plugins
 require 'user.colorscheme' -- Load colorscheme
+require 'user.rc'          -- Load additional commands after everything else

@@ -23,6 +23,8 @@ M.setup = function ()
       -- left = '<M-д>',
     },
   }
+
+  vim.keymap.set('n', '<leader>r',  '<cmd>NnnExplorer<cr>' )
 end
 
 return M

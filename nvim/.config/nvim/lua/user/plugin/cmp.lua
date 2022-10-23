@@ -44,7 +44,7 @@ M.setup = function()
     ghost_text = true,
   }
   -- Add luasnip only if it's installed
-  local has_luasnip, _ = pcall(require, 'luasnip')
+  local has_luasnip, luasnip = pcall(require, 'luasnip')
   if has_luasnip then
     config.snippet = {
       expand = function(args)

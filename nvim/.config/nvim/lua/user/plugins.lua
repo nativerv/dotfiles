@@ -1,6 +1,6 @@
--- Todo: install lsp-status
--- Todo: install trouble.nvim
--- Todo: install barbar.nvim
+-- TODO: write a plugin that runs curls
+-- TODO: install todo-comments
+-- TODO: look at how vim-illuminate handles treesitter & lsp support
 
 return require('packer').startup(function(use)
   -- Packer
@@ -62,6 +62,9 @@ return require('packer').startup(function(use)
   } -- Vimscript
   use {
     'tpope/vim-surround',
+    config = function()
+      require('user.plugin.vim-surround').setup()
+    end,
   } -- Vimscript (surround.nvim)
   use {
     'matze/vim-move',
@@ -110,6 +113,10 @@ return require('packer').startup(function(use)
   -- Source for nvim-cmp - lsp
   use {
     'hrsh7th/cmp-nvim-lsp',
+    after = { 'nvim-lspconfig' },
+    config = function()
+      require('user.plugin.cmp-nvim-lsp').setup()
+    end,
     commit = 'ebdfc204afb87f15ce3d3d3f5df0b8181443b5ba',
   }
 
@@ -137,8 +144,15 @@ return require('packer').startup(function(use)
   -- Language Server Protocol
   use {
     'neovim/nvim-lspconfig',
+    after = { 'neodev.nvim' },
     config = function()
       require('user.plugin.lspconfig').setup()
+    end,
+  }
+  use {
+    'folke/neodev.nvim',
+    config = function()
+      require('user.plugin.neodev').setup()
     end,
   }
   use {
@@ -147,14 +161,30 @@ return require('packer').startup(function(use)
       require('user.plugin.dressing').setup()
     end,
   }
-  -- use { 'ray-x/lsp_signature.nvim' }
-  use {
+  use { -- Display kind in nvim-cmp
     'onsails/lspkind-nvim',
     commit = '93e98a0c900327ce7e9be1cbf24aebbe7170e375',
-  } -- Display kind in nvim-cmp
+  }
   use {
     'jose-elias-alvarez/null-ls.nvim',
     requires = { 'nvim-lua/plenary.nvim', 'neovim/nvim-lspconfig' },
+    after = { 'nvim-lspconfig' },
+    config = function()
+      require('user.plugin.null-ls').setup()
+    end,
+  }
+  use {
+    'SmiteshP/nvim-navic',
+    after = { 'nvim-lspconfig' },
+    config = function()
+      require('user.plugin.navic').setup()
+    end,
+  }
+  use {
+    'RRethy/vim-illuminate',
+    config = function()
+      require('user.plugin.illuminate').setup()
+    end,
   }
 
   -- Syntax highlighing plugins
@@ -187,6 +217,20 @@ return require('packer').startup(function(use)
     commit = '61f122ebc41e9bcf1793c752a728db59feee77bb',
     cmd = { 'StartupTime' },
   }
+  use {
+    'folke/todo-comments.nvim',
+    config = function()
+      require('user.plugin.todo-comments').setup()
+    end,
+  }
+  -- use {
+  --   'vimwiki/vimwiki',
+  --   config = function ()
+  --     require'user.plugin.vimwiki'.setup()
+  --   end,
+  --   disable = true,
+  --   commit = '63af6e72dd3fa840bffb3ebcb8c96970c02e0913',
+  -- }
 
   -- Navigation
   use {

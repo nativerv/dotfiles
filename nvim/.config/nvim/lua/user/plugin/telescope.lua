@@ -27,9 +27,19 @@ M.setup = function()
     }
   }
 
-  -- To get ui-select loaded and working with telescope, you need to call
-  -- load_extension, somewhere after setup function:
+  -- Setup Telescope with the `config`
   require'telescope'.setup (config)
+
+  -- Find files (Ctrl-P)
+  vim.keymap.set('n', '<leader>ff', function () require"telescope.builtin".find_files({ hidden = true }) end)
+  vim.keymap.set('n', '<C-p>',      function () require"telescope.builtin".find_files({ hidden = true }) end)
+  -- The rest junk
+  vim.keymap.set('n', '<leader>fb', function () require"telescope.builtin".current_buffer_fuzzy_find() end)
+  vim.keymap.set('n', '<leader>fh', function () require"telescope.builtin".help_tags() end)
+  vim.keymap.set('n', '<leader>ft', function () require"telescope.builtin".tags() end)
+  vim.keymap.set('n', '<leader>fp', function () require"telescope.builtin".live_grep() end)
+  vim.keymap.set('n', '<leader>?',  function () require"telescope.builtin".oldfiles() end)
+  vim.keymap.set('n', '<leader>fd', function () require"telescope.builtin".diagnostics() end)
 end
 
 return M

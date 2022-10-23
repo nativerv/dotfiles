@@ -1,4 +1,5 @@
 local util = {}
+
 --
 -- function os.capture(cmd, raw)
 --   local f = assert(io.popen(cmd, 'r'))
@@ -55,12 +56,9 @@ local util = {}
 -- util.XDG_CONFIG_HOME = os.getenv('XDG_CONFIG_HOME')
 -- util.XDG_DATA_HOME = os.getenv('XDG_DATA_HOME')
 -- util.XDG_CACHE_HOME = os.getenv('XDG_CACHE_HOME')
---
-function if(condition, if_true, if_false)
-  if condition then
-    return if_true
-  else
-    return if_false
-  end
+
+
+function util.is_empty(value)
+  return value == nil or value == ""
 end
 return util

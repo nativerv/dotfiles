@@ -1,0 +1,3 @@
+;; extends
+
+(strikethrough) @text.strike

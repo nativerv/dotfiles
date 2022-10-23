@@ -80,12 +80,12 @@ vim.cmd [[
     autocmd!
     autocmd ColorScheme * highlight Normal ctermbg=NONE guibg=NONE
     autocmd ColorScheme * highlight NormalNC ctermbg=NONE guibg=NONE
+    autocmd ColorScheme * highlight NormalSB ctermbg=NONE guibg=NONE
     autocmd ColorScheme * highlight NormalFloat ctermbg=NONE guibg=NONE
 
     " Floats
     autocmd ColorScheme * highlight FloatBorder ctermbg=NONE guibg=NONE
-    " autocmd ColorScheme * highlight NormalNC ctermbg=NONE guibg=NONE
-    " autocmd ColorScheme * highlight NormalFloat ctermbg=NONE guibg=NONE
+    autocmd ColorScheme * highlight LspInfoBorder ctermbg=NONE guibg=NONE
 
     " Line numbers
     autocmd ColorScheme * highlight LineNr ctermbg=NONE guibg=NONE
@@ -201,19 +201,29 @@ vim.cmd [[
 
     autocmd ColorScheme * highlight Todo ctermbg=NONE guibg=NONE guifg='#e5c07b'
 
-    " LspInfo border
-    autocmd ColorScheme * highlight link LspInfoBorder FloatBorder
-
     " Gitsigns/Gitgutter - always use red/green/yellow
     autocmd ColorScheme * highlight GitGutterAdd guifg='#14a573'
     autocmd ColorScheme * highlight GitGutterChange guifg='#deaf6c'
     autocmd ColorScheme * highlight GitGutterDelete guifg='#af404a'
+    autocmd ColorScheme * highlight GitSignsAdd guifg='#14a573'
+    autocmd ColorScheme * highlight GitSignsChange guifg='#deaf6c'
+    autocmd ColorScheme * highlight GitSignsDelete guifg='#af404a'
 
     " Search (variants: #1da9f1 #4183c4)
     autocmd ColorScheme * highlight Search ctermbg=NONE guibg='#4183c4' guifg='#21252b'
     autocmd ColorScheme * highlight IncSearch ctermbg=NONE guibg='#ff9e64' guifg='#21252b'
 
     " TODO: Refactor all colors with imports from single source
+    autocmd ColorScheme * highlight DiagnosticsError        guisp='#e86671'
+    autocmd ColorScheme * highlight DiagnosticsWarning      guisp='#e5c07b'
+    autocmd ColorScheme * highlight DiagnosticsInformation  guisp='#61afef'
+    autocmd ColorScheme * highlight DiagnosticsHint         guisp='#56b6c2'
+
+    autocmd ColorScheme * highlight DiagnosticSignError        guifg='#e86671'
+    autocmd ColorScheme * highlight DiagnosticSignWarning      guifg='#e5c07b'
+    autocmd ColorScheme * highlight DiagnosticSignInformation  guifg='#61afef'
+    autocmd ColorScheme * highlight DiagnosticSignHint         guifg='#56b6c2'
+
     autocmd ColorScheme * highlight LspDiagnosticsUnderlineError        cterm=undercurl gui=undercurl guisp='#e86671'
     autocmd ColorScheme * highlight LspDiagnosticsUnderlineWarning      cterm=undercurl gui=undercurl guisp='#e5c07b'
     autocmd ColorScheme * highlight LspDiagnosticsUnderlineInformation  cterm=undercurl gui=undercurl guisp='#61afef'

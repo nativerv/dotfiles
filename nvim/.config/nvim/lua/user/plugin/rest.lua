@@ -22,6 +22,11 @@ M.setup = function ()
     env_file = '.env',
     custom_dynamic_variables = {},
   }
+
+  -- Keymaps
+  vim.keymap.set('n', '<leader>trr',  [[<cmd>lua require'rest-nvim'.run()<cr>]]      )
+  vim.keymap.set('n', '<leader>trp',  [[<cmd>lua require'rest-nvim'.preview()<cr>]]  )
+  vim.keymap.set('n', '<leader>trl',  [[<cmd>lua require'rest-nvim'.run_last()<cr>]] )
 end
 
 return M

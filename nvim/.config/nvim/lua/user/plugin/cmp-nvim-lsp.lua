@@ -1,7 +1,9 @@
 local M = {}
 
 M.setup = function()
-  M.capabilities = require('cmp_nvim_lsp').update_capabilities(M.capabilities)
+  local lspconfig_config = require 'user.plugin.lspconfig'
+  lspconfig_config.capabilities =
+    require('cmp_nvim_lsp').update_capabilities(lspconfig_config.capabilities)
 end
 
 return M

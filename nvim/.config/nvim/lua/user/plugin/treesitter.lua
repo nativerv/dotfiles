@@ -1,8 +1,17 @@
 local M = {}
 
-M.setup = function ()
-  local configs = {};
-  local captures = {};
+M.rainbow_colors = {
+  '#E06C75',
+  '#E5C07B',
+  '#98C379',
+  '#56B6C2',
+  '#61AFEF',
+  '#C678DD',
+}
+
+M.setup = function()
+  local configs = {}
+  local captures = {}
   -- | ensure_installed = 'all',
   --{
   --  "bash",       "bibtex", "c",      "c_sharp",    "clojure", "cmake",   "comment",
@@ -14,10 +23,10 @@ M.setup = function ()
   --  "typescript", "vim",    "vue",    "wgsl",       "yaml",
   --}, -- one of "all", "maintained" (parsers with maintainers), or a list of languages
   configs.sync_install = true -- install languages synchronously (only applied to `ensure_installed`)
-  configs.ignore_install = { } -- List of parsers to ignore installing
+  configs.ignore_install = {} -- List of parsers to ignore installing
   configs.highlight = {
-    enable = true,              -- false will disable the whole extension
-    disable = { 'sh', 'org', 'latex', },  -- list of language that will be disabled
+    enable = true, -- false will disable the whole extension
+    disable = { 'sh', 'org', 'latex' }, -- list of language that will be disabled
     -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
     -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
     -- Using this option may slow down your editor, and you may see some duplicate highlights.
@@ -35,6 +44,12 @@ M.setup = function ()
     -- colors = {}, -- table of hex strings
     -- termcolors = {} -- table of colour name strings
   }
+  for index, color in ipairs(M.rainbow_colors) do -- p00f/rainbow#81
+    vim.api.nvim_set_hl(0, ('rainbowcol%d'):format(index), {
+      fg = color,
+    })
+  end
+
   configs.context_commentstring = {
     enable = true,
   }
@@ -65,11 +80,20 @@ M.setup = function ()
 
       keymaps = {
         -- You can use the capture groups defined in textobjects.scm
-        ["af"] = "@function.outer",
-        ["if"] = "@function.inner",
-        ["ac"] = "@class.outer",
-        -- you can optionally set descriptions to the mappings (used in the desc parameter of nvim_buf_set_keymap
-        ["ic"] = { query = "@class.inner", desc = "Select inner part of a class region" },
+        -- you can optionally set descriptions to the mappings (used in the desc parameter of nvim_buf_set_keymap)
+        ['af'] = {
+          query = '@function.outer',
+          desc = 'Select around function',
+        },
+        ['if'] = {
+          query = '@function.inner',
+          desc = 'Select inner part of a function',
+        },
+        ['ac'] = { query = '@class.outer', desc = 'Select around class' },
+        ['ic'] = {
+          query = '@class.inner',
+          desc = 'Select inner part of a class',
+        },
       },
       -- You can choose the select mode (default is charwise 'v')
       selection_modes = {
@@ -86,10 +110,10 @@ M.setup = function ()
   }
 
   -- Highlight the @foo.bar capture group with the "Identifier" highlight group.
-  captures["@strikethrough"] = '@text.strike'
+  --captures['@strikethrough'] = '@text.strike'
 
-  require'nvim-treesitter.configs'.setup (configs)
-  require"nvim-treesitter.highlight".set_custom_captures (captures)
+  require('nvim-treesitter.configs').setup(configs)
+  require('nvim-treesitter.highlight').set_custom_captures(captures)
 end
 
 return M
