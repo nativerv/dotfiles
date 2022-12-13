@@ -70,7 +70,8 @@ ranger/.config/ranger/plugins/__pycache__
 ranger/.config/ranger/plugins/ranger_devicons/__pycache__
 ranger/.config/ranger/plugins/__init__.py
 
-nvim-lua/.config/nvim/plugin/packer_compiled.lua
 gtk/.config/gtk-2.0/gtkfilechooser.ini
 
-nvim/.config/nvim/plugin/packer_compiled.lua
+nvim/.config/nvim/plugin
+nvim/.config/nvim/spell
+tridactyl/.config/tridactyl/themes/wal.css
