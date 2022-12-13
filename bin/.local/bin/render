@@ -1,0 +1,34 @@
+#!/bin/sh
+
+set -ue
+
+
+do_open=
+while getopts 'o' name; do
+  case "${name}" in
+      o) do_open=true ;;
+      *) printf "Usage: %s: [-o] file\n" "${0}"
+         exit 1
+         ;;
+    esac
+done
+shift $((OPTIND - 1))
+
+BROWSER="${BROWSER:-firefox}"
+
+MD_TMP_DIR='/tmp/md'
+mkdir -p "${MD_TMP_DIR}"
+
+prefix="$(openssl rand -hex 3)"
+filename="$(basename "${1}")"
+rendered="${MD_TMP_DIR}/${prefix}-${filename%.*}.html" 
+
+# exec closes stderr (suppress browser output)
+pandoc --standalone --css github-markdown.css -f 'gfm' -t 'html' -o "${rendered}" "${1}"
+
+# shellcheck disable=2181
+# ignore stupid bullshit of 
+# `[2181] Check exit code directly with e.g. 'if mycmd;', not indirectly with $?. (shellcheck)`
+[ "${?}" = 0 ] && [ "${do_open}" = 'true' ] \
+  && exec 2>&- \
+  && setsid "${BROWSER}" "${rendered}"

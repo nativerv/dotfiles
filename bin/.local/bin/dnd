@@ -1,0 +1,14 @@
+#!/bin/sh
+
+set -eu
+
+pub_dir="$(xdg-user-dir PUBLICSHARE)"
+file_name="${1}"
+file_ext="${1##*.}"
+pub_file_name="${pub_dir}/${hash}.${file_ext}"
+hash="$(sha256sum "${1}" | cut -d' ' -f1)"
+shift
+
+
+ln "${file_name}" "${pub_file_name}" \
+  && dragon-drag-and-drop "${@}" "${file_name}"

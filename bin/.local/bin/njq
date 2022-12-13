@@ -1,0 +1,48 @@
+#!/usr/bin/env node
+
+// Author: nrv
+// Description: a simple alternative for the `jq` cli json parser
+// which allows to select and map your json with plain JS,
+// the native platform of JSON (as the name implies),
+// instead of cryptic homebrew syntax.
+// The parsed json is contained in the `this` context.
+
+// Extra stuff that this script provides: 
+// - `print` function: prints primitive types as raw strings
+//   without even the trailing '\n' symbol
+// Example:
+// curl https://example.com/api                                   -> '{"users": [{"name": "john doe"}]}'
+// curl https://example.com/api | njq 'print(this.users[0].name)' -> 'john doe'
+
+const fs = require('fs');
+const stdinText = fs.readFileSync(0, 'utf-8');
+
+// Define stuff
+function print(object) {
+  if ( typeof object === 'number' 
+    || typeof object === 'string' 
+    || typeof object === 'bool'
+  ) {
+    process.stdout.write(object.toString())
+  } else {
+    process.stdout.write(JSON.stringify(object))
+  }
+}
+
+function evalInContext(code, context) {
+  (function () {
+    eval(code)
+  }).bind(context)();
+}
+
+// Do the thing
+try {
+  const json = JSON.parse(stdinText);
+  if (process.argv[2] === undefined) {
+    console.log(JSON.stringify(json, null, 2));
+  } else {
+    evalInContext(process.argv[2], json)
+  }
+} catch(e) {
+  console.error(e)
+}

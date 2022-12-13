@@ -1,0 +1,16 @@
+#!/bin/sh
+
+# Author: nrv
+# Description: hardlink the file to XDG_PUBLICSHARE dir with name
+# *sha256sum* of that file, so you can use it from firejailed apps
+
+set -eu
+
+pub_dir="$(xdg-user-dir PUBLICSHARE)"
+file_path="${1}"
+file_ext="${1##*.}"
+hash="$(sha256sum "${file_path}" | cut -d' ' -f1)"
+pub_file_name="${pub_dir}/${hash}.${file_ext}"
+
+ln -f "${file_path}" "${pub_file_name}" \
+  && printf '%s' "${pub_file_name}"

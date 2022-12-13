@@ -1,0 +1,11 @@
+#!/bin/sh
+
+[ -t 1 ] && mode="yank"
+mode="paste"
+
+case "${mode}" in
+  'yank') yank ;;
+  'paste') xclip -out -selection clipboard ;;
+  *) echo 'unreachable' 1>&2 ;;
+esac
+

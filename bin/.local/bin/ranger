@@ -1,0 +1,5 @@
+#!/bin/sh
+
+printf '\033]2;ranger\007';
+command -p ranger "${@}"
+printf '\033[23t'

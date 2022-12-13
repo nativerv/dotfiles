@@ -1,0 +1,118 @@
+#!/bin/sh
+
+MUSICFIND_PID_FILE='/tmp/musicfind_pid'
+MUSICFIND_RECORDING_NID_FILE='/tmp/musicfind_nid'
+MUSICFIND_CLIP_FILE='/tmp/musicfind_clip'
+MUSICFIND_ALBUM_ART_FILE='/tmp/musicfind_album_art'
+MUSICFIND_PRETTY_NAME='Musicfind'
+XDG_DATA_HOME="${XDG_DATA_HOME:-"${HOME}/.local/share"}"
+MUSICFIND_DATA_HOME="${XDG_DATA_HOME}/musicfind"
+MUSICFIND_NO_IMAGE_FILE="${MUSICFIND_DATA_HOME}/no_image.png"
+
+api_token='abc123'
+
+set -ux
+
+cleanup() {
+  printf '' > "${MUSICFIND_PID_FILE}"
+  printf '' > "${MUSICFIND_RECORDING_NID_FILE}"
+  # rm "${MUSICFIND_CLIP_FILE}"
+}
+
+case "${1}" in
+  record) 
+    PULSE_LATENCY_MSEC=1 \
+      ffmpeg \
+        -y \
+        -f pulse \
+        -i alsa_output.usb-GeneralPlus_USB_Audio_Device-00.analog-stereo.monitor \
+        -f ogg \
+        "${MUSICFIND_CLIP_FILE}" &
+
+      # Save pid for later stopping
+      printf '%s' "${!}" > "${MUSICFIND_PID_FILE}"
+
+      recording_nid="$(
+        dunstify \
+          --printid \
+          --urgency=critical \
+          "${MUSICFIND_PRETTY_NAME}" \
+          'Recording audio clip to search for...' \
+          | tee "${MUSICFIND_RECORDING_NID_FILE}"
+      )"
+    ;;
+  send) 
+    pid="$(cat "${MUSICFIND_PID_FILE}")"
+    recording_nid="$(cat "${MUSICFIND_RECORDING_NID_FILE}")"
+    kill -2 "${pid}"
+    dunstify --close="${recording_nid}"
+
+    # Wait for ffmpeg to finish and exit
+    tail --pid="${pid}" -f /dev/null
+
+    # Display "sending request" notification
+    send_nid="$(dunstify --printid "${MUSICFIND_PRETTY_NAME}" 'Sending recorded clip to the api...')"
+
+
+# -F "api_token=${api_token}" \
+    # Do the request
+    response="$(curl \
+      -sL \
+      -F "file=@${MUSICFIND_CLIP_FILE}" \
+      -F 'return=spotify' \
+      'https://api.audd.io/'
+    )" 
+
+    # Close "sending request" notification before showing result
+    dunstify --close="${send_nid}"
+
+    # Guard for api error
+    status="$(printf '%s' "${response}" | jq -r '.status')"
+    [ "${status}" = 'error' ] && notify-send 'Could not to recognize song' 'Clip is probably too short.' && cleanup && exit 1;
+
+    result="$(printf '%s' "${response}" | jq -r '.result')"
+
+    # Guard for nothing found
+    [ "${result}" = 'null' ] && notify-send 'Could to recognize song' 'Nothing was found.' && cleanup && exit 1;
+
+    artist="$(printf '%s' "${result}" | jq -r '.artist')"
+    title="$(printf '%s' "${result}" | jq -r '.title')"
+    album_art_url="$(printf '%s' "${result}" | jq -r '.spotify.album.images[0].url')"
+
+    # Decide album art - fetch or use default if null
+    MUSICFIND_ALBUM_ART_FILE="${MUSICFIND_NO_IMAGE_FILE}"
+    [ ! "${album_art_url}" = 'null' ] && curl -sL -o "${MUSICFIND_ALBUM_ART_FILE}" "${album_art_url}" 
+
+    artist_title="${artist} - ${title}"
+    action_open_in_browser="default"
+    action_copy_to_clipboard="copy"
+    
+    # Send song notification
+    notification_response="$(dunstify \
+      --icon="${MUSICFIND_ALBUM_ART_FILE}" \
+      --action="${action_open_in_browser},Open in browser" \
+      --action="${action_copy_to_clipboard},Copy \"${artist_title}\" to clipboard" \
+      "Song found" \
+      "${artist} - ${title}"
+    )"
+
+    # Handle notification response
+    case "${notification_response}" in 
+      "${action_open_in_browser}") xdg-open "https://google.com/search?q=${artist_title}" ;;
+      "${action_copy_to_clipboard}") printf '%s' "${artist_title}" | xclip -in -sel clipboard ;;
+    esac
+
+    cleanup
+    ;;
+  abort) 
+    # Close notification and stop ffmpeg
+    kill -2 "$(cat "${MUSICFIND_PID_FILE}")"
+    dunstify --close="$(cat "${MUSICFIND_RECORDING_NID_FILE}")"
+    dunstify --urgency=low "${MUSICFIND_PRETTY_NAME}" 'Music recognition aborted.'
+
+    cleanup
+    ;;
+  *) 
+    printf 'usage: %s record|send|abort' "${0}"
+    ;;
+esac

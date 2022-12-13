@@ -1,0 +1,20 @@
+#!/bin/sh
+
+set -eux
+# --data '{ "rpt": "imageview", "format": "json", "request": { "blocks": [{ "block": "b-page_type_search-by-image__link" }]} }' \
+
+image_search_url='https://yandex.ru/images/search'
+response="$(
+  curl \
+    --no-buffer \
+    --request POST \
+    --header 'Content-Type: application/json' \
+    --form "upfile=@-" \
+    "${image_search_url}"
+)"
+query_string="$(echo "${response}" | njq 'this.blocks[0].params.url')"
+img_search_url="${image_search_url}?${query_string}"
+
+echo "${img_search_url}"
+
+

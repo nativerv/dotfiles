@@ -1,0 +1,30 @@
+#!/bin/sh
+
+# Author: nrv
+# Description: Get local weather from https://wttr.in in +/-N°C format,
+# then strip the +/-N with grep
+
+# c    Weather condition,
+# C    Weather condition textual name,
+# x    Weather condition, plain-text symbol,
+# h    Humidity,
+# t    Temperature (Actual),
+# f    Temperature (Feels Like),
+# w    Wind,
+# l    Location,
+# m    Moon phase 🌑🌒🌓🌔🌕🌖🌗🌘,
+# M    Moon day,
+# p    Precipitation (mm/3 hours),
+# P    Pressure (hPa),
+# u    UV index (1-12),
+#
+# D    Dawn*,
+# S    Sunrise*,
+# z    Zenith*,
+# s    Sunset*,
+# d    Dusk*,
+# T    Current time*,
+# Z    Local timezone.
+
+curl -s 'http://wttr.in/?format=%t' | grep -oE '[\+\-]{1}[0-9]+' | tee -a "${HOME}/desk/sb-weather.log"
+date >> ~/desk/sb-weather.log

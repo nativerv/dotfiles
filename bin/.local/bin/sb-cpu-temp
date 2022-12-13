@@ -1,0 +1,15 @@
+#!/bin/sh
+
+# Get max temperature among all cores
+# sensors -j \
+#   | jq -c '."coretemp-isa-0000" | to_entries | .[]' \
+#   | tail -n+2 | sed -E 's/"temp([0-9]+)_input"/"temp_input"/g' \
+#   | jq -c '."value"."temp_input"' \
+#   | sort -rn \
+#   | head -n1
+sensors -u coretemp-isa-0000 \
+  | grep -E 'temp[0-9]+_input'  \
+  | cut -d' ' -f4  \
+  | sort -rn  \
+  | head -n1  \
+  | xargs printf '%.0f'

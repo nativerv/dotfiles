@@ -1,13 +1,19 @@
 #!/bin/sh
 
-image=$(mktemp)
+image_path=$(mktemp)
 
-xclip -out -selection clipboard -target image/png > "${image}"
+xclip -out -selection clipboard -target image/png > "${image_path}"
 
-output="$(zbarimg "${image}")"
+output="$(zbarimg "${image_path}" 2>/dev/null)"
 
 if [ -z "${output}" ]; then
   notify-send 'Barcode Scan' 'Clipboard contains no image'
 else
-  echo "${output}" | zenity --title 'Barcode Scan' --text-info
+  echo "${output}" | notify-send --urgency=low 'Barcode Scan' "${output}"
 fi
+
+# Handle notification response
+case "${notification_response}" in 
+  "${action_open_in_browser}") xdg-open "https://google.com/search?q=${artist_title}" ;;
+  "${action_copy_to_clipboard}") printf '%s' "${artist_title}" | xclip -in -sel clipboard ;;
+esac

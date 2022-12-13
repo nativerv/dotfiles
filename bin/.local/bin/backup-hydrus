@@ -1,0 +1,7 @@
+#!/bin/sh
+
+bu_date="$(date +%F_%H-%M-%S)"
+
+mkdir -p "${HOME}"/desk/hydrus-backups/"${bu_date}"
+
+cp "${HOME}"/.local/share/hydrus/db/client.* "${HOME}"/desk/hydrus-backups/"${bu_date}"

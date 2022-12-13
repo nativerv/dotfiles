@@ -1,0 +1,14 @@
+#!/bin/sh
+
+set -eu
+
+urlencode() {
+  printf %s "${1}" | python -c "import urllib.parse;print(urllib.parse.quote(input()))"
+}
+
+curl -s "https://hoogle.haskell.org/?hoogle=$(urlencode "${1}")" \
+  | pup --plain '#body > .result > .ans > a > text{}'  \
+  | head -n20  \
+  | sed -E ':a;N;$!ba;s/\n\s+::/ ::/g' \
+  | sed -E ':a;N;$!ba;s/data\n\s+(.+)/data \1/g' \
+  | sed -E ":a;N;\$!ba;s/${1}\s*\n\s*(.+)/${1} \1/g" \

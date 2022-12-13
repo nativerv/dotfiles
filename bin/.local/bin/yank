@@ -1,13 +1,21 @@
 #!/bin/sh
 
-mime_type="$(file --mime-type -b "${1}")"
+set -ue
 
 copy () {
   xclip -in -selection clipboard -t "${mime_type}"
 }
 
-set -ue
+# If text is piped
+if [ "${#}" = 0 ]; then
+  mime_type='text/plain'
+  copy
+  exit 0
+fi
 
+mime_type="$(file --mime-type -b "${1}")"
+
+# If filename is provided
 case "${mime_type}" in
   image/png)
     copy < "${1}"
