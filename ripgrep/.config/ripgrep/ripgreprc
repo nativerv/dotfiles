@@ -1,0 +1,9 @@
+--smart-case
+
+#--hidden
+
+# put filename on each line like grep
+--with-filename 
+
+# disable respecting hidden (dot) files and .gitignore 
+--no-ignore
