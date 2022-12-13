@@ -1,0 +1,5 @@
+[Desktop Entry]
+Type=Application
+Name=Web browser
+#Exec=/usr/bin/mpv %F
+Exec=ev emit opend web %u

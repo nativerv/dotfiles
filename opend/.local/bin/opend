@@ -1,0 +1,45 @@
+#!/bin/sh
+
+XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-"${HOME}/.config"}"
+XDG_DATA_HOME="${XDG_DATA_HOME:-"${HOME}/.local/share"}"
+
+EDITOR="${EDITOR:-nvim}"
+READER="${READER:-zathura}"
+BROWSER="${BROWSER:-chromium}"
+TERMINAL="${TERMINAL:-st}"
+EXPLORER="${EXPLORER:-ranger}"
+IMAGE_VIEWER="${IMAGE_VIEWER:-sxiv}"
+MEDIA_VIEWER="${MEDIA_VIEWER:-mpv}"
+RSS_HANDLER="${RSS_HANDLER:-newsboat}"
+TORRENT_HANDLER="${TORRENT_HANDLER:-transadd}"
+MAIL_HANDLER="${MAIL_HANDLER:-false}"
+# TORRENT_HANDLER=transadd
+
+ev listen | while read -r 'source' 'target' 'payload'; do
+  # Guard - opend event
+  [ ! "${source}" = 'opend' ] && continue
+
+  answer="$(printf 'Yes\nNo' | dmenu -l 2 -p "Do you want to open '${payload}' with a default program?")"
+
+  # Guard - user answer
+  case "${answer}" in
+    ''|'No') continue ;;
+    *) ;;
+  esac
+
+  # Match and start the subject
+  case "${target}" in
+    pdf)      "${READER}" "${payload}" & ;;
+    torrent)  "${TORRENT_HANDLER}" "${payload}" & ;;
+    web)      "${BROWSER}" "${payload}" & ;;
+    telegram) telegram-desktop -workdir "${XDG_DATA_HOME}/TelegramDesktop/" -- "${payload}" & ;;
+    lbry)     zeniny --info --text "install lbry to open ${payload}" & ;;
+    image)    "${IMAGE_VIEWER}" -a "${payload}" & ;;
+    video)    "${MEDIA_VIEWER}" "${payload}" & ;;
+    rss)      "${TERMINAL}" -e "${RSS_HANDLER}" "${payload}" & ;;
+    file)     "${TERMINAL}" -e "${EXPLORER}" "${payload}" & ;;
+    text)     "${TERMINAL}" -e "${EDITOR}" "${payload}" & ;;
+    mail)     "${TERMINAL}" -e "${MAIL_HANDLER}" "${payload}" & ;;
+    *) printf 'opend: no default program category: "%s"' "${target}" >&2 && exit 1;
+  esac
+done

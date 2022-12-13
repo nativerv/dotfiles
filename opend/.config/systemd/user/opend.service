@@ -1,0 +1,24 @@
+[Unit]
+Description=File opening daemon; used to escape `firejail`-ed apps
+Documentation=
+After=ev.service
+Requisite=ev.service
+
+[Service]
+Type=exec
+ExecStart=/bin/sh -c opend
+
+# Sandboxing
+; NoNewPrivileges=yes
+; ProtectKernelTunables=yes
+; ProtectControlGroups=yes
+; RestrictNamespaces=yes
+; LockPersonality=true
+; MemoryDenyWriteExecute=true
+; PrivateUsers=true
+; RestrictNamespaces=true
+; SystemCallArchitectures=native
+; SystemCallFilter=@system-service 
+
+[Install]
+WantedBy=default.target
