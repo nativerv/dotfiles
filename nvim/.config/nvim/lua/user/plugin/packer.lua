@@ -15,7 +15,7 @@ M.setup = function()
       -- local module_string = string.gsub(module_string, '.lua$', '')
       -- Require it (not workint atm for some reason, so i fell back to the :source method below)
       --require(module_string)
-      vim.fn.system { "rm", vim.fn.stdpath 'config' .. '/plugin/packer_compiled.lua' }
+      -- vim.fn.system { "rm", vim.fn.stdpath 'config' .. '/plugin/packer_compiled.lua' }
       local command = ':source ' .. module_path
       vim.cmd(command)
       require('packer').compile()

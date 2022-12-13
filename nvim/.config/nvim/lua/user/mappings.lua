@@ -10,15 +10,20 @@ vim.keymap.set('n', ';', '$'--[[ , { unique = true } ]])
 
 -- Toggle 80 color column
 vim.keymap.set('n', '<leader>ul', function()
-  if vim.opt.colorcolumn == '80' then
-    vim.opt.colorcolumn = '0'
+  if vim.opt.colorcolumn == 80 then
+    vim.o.colorcolumn = 0
   else
-    vim.opt.colorcolumn = '80'
+    vim.o.colorcolumn = 80
   end
-end)
+end, { desc = 'Toggle color column (the 80th line rule)' })
 
 -- Toggle wrap
-vim.keymap.set('n', '<leader>uw', '<cmd>set wrap!<cr>')
+vim.keymap.set(
+  'n',
+  '<leader>uw',
+  '<cmd>set wrap!<cr>',
+  { desc = 'Toggle word wrap' }
+)
 
 -- Unmap <space> so it don't interfere with the leader>
 vim.keymap.set('n', '<space>', '<nop>')
@@ -61,17 +66,6 @@ vim.keymap.set('v', '<M-K>', ":t '><cr>gv=gv")
 vim.keymap.set('i', '<M-J>', '<Esc>:t .-1<cr>==gi')
 vim.keymap.set('v', '<M-J>', ":t '<-1<cr>gv=gv")
 
--- Print highlight group under cursor
-vim.keymap.set(
-  'n',
-  '<F10>',
-  [[
-  :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
-  \ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
-  \ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<cr>
-]]
-)
-
 -- Move cursor on wrapped lines with j/k
 vim.cmd [[
   noremap <silent> <expr> j (v:count == 0 ? 'gj' : 'j')
@@ -88,13 +82,16 @@ vim.cmd [[
   cnoreabbrev q! BufDel!
 ]]
 
+-- Like "p", but adjust the indent to the current line
 vim.keymap.set('n', 'p', ']p')
 
 -- Latex
 -- Toggle compile on save
-vim.keymap.set('n', '<leader>ll', function()
+vim.keymap.set('n', '<leader><leader>lc', function()
   vim.g.compile_tex = not vim.g.compile_tex
-end)
+end, {
+  desc = 'Toggle compile on save (latex)',
+})
 -- Open preview
 vim.keymap.set(
   'n',
@@ -126,3 +123,6 @@ vim.keymap.set('n', '<m-щ>', '<cmd>:bnext<cr>')
 
 -- Search selected text
 vim.cmd [[ vnoremap // "hy:%s/\V<C-r>h//gc<left><left><left>]]
+
+-- Center horizontally
+vim.keymap.set({ 'n', 'v' }, 'z.', ':<C-u>normal! zszH<CR>', { silent = true })

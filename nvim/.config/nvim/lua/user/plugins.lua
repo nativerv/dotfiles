@@ -60,12 +60,18 @@ return require('packer').startup(function(use)
     'tpope/vim-repeat',
     commit = '24afe922e6a05891756ecf331f39a1f6743d3d5a',
   } -- Vimscript
+  -- use {
+  --   'tpope/vim-surround',
+  --   config = function()
+  --     require('user.plugin.vim-surround').setup()
+  --   end,
+  -- } -- Vimscript (surround.nvim)
   use {
-    'tpope/vim-surround',
+    'kylechui/nvim-surround',
     config = function()
-      require('user.plugin.vim-surround').setup()
+      require('user.plugin.nvim-surround').setup()
     end,
-  } -- Vimscript (surround.nvim)
+  }
   use {
     'matze/vim-move',
     commit = '97fc86064eaa95384b5b00f6253e339fba44da5d',
@@ -231,6 +237,27 @@ return require('packer').startup(function(use)
   --   disable = true,
   --   commit = '63af6e72dd3fa840bffb3ebcb8c96970c02e0913',
   -- }
+  -- use {
+  --   'nvim-neorg/neorg',
+  --   config = function()
+  --     require('neorg').setup {
+  --       load = {
+  --         ['core.defaults'] = {},
+  --         ['core.norg.concealer'] = {
+  --           config = { dim_code_blocks = { enabled = true } },
+  --         },
+  --       },
+  --     }
+  --   end,
+  -- }
+  use {
+    'iamcco/markdown-preview.nvim',
+    run = 'cd app && npm install',
+    setup = function()
+      require('user.plugin.markdown-preview').setup()
+    end,
+    ft = { 'markdown' },
+  }
 
   -- Navigation
   use {
@@ -256,6 +283,9 @@ return require('packer').startup(function(use)
   }
   use {
     'bkad/CamelCaseMotion',
+    config = function()
+      require('user.plugin.camel-case-motion').setup()
+    end,
     commit = 'de439d7c06cffd0839a29045a103fe4b44b15cdc',
   } -- Vimscript
   use {

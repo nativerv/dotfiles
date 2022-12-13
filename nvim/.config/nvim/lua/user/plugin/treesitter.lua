@@ -89,10 +89,21 @@ M.setup = function()
           query = '@function.inner',
           desc = 'Select inner part of a function',
         },
-        ['ac'] = { query = '@class.outer', desc = 'Select around class' },
+        ['ac'] = {
+          query = '@class.outer',
+          desc = 'Select around class',
+        },
         ['ic'] = {
           query = '@class.inner',
           desc = 'Select inner part of a class',
+        },
+        ['al'] = {
+          query = '@loop.outer',
+          desc = 'Select around loop',
+        },
+        ['il'] = {
+          query = '@loop.inner',
+          desc = 'Select inner part of a loop',
         },
       },
       -- You can choose the select mode (default is charwise 'v')

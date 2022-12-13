@@ -7,6 +7,19 @@ vim.opt.titlestring = '%t - NeoVim' -- Title template
 vim.opt.title = true -- Enable title
 vim.opt.titleold = '' -- ?
 
+-- vim.g.clipboard = {
+--   name = 'xclip-xfce4-clipman',
+--   copy = {
+--     ['+'] = 'xclip -selection clipboard',
+--     ['*'] = 'xclip -selection primary',
+--   },
+--   paste = {
+--     ['+'] = 'xclip -selection clipboard -o',
+--     ['*'] = 'xclip -selection primary -o',
+--   },
+--   cache_enabled = 1,
+-- }
+
 -- Inner world
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
@@ -44,13 +57,11 @@ vim.opt.undodir = undodir_path -- Enable persistent undo
 vim.opt.undofile = true -- Enable persistent undo
 vim.opt.laststatus = 3 -- Use only one statusline (without lualine)
 vim.g.netrw_browsex_viewer = 'cd %:h && xdg-open'
-vim.o.conceallevel = 3
+vim.o.conceallevel = 2
 
 vim.g.compile_tex = true -- Compile latex on save by default
 
 -- Plugin world
--- camelcasemotion
-vim.g.camelcasemotion_key = '<leader>'
 
 -- vim-move
 vim.g.move_key_modifier = 'M-C'

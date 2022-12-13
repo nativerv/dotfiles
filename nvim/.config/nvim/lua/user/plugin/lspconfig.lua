@@ -27,6 +27,9 @@ M.setup = function()
 
     -- Define commands
     vim.api.nvim_create_user_command('Format', vim.lsp.buf.formatting, {})
+    -- vim.api.nvim_create_user_command('Format', vim.lsp.buf.format, {
+    --   range = true,
+    -- })
 
     -- Define mappings (for lsp buffers only)
     local map = vim.keymap.set

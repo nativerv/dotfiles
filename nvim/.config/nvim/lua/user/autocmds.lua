@@ -11,6 +11,39 @@ vim.api.nvim_create_autocmd({ 'BufWritePre' }, {
   end,
 })
 
+local function get_visual_text()
+  local line_start, col_start = (vim.fn.getpos 'v')[2], (vim.fn.getpos 'v')[3]
+  local line_end, col_end = (vim.fn.getpos '.')[2], (vim.fn.getpos '.')[3]
+
+  local lines = vim.fn.getline(line_start, line_end)
+  if #lines == 0 then
+    return ''
+  end
+
+  lines[1] = string.sub(lines[1], col_start, #lines[1])
+  lines[#lines] = string.sub(lines[#lines], 1, col_end)
+
+  return table.concat(lines, '\n')
+end
+
+-- | Put visual selection to OS's `primary` selection
+vim.api.nvim_create_autocmd({ 'CursorMoved' }, {
+  pattern = '*',
+  group = vim.api.nvim_create_augroup(
+    'nrv#visual_selection_to_primary',
+    { clear = true }
+  ),
+  callback = function()
+    if string.lower(vim.fn.mode()) == 'v' then
+      vim.fn.system {
+        'sh',
+        '-c',
+        "echo '" .. get_visual_text() .. "' | xclip -in -selection primary",
+      }
+    end
+  end,
+})
+
 -- Disable conceallevel (does not fully work)
 --
 -- vim.api.nvim_create_autocmd({ 'BufEnter' }, {

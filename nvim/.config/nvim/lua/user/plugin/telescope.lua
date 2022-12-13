@@ -5,7 +5,7 @@ M.setup = function()
   config.extensions = {}
   config.defaults = {
     file_ignore_patterns = {
-      '.git'
+      '.git',
     },
     -- prompt_prefix = ' ',
     -- prompt_prefix = ' ',
@@ -22,24 +22,40 @@ M.setup = function()
     },
   }
   config.extensions['ui-select'] = {
-    require("telescope.themes").get_dropdown {
+    require('telescope.themes').get_dropdown {
       -- even more opts
-    }
+    },
   }
 
   -- Setup Telescope with the `config`
-  require'telescope'.setup (config)
+  require('telescope').setup(config)
 
   -- Find files (Ctrl-P)
-  vim.keymap.set('n', '<leader>ff', function () require"telescope.builtin".find_files({ hidden = true }) end)
-  vim.keymap.set('n', '<C-p>',      function () require"telescope.builtin".find_files({ hidden = true }) end)
+  vim.keymap.set('n', '<leader>ff', function()
+    require('telescope.builtin').find_files { hidden = true }
+  end, { desc = 'Find files (ctrl-p)' })
+  vim.keymap.set('n', '<C-p>', function()
+    require('telescope.builtin').find_files { hidden = true }
+  end, { desc = 'Find files' })
   -- The rest junk
-  vim.keymap.set('n', '<leader>fb', function () require"telescope.builtin".current_buffer_fuzzy_find() end)
-  vim.keymap.set('n', '<leader>fh', function () require"telescope.builtin".help_tags() end)
-  vim.keymap.set('n', '<leader>ft', function () require"telescope.builtin".tags() end)
-  vim.keymap.set('n', '<leader>fp', function () require"telescope.builtin".live_grep() end)
-  vim.keymap.set('n', '<leader>?',  function () require"telescope.builtin".oldfiles() end)
-  vim.keymap.set('n', '<leader>fd', function () require"telescope.builtin".diagnostics() end)
+  vim.keymap.set('n', '<leader>fb', function()
+    require('telescope.builtin').current_buffer_fuzzy_find()
+  end, { desc = 'Find in current buffer' })
+  vim.keymap.set('n', '<leader>fh', function()
+    require('telescope.builtin').help_tags()
+  end, { desc = 'Find help page' })
+  vim.keymap.set('n', '<leader>ft', function()
+    require('telescope.builtin').tags()
+  end, { desc = 'Find ctags' })
+  vim.keymap.set('n', '<leader>fp', function()
+    require('telescope.builtin').live_grep()
+  end, { desc = 'Find in files (live grep)' })
+  vim.keymap.set('n', '<leader>?', function()
+    require('telescope.builtin').oldfiles()
+  end, { desc = '' })
+  vim.keymap.set('n', '<leader>fd', function()
+    require('telescope.builtin').diagnostics()
+  end, { desc = 'Find diagnostics' })
 end
 
 return M
