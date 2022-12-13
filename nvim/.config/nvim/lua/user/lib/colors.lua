@@ -31,13 +31,16 @@ function M.blend(fg, bg, alpha)
   )
 end
 
-function M.darken(hex, amount, bg)
-  return M.blend(hex, bg or M.bg, math.abs(amount))
+---@param color (number) Color to lighten
+---@param amount (number) Amount, 0-N
+---@param bg (number|nil) Some shit that you don't need to specify, 0-N
+function M.darken(color, amount, bg)
+  return M.blend(color, bg or 0xffffff, math.abs(amount))
 end
 
 ---@param color (number) Color to lighten
 ---@param amount (number) Amount, 0-N
----@param fg (number) Amount, 0-N
+---@param fg (number|nil) Some shit that you don't need to specify, 0-N
 function M.lighten(color, amount, fg)
   return M.blend(color, fg or 0x000000, math.abs(amount))
 end
