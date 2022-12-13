@@ -8,16 +8,17 @@
 
 set -e
 
-DMENU_PASS_CURRENT="${DMENU_PASS_CURRENT:-'dmenu_pass_current'}"
+PASSWORD_STORE_DIR="${PASSWORD_STORE_DIR:-"${HOME}/.local/share/pass"}"
+DMENU_PASS_CURRENT="${DMENU_PASS_CURRENT:-"dmenu_pass_current"}"
 
 cut_pass_dir="$(printf 's|^%s/||g; s|.gpg$||g' "${PASSWORD_STORE_DIR}")"
 filter_dmenu_pass_current="${DMENU_PASS_CURRENT}"
 
 pass_file="$(
   find "${PASSWORD_STORE_DIR}" -iname "*.gpg" \
-    | sed --posix -E "${cut_pass_dir}" \
-    | grep -vE "${filter_dmenu_pass_current}" \
-    | dmenu -l 10 -p "Copy a password: "
+    | sed "${cut_pass_dir}" \
+    | grep -v "${filter_dmenu_pass_current}" \
+    | dmenu -l 10 -p "Select field: "
 )"
 
 pass show "${pass_file}" | pass insert --multiline "${DMENU_PASS_CURRENT}" >/dev/null 2>&1
