@@ -21,3 +21,8 @@ set keymap vi-command
 
 # Switch to insert before giving readline to the user
 set keymap vi-insert
+
+# Autopairs
+# Commented that for now as it is only annoys me
+# "(": "\C-v()\e[D"
+# "\"": "\C-v\"\C-v\"\e[D"
