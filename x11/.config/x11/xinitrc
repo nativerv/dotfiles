@@ -18,7 +18,7 @@
 #xinit-config-hot-updaters &
 
 # Load Xresources database
-xrdb -I"$HOME" "${XDG_CONFIG_HOME:-$HOME/.config}/x11/xresources"
+xrdb -I"${HOME}" "${XDG_CONFIG_HOME:-${HOME}/.config}/x11/xresources"
 
 # Export DISPLAY and XAUTHORITY to systemd-user
 [ -x /etc/X11/xinit/xinitrc.d/50-systemd-user.sh ] \
@@ -29,7 +29,11 @@ command -v systemctl >/dev/null 2>&1 \
   && systemctl --user start "xsession@$(echo "${DISPLAY}" | tr -d ':').target" >/dev/null 2>&1
 
 # Start WM
+# "${XDG_CACHE_DIR}/xmonad/xmonad-x86_64-linux"
 "${HOME}/.xmonad/xmonad-x86_64-linux"
+# xmonad
+# dwm
+# qtile start -b wayland
 
 # Tell my systemd services that they no longer can start
 command -v systemctl >/dev/null 2>&1 \
