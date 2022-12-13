@@ -4,13 +4,28 @@
 # ${0}   ${1}    ${2}    ${3} ${4} ${5}
 # script appname summary body icon urgency
 
+XDG_DATA_HOME="${XDG_DATA_HOME:-"${HOME}/.local/share"}"
+             
+script="${0}"
+appname="${1}"
+summary="${2}"
+body="${3}"
+icon="${4}"
+urgency="${5}"
+
 # Get app name:
 # zenity --info --text "'${1}' - '${2}' - '${3}' - '${4}' - '${5}'" &
 
 # Ignore list - play no sound for these
-[ "${1}" = "Telegram Desktop" ] && exit
-[ "${1}" = "flameshot" ] && exit
-[ "${1}" = "setwall" ] && exit
+[ "${appname}" = "Telegram Desktop" ] && exit
+[ "${appname}" = "flameshot" ] && exit
+[ "${appname}" = "setwall" ] && exit
 
-paplay "${HOME}/.local/share/dunst/sounds/Iapetus.ogg"
+case "${urgency}" in
+  "LOW") exit ;;
+  "NORMAL"|"CRITICAL") paplay "${XDG_DATA_HOME}/dunst/sounds/Iapetus.ogg" ;;
+  *) ;;
+esac
+
+
 
