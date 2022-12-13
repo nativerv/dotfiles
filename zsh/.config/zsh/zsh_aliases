@@ -22,7 +22,7 @@ alias nf="neofetch"
 alias pf="pfetch"
 alias af="afetch"
 alias nb="newsboat"
-alias zt="zathura"
+alias zat="zathura"
 alias fj="firejail "
 alias nfj="firejail --noprofile "
 alias dfj="firejail --profile=default "
@@ -37,6 +37,7 @@ alias scu="systemctl --user"
 alias doc="docker"
 alias bj="bubblejail"
 alias dt="date +%F_%H-%M-%S | head -c-1"
+alias gr='grep --recursive --line-number'
 
 # Noglobs
 alias tl='noglob tl'
@@ -97,7 +98,7 @@ alias rs="reset"
 alias zshplug="find "${ZDOTDIR}/plugins" -type d -exec test -e '{}/.git' ';' -print0 | xargs -I {} -0 git -C {} pull -q"
 
 # Aliases for ls
-alias ls='ls --time-style=long-iso --color=auto --group-directories-first ' 
+alias ls='ls --time-style=long-iso --color=auto --group-directories-first' 
 alias ll='ls -lF'    # Table with file type indicators
 alias lla='ls -alF'  # Table with all and file type indicators
 alias lld='ls -aldF' # Table with exact file (for looking at directories, not their contents)

@@ -29,9 +29,10 @@ zmodload zsh/zprof
 
 # Enable pywal colors in terminal by pasting 
 # it's escape sequences
-# (cat ~/.cache/wal/sequences &)
+pywal_sequences_path="${XDG_CACHE_HOME:-$HOME/.cache}/wal/sequences"
+[ -s "${pywal_sequences_path}" ] && (cat ~/.cache/wal/sequences &)
 
-# Enable pywal colors in terminal by pasting 
+# Enable pywal colors in TTY by pasting 
 # it's escape sequences
 pywal_colors_path="${XDG_CACHE_HOME:-$HOME/.cache}/wal/colors-tty.sh"
 [ -s "${pywal_colors_path}" ] && source "${pywal_colors_path}"

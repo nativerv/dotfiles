@@ -14,7 +14,11 @@ XDG_DATA_HOME="${XDG_DATA_HOME:-"${HOME}/.local/share"}"
 XDG_CACHE_HOME="${XDG_CACHE_HOME:-"${HOME}/.cache"}"
 
 # Export environment.d env vars to zsh hacky way
-. <(cat "${XDG_CONFIG_HOME}"/environment.d/*.conf | sed -E "s/^([a-zA-Z])/export \1/g")
+source <(
+  ls -v "${XDG_CONFIG_HOME}"/environment.d/* \
+    | xargs cat \
+    | sed -E "s/^([a-zA-Z])/export \1/g"
+)
 
 #### XDG stuff ====================================
 
@@ -71,7 +75,7 @@ if_bin_exists 'calc' && ! [ -z "${CALCHISTFILE+false}" ] && ensure_dir "${CALCHI
 ### Language-specific stuff =======================
 
 # Setup Rust
-[ -s "${CARGO_HOME}/env" ] && source "${CARGO_HOME}/env"
+[ -s "${CARGO_HOME}/env" -a ! -z "${CARGO_HOME+false}" ] && source "${CARGO_HOME}/env"
 
 # Setup NVM and NodeJS
 # export NVM_DIR="${XDG_DATA_HOME}/nvm"
