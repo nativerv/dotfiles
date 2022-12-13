@@ -1,6 +1,7 @@
 -- TODO: write a plugin that runs curls
 -- TODO: install todo-comments
 -- TODO: look at how vim-illuminate handles treesitter & lsp support
+-- TODO: maybe refactor 'user.plugin.lspconfig' exporting on_attach and stuff with LspAttach autocmd
 
 return require('packer').startup(function(use)
   -- Packer
@@ -146,6 +147,38 @@ return require('packer').startup(function(use)
     'nvim-treesitter/nvim-treesitter-textobjects',
     requires = 'nvim-treesitter/nvim-treesitter',
   }
+  use {
+    'windwp/nvim-ts-autotag',
+    requires = 'nvim-treesitter/nvim-treesitter',
+    config = function()
+      require('nvim-treesitter.configs').setup {
+        autotag = {
+          enable = true,
+        },
+        enable_rename = false,
+      }
+    end,
+    ft = {
+      'html',
+      'javascript',
+      'typescript',
+      'javascriptreact',
+      'typescriptreact',
+      'svelte',
+      'vue',
+      'tsx',
+      'jsx',
+      'rescript',
+      'xml',
+      'php',
+      'markdown',
+      'glimmer',
+      'handlebars',
+      'hbs',
+      'htmldjango',
+    },
+    commit = 'fdefe46c6807441460f11f11a167a2baf8e4534b',
+  }
 
   -- Language Server Protocol
   use {
@@ -190,6 +223,27 @@ return require('packer').startup(function(use)
     'RRethy/vim-illuminate',
     config = function()
       require('user.plugin.illuminate').setup()
+    end,
+  }
+  use {
+    'https://git.sr.ht/~whynothugo/lsp_lines.nvim',
+    config = function()
+      require('user.plugin.lsp-lines').setup()
+    end,
+    commit = 'ec98b45c8280e5ef8c84028d4f38aa447276c002',
+  }
+  use {
+    'lvimuser/lsp-inlayhints.nvim',
+    config = function()
+      require('user.plugin.lsp-inlayhints').setup()
+    end,
+    commit = 'a28c51a6362e3faa17f67749436cb5c8b55dcc6d',
+  }
+  use {
+    'zbirenbaum/neodim',
+    event = 'LspAttach',
+    config = function(eblan)
+      require'user.plugin.neodim'.setup()
     end,
   }
 
@@ -257,6 +311,7 @@ return require('packer').startup(function(use)
       require('user.plugin.markdown-preview').setup()
     end,
     ft = { 'markdown' },
+    commit = '02cc3874738bc0f86e4b91f09b8a0ac88aef8e96',
   }
 
   -- Navigation
@@ -329,6 +384,14 @@ return require('packer').startup(function(use)
   use {
     'ojroques/nvim-bufdel',
     commit = 'af537a915b8c60c6dcb6416e0e9382a5bed94bb3',
+  }
+  use {
+    'ghillb/cybu.nvim',
+    requires = { 'nvim-tree/nvim-web-devicons', 'nvim-lua/plenary.nvim' },
+    config = function()
+      require('user.plugin.cybu').setup()
+    end,
+    commit = '43acf0ffb51982f9217f3ebfb793d0a0adbba93b',
   }
   --use { 'lukas-reineke/indent-blankline.nvim' }
 end)

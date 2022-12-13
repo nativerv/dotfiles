@@ -118,6 +118,29 @@ M.setup = function()
       -- `ap`.
       include_surrounding_whitespace = false,
     },
+    swap = {
+      enable = true,
+      swap_next = {
+        ['<leader><leader>sp'] = {
+          query = '@parameter.inner',
+          desc = 'Swap current parameter with next',
+        },
+        ['<leader><leader>sf'] = {
+          query = '@field',
+          desc = 'Swap current field with next',
+        },
+      },
+      swap_previous = {
+        ['<leader><leader>sP'] = {
+          query = '@parameter.inner',
+          desc = 'Swap current parameter with previous',
+        },
+        ['<leader><leader>sF'] = {
+          query = '@field',
+          desc = 'Swap current field with previous',
+        },
+      },
+    },
   }
 
   -- Highlight the @foo.bar capture group with the "Identifier" highlight group.
