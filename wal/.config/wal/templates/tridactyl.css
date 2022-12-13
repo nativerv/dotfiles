@@ -1,0 +1,13 @@
+:root {{
+  --tridactyl-bg: {background} !important;
+  --tridactyl-fg: {foreground} !important;
+  --tridactyl-header-first-bg: {color1} !important;
+  --tridactyl-header-second-bg: {color1} !important;
+  --tridactyl-header-third-bg: {color1} !important;
+  --tridactyl-cmdl-bg: {background} !important;
+  --tridactyl-of-bg: {color2} !important;
+}}
+
+/* .sectionHeader {{ */
+/*   border-top: 1px solid {color2} !important; */
+/* }} */

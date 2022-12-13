@@ -1,0 +1,20 @@
+# Background
+set default-bg "{background}"
+set completion-bg "{background}"
+set notification-bg "{background}"
+set index-bg "{background}"
+set completion-group-bg "{background}"
+set inputbar-bg "{background}"
+
+# Foreground
+set default-fg "{foreground}"
+set completion-highlight-fg "{background}"
+set index-active-fg "{background}"
+set render-loading-fg "{background}"
+set completion-group-fg "{color1}"
+
+# Selections
+set index-active-bg "{color2}"
+set highlight-bg "{color2}"
+set highlight-color "{color2}"
+set completion-highlight-bg "{color2}"
