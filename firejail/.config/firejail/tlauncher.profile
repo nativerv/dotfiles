@@ -21,6 +21,9 @@ noblacklist ${HOME}/.tlauncher
 mkdir ${HOME}/.tlauncher
 whitelist ${HOME}/.tlauncher
 
+blacklist /srv
+blacklist /media
+
 include allow-java.inc
 include allow-bin-sh.inc
 

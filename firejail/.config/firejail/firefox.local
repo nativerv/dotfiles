@@ -58,9 +58,13 @@ include allow-nvim.inc
 noblacklist ${HOME}/.config/tridactyl
 whitelist ${HOME}/.config/tridactyl
 
-# Allow mitmproxy
+# Allow mitmproxy (for certificate)
 noblacklist ${HOME}/.config/mitmproxy
 whitelist ${HOME}/.config/mitmproxy
+
+# Allow syncthing certificate
+noblacklist ${HOME}/.config/syncthing/https-cert.pem
+whitelist ${HOME}/.config/syncthing/https-cert.pem
 
 dbus-user.own org.mozilla.Firefox.*
 dbus-user.own org.mozilla.firefox.*

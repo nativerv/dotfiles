@@ -10,8 +10,17 @@ blacklist ${HOME}/.Xauthority
 # Allow nvim
 noblacklist ${HOME}/.config/nvim
 whitelist ${HOME}/.config/nvim
+
+# This line actually fixes markdown-preview.nvim `npm install`
+#ignore read-only ${HOME}/.local/share/nvim
+
 noblacklist ${HOME}/.local/share/nvim
 whitelist ${HOME}/.local/share/nvim
+
+include allow-ev.inc
+
+noblacklist ${HOME}/dox/notes
+whitelist ${HOME}/dox/notes
 
 # Allow XDG dirs owned by node, npm and yarn
 noblacklist ${HOME}/.config/nodejs

@@ -1,6 +1,5 @@
 #include allow-steam.inc
 
-
 noblacklist /usr/share/zenity
 whitelist /usr/share/zenity
 whitelist /usr/lib/*
@@ -32,7 +31,39 @@ whitelist /media/win_d_drive/Games
 
 noblacklist /media/win_d_drive/vg
 whitelist /media/win_d_drive/vg
- 
+
+# Block srv (and steam)
+blacklist /srv
+
+# Block opt
+blacklist /opt
+
+# Block mnt
+blacklist /mnt
+
+# Block writing to sus stuff
+read-only ${HOME}/dot
+read-only ${HOME}/.config
+blacklist /run/firejail/mnt/dns-etc/docker
+blacklist /run/firejail/mnt/dns-etc/docker/key.json
+blacklist /run/docker.pid
+blacklist /run/docker
+blacklist /run/NetworkManager/system-connections/docker0.nmconnection
+blacklist /run/docker.sock
+blacklist /run/systemd/transient/docker-a4b39d043c22c18e405d565ceccb22330692e36959bdf5370fc7aa16f0cbf0c1.scope.d
+blacklist /run/systemd/transient/docker-a4b39d043c22c18e405d565ceccb22330692e36959bdf5370fc7aa16f0cbf0c1.scope.d/50-DeviceAllow.conf
+blacklist /run/systemd/transient/docker-a4b39d043c22c18e405d565ceccb22330692e36959bdf5370fc7aa16f0cbf0c1.scope.d/50-DevicePolicy.conf
+blacklist /run/systemd/transient/docker-a4b39d043c22c18e405d565ceccb22330692e36959bdf5370fc7aa16f0cbf0c1.scope
+blacklist /run/systemd/units/invocation:docker-a4b39d043c22c18e405d565ceccb22330692e36959bdf5370fc7aa16f0cbf0c1.scope
+blacklist /run/systemd/units/invocation:docker.service
+
+# But allow lutris dirs
+read-write ${HOME}/.config/lutris
+
+read-only ${HOME}/.local/share/*
+read-write ${HOME}/.local/share/lutris
+
+# Do not need controller support
 private-dev
 
 # vim:syntax=firejail

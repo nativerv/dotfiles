@@ -5,15 +5,8 @@ noblacklist ${HOME}/edu
 whitelist ${HOME}/edu
 noblacklist ${HOME}/dot
 whitelist ${HOME}/dot
-noblacklist ${HOME}/desk
-noblacklist ${HOME}/desk/tree-sitter
-whitelist ${HOME}/desk/tree-sitter
-
-whitelist ${HOME}/.cache/yay
 read-only ${HOME}/dot
 #ignore read-only ${HOME}/.local/share/nvim
 #read-only ${HOME}/.local/share/nvim/site/pack
 #read-write ${HOME}/.local/share/nvim/tree-sitter*
-whitelist-ro ${HOME}/.local/bin/njq
-blacklist /media
 

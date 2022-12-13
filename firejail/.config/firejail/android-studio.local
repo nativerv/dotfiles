@@ -1,8 +1,15 @@
 ignore noexec ${HOME}
 ignore private-cache
+ignore nogroups
+ignore include allow-ssh.inc
 
 include disable-xdg.inc
-include allow-pr.inc
+#include allow-pr.inc
+
+noblacklist ${HOME}/edu
+noblacklist ${HOME}/pr
+
+include whitelist-common.inc
 #include allow-edu.inc
 
 noblacklist ${HOME}/.config/Google

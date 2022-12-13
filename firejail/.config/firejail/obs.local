@@ -4,6 +4,10 @@ include allow-bin-sh.inc
 noblacklist ${HOME}/.config/obs-studio
 whitelist ${HOME}/.config/obs-studio
 
+include whitelist-common.inc
+include whitelist-var-common.inc
+#include whitelist-usr-share-common.inc
+
 # Whitelist video dir
 mkdir ${HOME}/vid/obs
 include allow-vid-obs.inc

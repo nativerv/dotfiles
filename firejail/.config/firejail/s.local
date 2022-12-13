@@ -1,0 +1,4 @@
+include allow-ev.inc
+whitelist ${HOME}/.local/bin/ev
+ignore noexec ${HOME}
+ignore include disable-exec.inc
