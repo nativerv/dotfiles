@@ -1,0 +1,6 @@
+#!/bin/sh
+
+XDG_DATA_HOME="${XDG_DATA_HOME:-"${HOME}/.local/share"}"
+
+# credit: https://github.com/rwxrob/dot/blob/main/scripts/myip
+dig +short 'myip.opendns.com' @resolver1.opendns.com | xargs notify-send -i "${XDG_DATA_HOME}/icons/hicolor/256x256/notifications/ip-address-256x256.png" 'IP Address'

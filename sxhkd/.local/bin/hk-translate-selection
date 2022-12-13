@@ -1,0 +1,16 @@
+#!/bin/sh
+
+XDG_DATA_HOME="${XDG_DATA_HOME:-"${HOME}/.local/share"}"
+TL_DATA_HOME="${XDG_DATA_HOME}/tl"
+
+primary="$(xclip -out -selection primary)"
+translation="$(tl "${primary}")"
+
+# Guard for dictionary translation
+[ "$(printf '%s' "${translation}" | wc -l)" -gt 1 ] \
+  && translation="$(printf '%s' "${translation}" | head -n1 | awk '{ print $2 }')"
+
+notify-send \
+  -i "${TL_DATA_HOME}/tl_icon.png" \
+  "Translation" \
+  "\n\"${translation}\""

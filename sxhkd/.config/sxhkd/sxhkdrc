@@ -34,6 +34,9 @@ super + r ; r
 super + r ; t
   musicfind send
 
+super + r ; c
+  musicfind abort
+
 ### Screenshot 
 
 Print
@@ -64,6 +67,20 @@ super + shift + p:
 # Pass: type from selected
 super + ctrl + p:
   dmenu_pass_current
+
+### Translate selection
+super + u ; {t}:
+  {hk-translate-selection}
+
+### Display current public ip address
+super + u ; {i}:
+  {hk-get-public-ip}
+
+### Notifications
+super + n ; {n,c}:
+  {dunstctl context,dunstctl close}
+super + n ; {super + n,super + c}:
+  {dunstctl context,dunstctl close}
 
 ### Music
 
