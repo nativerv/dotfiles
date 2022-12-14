@@ -36,7 +36,10 @@ M.setup = function()
   }
 
   vim.api.nvim_create_autocmd('LspAttach', {
-    group = vim.api.nvim_create_augroup('nrv#lsp-inlayhints-attach', {}),
+    group = vim.api.nvim_create_augroup(
+      'nrv#lsp-inlayhints_attach',
+      { clear = true }
+    ),
     callback = function(args)
       if not (args.data and args.data.client_id) then
         return

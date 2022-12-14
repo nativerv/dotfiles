@@ -72,7 +72,10 @@ M.setup = function()
   end, { desc = 'Next buffer' })
 
   -- vim.api.nvim_create_autocmd('BufWinEnter', {
-  --   group = vim.api.nvim_create_augroup('nrv#cybu_show_on_buffer_switch', {}),
+  --   group = vim.api.nvim_create_augroup(
+  --     'nrv#cybu_show_on_buffer_switch',
+  --     { clear = true }
+  --   ),
   --   callback = function()
   --     -- require('cybu').populate_state()
   --     -- require('cybu').show_cybu_win(require('cybu').get_cybu_win_pos())

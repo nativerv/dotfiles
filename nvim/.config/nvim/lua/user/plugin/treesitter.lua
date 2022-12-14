@@ -83,7 +83,7 @@ M.setup = function()
         -- you can optionally set descriptions to the mappings (used in the desc parameter of nvim_buf_set_keymap)
         ['af'] = {
           query = '@function.outer',
-          desc = 'Select around function',
+          desc = 'Select around a function',
         },
         ['if'] = {
           query = '@function.inner',
@@ -91,7 +91,7 @@ M.setup = function()
         },
         ['ac'] = {
           query = '@class.outer',
-          desc = 'Select around class',
+          desc = 'Select around a class',
         },
         ['ic'] = {
           query = '@class.inner',
@@ -99,11 +99,19 @@ M.setup = function()
         },
         ['al'] = {
           query = '@loop.outer',
-          desc = 'Select around loop',
+          desc = 'Select around a loop',
         },
         ['il'] = {
           query = '@loop.inner',
           desc = 'Select inner part of a loop',
+        },
+        ['ia'] = {
+          query = '@parameter.inner',
+          desc = 'Select inner part of a parameter',
+        },
+        ['aa'] = {
+          query = '@parameter.outer',
+          desc = 'Select around a parameter',
         },
       },
       -- You can choose the select mode (default is charwise 'v')

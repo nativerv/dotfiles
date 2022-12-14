@@ -12,5 +12,5 @@
 ([
   (code_span_delimiter)
 ] @conceal @text.literal
-(#set! conceal " ")
+(#set! conceal "")
 )
