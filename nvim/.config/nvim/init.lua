@@ -11,9 +11,6 @@
 -- Cache lua to improve startuptime - needs to be loaded as early as possible
 pcall(require, 'impatient')
 
--- Preconfig
--- require 'user.utils'       -- Load util functions
-
 -- Begin config
 require 'user.bootstrap'   -- Ensure `packer.nvim` is installed - for new systems
 require 'user.plugins'     -- Load plugins

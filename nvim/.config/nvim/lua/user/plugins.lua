@@ -1,5 +1,4 @@
 -- TODO: write a plugin that runs curls
--- TODO: install todo-comments
 -- TODO: look at how vim-illuminate handles treesitter & lsp support
 -- TODO: maybe refactor 'user.plugin.lspconfig' exporting on_attach and stuff with LspAttach autocmd
 

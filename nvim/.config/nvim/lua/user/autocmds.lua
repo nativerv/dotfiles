@@ -77,7 +77,9 @@ vim.api.nvim_create_autocmd({ 'BufWinEnter' }, {
     { clear = true }
   ),
   callback = function()
-    vim.cmd [[ normal! g`"zz ]]
+    if vim.fn.line '\'"' <= vim.fn.line '$' then
+      vim.cmd [[ normal! g`"zz ]]
+    end
   end,
 })
 
