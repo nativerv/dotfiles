@@ -126,3 +126,12 @@ vim.cmd [[ vnoremap // "hy:%s/\V<C-r>h//gc<left><left><left>]]
 
 -- Center horizontally
 vim.keymap.set({ 'n', 'v' }, 'z.', ':<C-u>normal! zszH<CR>', { silent = true })
+
+-- Scroll history in command mode
+vim.keymap.set('c', '<c-j>', '<down>')
+vim.keymap.set('c', '<c-k>', '<up>')
+
+-- Wrap cursor on h and l as with <space> and <bs>
+-- Do i want this or not? 🤔
+-- vim.keymap.set('n', 'l', '<space>')
+-- vim.keymap.set('n', 'h', '<bs>')

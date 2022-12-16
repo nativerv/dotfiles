@@ -116,16 +116,14 @@ M.setup = function()
   }
 
   -- Extend `on_attach` with navic
-  local lspconfig_config = require 'user.plugin.lspconfig'
-  local old_on_attach = lspconfig_config.on_attach
-  lspconfig_config.on_attach = function(client, bufnr)
-    old_on_attach(client, bufnr)
-    if client.server_capabilities.documentSymbolProvider then
-      require('nvim-navic').attach(client, bufnr)
+  require('user.plugin.lspconfig').extend_on_attach(
+    require 'user.plugin.lspconfig',
+    function(client, bufnr)
+      if client.server_capabilities.documentSymbolProvider then
+        require('nvim-navic').attach(client, bufnr)
+      end
     end
-  end
-  -- Update `on_attach` in server configs
-  require('user.plugin.lspconfig').configure_servers()
+  )
 
   -- Set the winbar to the navic stuff
   vim.o.winbar =

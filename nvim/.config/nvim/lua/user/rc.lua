@@ -21,3 +21,13 @@ vim.api.nvim_set_hl(
     foreground = ts_literal.foreground,
   }
 )
+
+-- Define RenderMarkdown command to render current file with pandoc
+vim.api.nvim_create_user_command('RenderMarkdown', function()
+  local render_cmd = 'silent !render -o %:p'
+  vim.cmd(render_cmd)
+end, {
+  nargs = 0,
+  complete = nil,
+  bar = true,
+})

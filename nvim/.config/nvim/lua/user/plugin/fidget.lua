@@ -5,8 +5,8 @@ M.setup = function()
 
   require('fidget').setup {
     text = {
-      spinner = 'pipe', -- animation shown when tasks are ongoing
-      done = '✔', -- character shown when all tasks are complete
+      spinner = 'dots', -- animation shown when tasks are ongoing
+      done = '✓', -- character shown when all tasks are complete
       commenced = 'Started', -- message shown when task starts
       completed = 'Completed', -- message shown when task completes
     },
@@ -32,7 +32,7 @@ M.setup = function()
       -- function to format fidget title
       fidget = function(fidget_name, spinner)
         return string.format(
-          '%s %s%s',
+          '[%s] %s%s',
           spinner,
           fidget_name,
           (' '):rep(left_margin)

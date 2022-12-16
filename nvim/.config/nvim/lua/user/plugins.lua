@@ -4,7 +4,7 @@
 
 return require('packer').startup {
   config = {
-    snapshot_path = vim.fn.stdpath 'config' .. '/snapshots'
+    snapshot_path = vim.fn.stdpath 'config' .. '/snapshots',
   },
   function(use)
     -- Packer
@@ -183,7 +183,7 @@ return require('packer').startup {
       commit = 'fdefe46c6807441460f11f11a167a2baf8e4534b',
     }
 
-    -- Language Server Protocol
+    -- LSP -- Language Server Protocol
     use {
       'neovim/nvim-lspconfig',
       after = { 'neodev.nvim' },
@@ -260,6 +260,13 @@ return require('packer').startup {
       end,
       commit = '44585a0c0085765195e6961c15529ba6c5a2a13b',
     }
+    use {
+      'lspcontainers/lspcontainers.nvim',
+      after = { 'nvim-lspconfig' },
+      setup = function()
+        require('user.plugin.lspcontainers').setup()
+      end,
+    }
 
     -- Syntax highlighing plugins
     use {
@@ -304,19 +311,6 @@ return require('packer').startup {
     --   end,
     --   disable = true,
     --   commit = '63af6e72dd3fa840bffb3ebcb8c96970c02e0913',
-    -- }
-    -- use {
-    --   'nvim-neorg/neorg',
-    --   config = function()
-    --     require('neorg').setup {
-    --       load = {
-    --         ['core.defaults'] = {},
-    --         ['core.norg.concealer'] = {
-    --           config = { dim_code_blocks = { enabled = true } },
-    --         },
-    --       },
-    --     }
-    --   end,
     -- }
     use {
       'iamcco/markdown-preview.nvim',

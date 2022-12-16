@@ -53,6 +53,18 @@ M.setup = function()
   configs.context_commentstring = {
     enable = true,
   }
+
+  configs.incremental_selection = {
+    enable = true,
+    keymaps = {
+      init_selection = 'gsi',
+      node_incremental = 'gsn',
+      node_decremental = 'gsN',
+      scope_incremental = 'gss',
+      scope_decremental = 'gsS',
+    }
+  }
+
   configs.playground = {
     enable = true,
     disable = {},
@@ -89,11 +101,27 @@ M.setup = function()
           query = '@function.inner',
           desc = 'Select inner part of a function',
         },
-        ['ac'] = {
+        ['acc'] = {
+          query = '@comment.outer',
+          desc = 'Select around a line comment',
+        },
+        ['icc'] = {
+          query = '@comment.inner',
+          desc = 'Select inner part of a line comment',
+        },
+        ['aca'] = {
+          query = '@comment.adjacent',
+          desc = 'Select around a sequence of line comments',
+        },
+        -- ['ica'] = {
+        --   query = '@comment.adjacent',
+        --   desc = 'Select inner part of a sequence of line comments',
+        -- },
+        ['as'] = {
           query = '@class.outer',
           desc = 'Select around a class',
         },
-        ['ic'] = {
+        ['is'] = {
           query = '@class.inner',
           desc = 'Select inner part of a class',
         },
