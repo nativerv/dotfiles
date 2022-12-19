@@ -73,14 +73,9 @@ vim.cmd [[
 ]]
 
 -- Close current buffer instead of window
---vim.keymap.set('c', 'wq', 'w<bar>BufDel')
---vim.keymap.set('c', 'q', 'BufDel')
---vim.keymap.set('c', 'q!', 'BufDel!')
-vim.cmd [[
-  cnoreabbrev wq w<bar>BufDel
-  cnoreabbrev q BufDel
-  cnoreabbrev q! BufDel!
-]]
+vim.cmd.cnoreabbrev('wq', 'w<bar>BufDel')
+vim.cmd.cnoreabbrev('q', 'BufDel')
+vim.cmd.cnoreabbrev('q!', 'BufDel!')
 
 -- Like "p", but adjust the indent to the current line
 vim.keymap.set('n', 'p', ']p')
@@ -122,7 +117,7 @@ vim.keymap.set('n', '<m-ш>', '<cmd>:bprev<cr>')
 vim.keymap.set('n', '<m-щ>', '<cmd>:bnext<cr>')
 
 -- Search selected text
-vim.cmd [[ vnoremap // "hy:%s/\V<C-r>h//gc<left><left><left>]]
+vim.cmd.vnoremap('//', [["hy:%s/\V<C-r>h//gc<left><left><left>]])
 
 -- Center horizontally
 vim.keymap.set({ 'n', 'v' }, 'z.', ':<C-u>normal! zszH<CR>', { silent = true })
@@ -135,3 +130,11 @@ vim.keymap.set('c', '<c-k>', '<up>')
 -- Do i want this or not? 🤔
 -- vim.keymap.set('n', 'l', '<space>')
 -- vim.keymap.set('n', 'h', '<bs>')
+
+-- Center on half-page motions
+vim.keymap.set('n', '<C-d>', '<C-d>zz')
+vim.keymap.set('n', '<C-u>', '<C-u>zz')
+
+-- Center cursor on search motions
+vim.keymap.set('n', 'n', 'nzzzv')
+vim.keymap.set('n', 'N', 'Nzzzv')

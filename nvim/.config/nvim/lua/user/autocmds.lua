@@ -93,23 +93,6 @@ vim.api.nvim_create_autocmd({ 'BufWinEnter' }, {
 -- WARNING:
 -- FIXME:
 
--- *this `autocmd` must be set before `colorscheme` call*
-local function hl_clear_bg(hl_group)
-  vim.api.nvim_create_autocmd({ 'ColorScheme' }, {
-    pattern = '*',
-    group = vim.api.nvim_create_augroup(
-      'nrv#uniform_background_color',
-      { clear = true }
-    ),
-    callback = function()
-      vim.api.nvim_set_hl(0, hl_group, {
-        bg = 'NONE',
-        ctermbg = 'NONE',
-      })
-    end,
-  })
-end
-
 vim.cmd [[
   augroup nrv#remove_background_color
     autocmd!

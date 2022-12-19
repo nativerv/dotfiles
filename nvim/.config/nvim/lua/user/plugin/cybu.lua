@@ -34,14 +34,18 @@ M.setup = function()
       },
     },
     behavior = { -- set behavior for different modes
+      -- show_on_autocmd = 'BufWinEnter',
       mode = {
         default = {
           switch = 'immediate', -- immediate, on_close
-          view = 'paging', -- paging, rolling
+          view = 'paging', -- 'paging' | 'rolling'
         },
         last_used = {
           switch = 'on_close', -- immediate, on_close
-          view = 'paging', -- paging, rolling
+          view = 'paging', -- 'paging' | 'rolling'
+        },
+        auto = {
+          view = 'paging', -- 'paging' | 'rolling'
         },
       },
     },
@@ -55,32 +59,40 @@ M.setup = function()
     -- used in excluded filetypes
   }
 
-  vim.keymap.set('n', '<m-i>', function()
-    require('cybu').cycle 'prev'
-  end, { desc = 'Prev buffer' })
+  -- vim.keymap.set('n', '<m-i>', function()
+  --   require('cybu').cycle 'prev'
+  -- end, { desc = 'Prev buffer' })
+  --
+  -- vim.keymap.set('n', '<m-o>', function()
+  --   require('cybu').cycle 'next'
+  -- end, { desc = 'Next buffer' })
+  --
+  -- vim.keymap.set('n', '<m-ш>', function()
+  --   require('cybu').cycle 'prev'
+  -- end, { desc = 'Prev buffer' })
+  --
+  -- vim.keymap.set('n', '<m-щ>', function()
+  --   require('cybu').cycle 'next'
+  -- end, { desc = 'Next buffer' })
+  vim.keymap.set('n', '<m-p>', function()
+    require('cybu').autocmd()
+  end, { desc = 'Peek open buffers' })
+  vim.keymap.set('n', '<m-з>', function()
+    require('cybu').autocmd()
+  end, { desc = 'Peek open buffers' })
 
-  vim.keymap.set('n', '<m-o>', function()
-    require('cybu').cycle 'next'
-  end, { desc = 'Next buffer' })
-
-  vim.keymap.set('n', '<m-ш>', function()
-    require('cybu').cycle 'prev'
-  end, { desc = 'Prev buffer' })
-
-  vim.keymap.set('n', '<m-щ>', function()
-    require('cybu').cycle 'next'
-  end, { desc = 'Next buffer' })
-
-  -- vim.api.nvim_create_autocmd('BufWinEnter', {
-  --   group = vim.api.nvim_create_augroup(
-  --     'nrv#cybu_show_on_buffer_switch',
-  --     { clear = true }
-  --   ),
-  --   callback = function()
-  --     -- require('cybu').populate_state()
-  --     -- require('cybu').show_cybu_win(require('cybu').get_cybu_win_pos())
-  --   end,
-  -- })
+  vim.api.nvim_create_autocmd('BufWinEnter', {
+    group = vim.api.nvim_create_augroup(
+      'nrv#cybu_show_on_buffer_switch',
+      { clear = true }
+    ),
+    callback = function()
+      -- Only show Cybu window on real buffers, not on floats (lsp, etc.)
+      if vim.api.nvim_win_get_config(0).relative == '' then
+        require('cybu').autocmd()
+      end
+    end,
+  })
 end
 
 return M

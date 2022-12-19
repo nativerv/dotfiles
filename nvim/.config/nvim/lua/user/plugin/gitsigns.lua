@@ -79,7 +79,7 @@ M.setup = function()
   end, { desc = 'Reset hunks under VISUAL selection' })
 
   -- Preview hunk
-  vim.keymap.set({ 'n', 'v' }, '<leader>gz', function()
+  vim.keymap.set({ 'n', 'v' }, '<leader>gd', function()
     require('gitsigns').preview_hunk()
   end, { desc = 'Preview hunk under cursor in a float' })
 
@@ -92,7 +92,7 @@ M.setup = function()
   end, { desc = 'Preview hunk under cursor in a float' })
 
   -- Textobjects
-  -- Select hunk (if you try to translate it to lua it 
+  -- Select hunk (if you try to translate it to lua it
   -- wouldn't work because of <C-U> magic)
   vim.keymap.set(
     { 'x', 'o', 'v' },

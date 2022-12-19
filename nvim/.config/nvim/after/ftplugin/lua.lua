@@ -17,7 +17,7 @@ end
 -- This mimics how require internally works.
 local function include_paths(fname, ext)
   ext = ext or 'lua'
-  local sep = dir_separator()
+  -- local sep = dir_separator()
   local paths = string.gsub(package.path, '%?', fname)
   for _, path in ipairs(vim.split(paths, '%;')) do
     if vim.fn.filereadable(path) == 1 then
@@ -47,7 +47,7 @@ local function include_runtime_paths(fname, ext)
 end
 
 -- Global function that searches the path for the required file
-function find_required_path(module)
+function Find_required_path(module)
   -- Look at package.config for directory separator string (it's the first line)
   local sep = string.match(package.config, '^[^\n]')
   -- Properly change '.' to separator (probably '/' on *nix and '\' on Windows)
@@ -78,4 +78,4 @@ end
 -- Set options to open require with gf
 vim.opt_local.include =
   [=[\v<((do|load)file|require)\s*\(?['"]\zs[^'"]+\ze['"]]=]
-vim.opt_local.includeexpr = 'v:lua.find_required_path(v:fname)'
+vim.opt_local.includeexpr = 'v:lua.Find_required_path(v:fname)'

@@ -321,6 +321,10 @@ return require('packer').startup {
       ft = { 'markdown' },
       commit = '02cc3874738bc0f86e4b91f09b8a0ac88aef8e96',
     }
+    use {
+      'seandewar/killersheep.nvim',
+      commit = '506823c47b854df02e78d5fec9468ab0e542dcf5',
+    }
 
     -- Navigation
     use {
