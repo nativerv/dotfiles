@@ -19,7 +19,6 @@ M.setup = function()
   }
   require('which-key').register {
     ['<leader>'] = {
-      u = { name = 'Utilities and toggleables...' },
       g = { name = 'Git...' },
       f = { name = 'Telescope...' },
       d = { name = 'Debug...' },
@@ -27,7 +26,8 @@ M.setup = function()
       t = { name = 'Tests...' },
       ['<leader>'] = {
         name = 'More...',
-        l = { name = 'Latex options...' },
+        u = { name = 'Utilities and toggleables...' },
+        l = { name = 'Latex...' },
       },
     },
   }

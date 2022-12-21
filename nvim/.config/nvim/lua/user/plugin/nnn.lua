@@ -24,7 +24,7 @@ M.setup = function ()
     },
   }
 
-  vim.keymap.set('n', '<leader>r',  '<cmd>NnnExplorer<cr>' )
+  vim.keymap.set('n', '<leader>r',  vim.cmd.NnnExplorer, { desc = 'File Explorer' })
 end
 
 return M

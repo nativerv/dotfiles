@@ -31,7 +31,7 @@ vim.keymap.set('n', ';', '$'--[[ , { unique = true } ]] )
 -- vim.keymap.set('n', 'gx', '<cmd>silent :execute "!xdg-open " .. shellescape("%:p:h/<cfile>")<cr>', { noremap = true, silent = true, });
 
 -- Toggle 80 color column
-vim.keymap.set('n', '<leader>ul', function()
+vim.keymap.set('n', '<leader><leader>ul', function()
   if vim.opt.colorcolumn == 80 then
     vim.o.colorcolumn = 0
   else
@@ -42,7 +42,7 @@ end, { desc = 'Toggle color column (the 80th line rule)' })
 -- Toggle wrap
 vim.keymap.set(
   'n',
-  '<leader>uw',
+  '<leader><leader>uw',
   '<cmd>set wrap!<cr>',
   { desc = 'Toggle word wrap' }
 )
@@ -72,9 +72,8 @@ vim.keymap.set('', '<C-a>', '<esc>ggVG')
 vim.keymap.set('n', '<C-c>', '<C-a>')
 
 -- Reload config
-vim.keymap.set('n', '<leader>dr', ':so %<cr>')
---vim.keymap.set('n', '<leader>dr', ':so ~/.config/nvim/init.lua<cr>')
-vim.keymap.set('n', '<leader>dp', ':PackerInstall<cr>')
+vim.keymap.set('n', '<leader><leader>s', '<cmd>so %<cr>', { desc = 'Source current file' })
+vim.keymap.set('v', '<leader><leader>s', '<cmd>so<cr>', { desc = 'Source selection' })
 
 -- Make p in `VISUAL` adequate
 vim.keymap.set('v', 'p', '"_dp')
@@ -107,7 +106,7 @@ vim.keymap.set('n', 'p', ']p')
 vim.keymap.set('n', '<leader><leader>lc', function()
   vim.g.compile_tex = not vim.g.compile_tex
 end, {
-  desc = 'Toggle compile on save (latex)',
+  desc = 'Toggle compile on save',
 })
 -- Open preview
 vim.keymap.set(
@@ -115,7 +114,7 @@ vim.keymap.set(
   '<leader><leader>lp',
   [[<cmd>!zathura $(printf % \| sed 's/tex$/pdf/g') & disown<cr>]],
   {
-    desc = 'Open preview (latex)',
+    desc = 'Open preview in Zathura',
   }
 )
 

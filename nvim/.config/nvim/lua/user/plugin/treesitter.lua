@@ -59,10 +59,10 @@ M.setup = function()
     keymaps = {
       init_selection = '<c-space>',
       node_incremental = '<c-space>',
-      node_decremental = '<c-s-space>',
+      node_decremental = '<bs>',
       -- scope_incremental = 'gss',
       -- scope_decremental = 'gsS', -- there's no such thing for some reason
-    }
+    },
   }
 
   configs.playground = {
@@ -157,31 +157,38 @@ M.setup = function()
     swap = {
       enable = true,
       swap_next = {
-        ['<leader><leader>sp'] = {
+        ['<leader>sa'] = {
           query = '@parameter.inner',
-          desc = 'Swap current parameter with next',
+          desc = 'Current function argument with next',
         },
-        ['<leader><leader>sf'] = {
+        ['<leader>sf'] = {
           query = '@field',
-          desc = 'Swap current field with next',
+          desc = 'Current field with next',
         },
       },
       swap_previous = {
-        ['<leader><leader>sP'] = {
+        ['<leader>sA'] = {
           query = '@parameter.inner',
-          desc = 'Swap current parameter with previous',
+          desc = 'Current function argument with previous',
         },
-        ['<leader><leader>sF'] = {
+        ['<leader>sF'] = {
           query = '@field',
-          desc = 'Swap current field with previous',
+          desc = 'Current field with previous',
         },
       },
     },
   }
 
-  -- Highlight the @foo.bar capture group with the "Identifier" highlight group.
-  --captures['@strikethrough'] = '@text.strike'
+  -- Which-key descriptions
+  if pcall(require, 'which-key') then
+    require('which-key').register {
+      ['<leader>'] = {
+        s = { name = 'Swap...' },
+      },
+    }
+  end
 
+  -- Actual treesitter setup executes here - above are just config tablese
   require('nvim-treesitter.configs').setup(configs)
   require('nvim-treesitter.highlight').set_custom_captures(captures)
 end

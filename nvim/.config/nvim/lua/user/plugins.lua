@@ -325,6 +325,13 @@ return require('packer').startup {
       'seandewar/killersheep.nvim',
       commit = '506823c47b854df02e78d5fec9468ab0e542dcf5',
     }
+    use {
+      'mbbill/undotree',
+      setup = function()
+        require('user.plugin.undotree').setup()
+      end,
+      commit = '1a23ea84bd02c34f50d8e10a8b4bfc89597ffe4e',
+    }
 
     -- Navigation
     use {
