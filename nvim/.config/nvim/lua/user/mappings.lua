@@ -1,9 +1,31 @@
 -- VIM world
 
+-- vim.cmd [[
+--   function! VOpfunc(type) abort
+--     let c = get({'line': "'[V']", 'char': "`[v`]", 'block': '`[\<C-V>`]'}, a:type, '')
+--     execute printf("normal! %s\"%so", c, v:register)
+--   endfunction
+-- ]]
+
+-- <C-V> is \22 in lua for some reason (@ii14:matrix.org said that)
+-- function VOpfunc(type)
+--   local command = ({ line = "'[V']", char = '`[v`]', block = '`[<C-V>`]' })[type]
+--       or ''
+--   vim.cmd.execute(('"normal! %so"'):format(command))
+-- end
+--
+-- local function opfunc()
+--   vim.api.nvim_set_option('opfunc', 'v:lua.VOpfunc')
+--   -- require('which-key').show('v', { mode = 'n', auto = true })
+--   return 'g@'
+-- end
+--
+-- vim.keymap.set('n', 'v', opfunc, { expr = true })
+
 -- TODO: refactor mappings
 
 -- FIX RUSSIAN ;->$
-vim.keymap.set('n', ';', '$'--[[ , { unique = true } ]])
+vim.keymap.set('n', ';', '$'--[[ , { unique = true } ]] )
 
 -- Open with xdg-open
 -- vim.keymap.set('n', 'gx', '<cmd>silent :execute "!xdg-open " .. shellescape("%:p:h/<cfile>")<cr>', { noremap = true, silent = true, });
@@ -55,7 +77,7 @@ vim.keymap.set('n', '<leader>dr', ':so %<cr>')
 vim.keymap.set('n', '<leader>dp', ':PackerInstall<cr>')
 
 -- Make p in `VISUAL` adequate
-vim.keymap.set('v', 'p', '"_dP')
+vim.keymap.set('v', 'p', '"_dp')
 vim.keymap.set('v', 'P', '"_dP') -- sdfsdf asdf as fasd as f
 
 -- Dublicate lines

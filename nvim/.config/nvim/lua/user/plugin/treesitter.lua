@@ -57,11 +57,11 @@ M.setup = function()
   configs.incremental_selection = {
     enable = true,
     keymaps = {
-      init_selection = 'gsi',
-      node_incremental = 'gsn',
-      node_decremental = 'gsN',
-      scope_incremental = 'gss',
-      scope_decremental = 'gsS',
+      init_selection = '<c-space>',
+      node_incremental = '<c-space>',
+      node_decremental = '<c-s-space>',
+      -- scope_incremental = 'gss',
+      -- scope_decremental = 'gsS', -- there's no such thing for some reason
     }
   }
 
@@ -145,14 +145,14 @@ M.setup = function()
       -- You can choose the select mode (default is charwise 'v')
       selection_modes = {
         ['@parameter.outer'] = 'v', -- charwise
-        ['@function.outer'] = 'V', -- linewise
-        ['@class.outer'] = '<c-v>', -- blockwise
+        ['@function.outer'] = 'v', -- linewise
+        ['@class.outer'] = 'v', -- blockwise
       },
       -- If you set this to `true` (default is `false`) then any textobject is
       -- extended to include preceding xor succeeding whitespace. Succeeding
       -- whitespace has priority in order to act similarly to eg the built-in
       -- `ap`.
-      include_surrounding_whitespace = false,
+      include_surrounding_whitespace = true,
     },
     swap = {
       enable = true,

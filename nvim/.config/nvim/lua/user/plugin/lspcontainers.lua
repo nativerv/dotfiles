@@ -9,24 +9,23 @@ M.command = function(server_name, opts)
     root_dir = require('lspconfig/util').find_git_ancestor(),
   }
   opts = vim.tbl_extend('force', default_opts, opts)
-  require('lspcontainers').command(server_name, opts)
+  return require('lspcontainers').command(server_name, opts)
 end
 
 local function make_tsserver()
-local opts = {
-before_init = function(params)
-  params.processId = vim.NIL
-end,
-cmd = M.command('tsserver'),
-root_dir = require('lspconfig/util').root_pattern(
-  'package.json',
-  'tsconfig.json',
-  'jsconfig.json',
-  '.git'
-  ),
-}
-return opts
-
+  local opts = {
+    before_init = function(params)
+      params.processId = vim.NIL
+    end,
+    cmd = M.command 'tsserver',
+    root_dir = require('lspconfig/util').root_pattern(
+      'package.json',
+      'tsconfig.json',
+      'jsconfig.json',
+      '.git'
+    ),
+  }
+  return opts
 end
 
 M.setup = function()

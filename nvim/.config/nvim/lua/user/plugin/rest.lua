@@ -1,7 +1,7 @@
 local M = {}
 
-M.setup = function ()
-  require'rest-nvim'.setup {
+M.setup = function()
+  require('rest-nvim').setup {
     -- Open request results in a horizontal split
     result_split_horizontal = false,
     -- Skip SSL verification, useful for unknown certificates
@@ -24,9 +24,25 @@ M.setup = function ()
   }
 
   -- Keymaps
-  vim.keymap.set('n', '<leader>trr',  [[<cmd>lua require'rest-nvim'.run()<cr>]]      )
-  vim.keymap.set('n', '<leader>trp',  [[<cmd>lua require'rest-nvim'.preview()<cr>]]  )
-  vim.keymap.set('n', '<leader>trl',  [[<cmd>lua require'rest-nvim'.run_last()<cr>]] )
+  -- Description
+  if pcall(require, 'which-key') then
+    require('which-key').register {
+      ['<leader>'] = {
+        t = {
+          r = {
+            name = 'rest.nvim...',
+            r = { name = 'Run request' },
+            p = { name = 'Preview' },
+            l = { name = 'Run last request' },
+          },
+        },
+      },
+    }
+  end
+  -- Maps
+  vim.keymap.set('n', '<leader>trr', require('rest-nvim').run)
+  -- vim.keymap.set('n', '<leader>trp', require('rest-nvim').preview) -- seems that that got removed
+  vim.keymap.set('n', '<leader>trl', require('rest-nvim').last) -- was run_last, now not even listed in the docs
 end
 
 return M

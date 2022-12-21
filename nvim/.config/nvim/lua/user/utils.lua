@@ -18,6 +18,17 @@ function M.join_path(path_object)
   return table.concat(path_object, M.os_separator)
 end
 
+M.is_inside_git_worktree = function ()
+  local result = vim.fn.system({ 'git', 'rev-parse', '--is-inside-work-tree' })
+  if result == 'true\n' then
+    return true
+  elseif result == 'false\n' then
+    return false
+  else
+    error('error executing git')
+  end
+end
+
 -- Define constants
 M.XDG_DOCUMENTS_DIR = M.xdg_user_dir 'DOCUMENTS'
 M.XDG_PICTURES_DIR = M.xdg_user_dir 'PICTURES'

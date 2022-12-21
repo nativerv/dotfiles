@@ -2,35 +2,37 @@ local M = {}
 
 M.server_configs = {}
 
-M.on_attach = function(client, bufnr)
+M.on_attach = function(_, bufnr)
   -- Enable completion triggered by <c-x><c-o>
   vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
 
   -- Define commands
   vim.api.nvim_create_user_command('Format', function()
+    vim.cmd.write()
     vim.lsp.buf.format { async = true }
+    vim.cmd.write()
   end, {})
-  -- vim.api.nvim_create_user_command('Format', vim.lsp.buf.format, {
-  --   range = true,
-  -- })
 
   -- Define mappings (for lsp buffers only)
-  local map = vim.keymap.set
-  local map_opts = { noremap = true, silent = true }
+  local default_map_opts = { noremap = true, silent = true }
+  local map = function(mode, mapping, action, opts)
+    vim.keymap.set(mode, mapping, action, opts or default_map_opts)
+  end
   -- stylua: ignore start
-  map('n', 'gD', vim.lsp.buf.declaration, map_opts)
-  map('n', 'gh', vim.lsp.buf.hover, map_opts)
-  map('n', 'gH', vim.lsp.buf.signature_help, map_opts)
-  map('n', 'gt', vim.lsp.buf.type_definition, map_opts)
-  map('n', 'gn', vim.lsp.buf.rename, map_opts)
-  map('n', 'gd', function() require 'telescope.builtin'.lsp_definitions({ initial_mode = "normal" }) end, map_opts)
-  map('n', 'gi', function() require 'telescope.builtin'.lsp_implementations({ initial_mode = "normal" }) end, map_opts)
-  map('n', 'gr', function() require 'telescope.builtin'.lsp_references({ initial_mode = "normal" }) end, map_opts)
-  map('n', 'gy', vim.lsp.buf.code_action, map_opts)
-  map('v', 'gy', vim.lsp.buf.range_code_action, map_opts)
-  map('n', 'gl', function() vim.diagnostic.open_float({ border = 'rounded', }) end, map_opts)
-  map('n', 'gE', vim.diagnostic.goto_prev, map_opts)
-  map('n', 'ge', vim.diagnostic.goto_next, map_opts)
+  local float_opts = { border = 'rounded', }
+  map('n', 'gD', vim.lsp.buf.declaration)
+  map('n', 'gh', vim.lsp.buf.hover)
+  map('n', 'gH', vim.lsp.buf.signature_help)
+  map('n', 'gt', vim.lsp.buf.type_definition)
+  map('n', 'gn', vim.lsp.buf.rename)
+  map('n', 'gd', function() require 'telescope.builtin'.lsp_definitions({ initial_mode = "insert" }) end)
+  map('n', 'gi', function() require 'telescope.builtin'.lsp_implementations({ initial_mode = "insert" }) end)
+  map('n', 'gr', function() require 'telescope.builtin'.lsp_references({ initial_mode = "insert" }) end)
+  map('n', 'gy', vim.lsp.buf.code_action)
+  map('v', 'gy', vim.lsp.buf.range_code_action)
+  map('n', 'gl', function() vim.diagnostic.open_float(float_opts) end)
+  map('n', 'gE', function() vim.diagnostic.goto_prev({ float = float_opts }) end)
+  map('n', 'ge', function() vim.diagnostic.goto_next({ float = float_opts }) end)
   -- stylua: ignore end
 
   -- Configure diagnostics appearance
@@ -75,13 +77,14 @@ end
 
 ---@param server_configs table?
 M.configure_servers = function(server_configs)
-  local server_configs2 = server_configs or require'user.plugin.lspconfig'.server_configs
+  local server_configs2 = server_configs
+      or require('user.plugin.lspconfig').server_configs
   -- Execute all configs and inject common capabilities to them
   for lsp, lsp_config in pairs(server_configs2) do
     -- Merge configs with custom function
     local default_config = {
-      on_attach = require'user.plugin.lspconfig'.on_attach,
-      capabilities = require'user.plugin.lspconfig'.capabilities,
+      on_attach = require('user.plugin.lspconfig').on_attach,
+      capabilities = require('user.plugin.lspconfig').capabilities,
     }
 
     local config = vim.tbl_extend('force', default_config, lsp_config)
@@ -199,6 +202,7 @@ M.setup = function()
     marksman = {},
   }
 
+  -- Rounded borders
   vim.lsp.handlers['textDocument/hover'] =
   vim.lsp.with(vim.lsp.handlers.hover, {
     border = 'rounded',

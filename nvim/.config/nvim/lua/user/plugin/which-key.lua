@@ -1,6 +1,9 @@
 local M = {}
 
 M.setup = function()
+  local presets = require 'which-key.plugins.presets'
+  presets.operators['v'] = nil
+
   require('which-key').setup {
     icons = {
       breadcrumb = '»', -- symbol used in the command line area that shows your active key combo
@@ -20,6 +23,8 @@ M.setup = function()
       g = { name = 'Git...' },
       f = { name = 'Telescope...' },
       d = { name = 'Debug...' },
+      l = { name = 'Lsp...' },
+      t = { name = 'Tests...' },
       ['<leader>'] = {
         name = 'More...',
         l = { name = 'Latex options...' },

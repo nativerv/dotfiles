@@ -53,6 +53,14 @@ M.setup = function()
 
   -- Link hl to comment - the default sets bg to grey for some unknown reason
   vim.api.nvim_set_hl(0, 'LspInlayHint', { link = 'Comment' })
+
+  -- Keybinds
+  vim.keymap.set(
+    'n',
+    '<leader>li',
+    require('lsp_lines').toggle,
+    { desc = 'Toggle inlay hints' }
+  )
 end
 
 return M

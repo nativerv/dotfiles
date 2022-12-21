@@ -277,14 +277,14 @@ return require('packer').startup {
     -- Features
     use { 'tpope/vim-fugitive' }
     --use { 'TimUntersberger/neogit', requires = { 'nvim-lua/plenary.nvim' } }
-    use {
-      'NTBBloodbath/rest.nvim',
-      requires = { 'nvim-lua/plenary.nvim' },
-      config = function()
-        require('user.plugin.rest').setup()
-      end,
-      commit = '2826f6960fbd9adb1da9ff0d008aa2819d2d06b3',
-    }
+    -- use {
+    --   'NTBBloodbath/rest.nvim',
+    --   requires = { 'nvim-lua/plenary.nvim' },
+    --   config = function()
+    --     require('user.plugin.rest').setup()
+    --   end,
+    --   commit = '2826f6960fbd9adb1da9ff0d008aa2819d2d06b3',
+    -- }
     --use { 'mfussenegger/nvim-dap' }
     use {
       'luukvbaal/nnn.nvim',
@@ -403,7 +403,7 @@ return require('packer').startup {
       config = function()
         require('user.plugin.cybu').setup()
       end,
-      commit = '43acf0ffb51982f9217f3ebfb793d0a0adbba93b',
+      commit = '395791b1e1177e3459c85415970ab8216b19a5dc',
     }
     --use { 'lukas-reineke/indent-blankline.nvim' }
   end,
