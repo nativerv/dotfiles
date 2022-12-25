@@ -1,0 +1,67 @@
+#!/bin/sh
+
+: "${XDG_CACHE_HOME:="${HOME}/.cache"}"
+
+# shellcheck disable=1091
+[ -s "${XDG_CACHE_HOME}/wal/colors.sh" ] && . "${XDG_CACHE_HOME}/wal/colors.sh"
+
+: "${background:=white}"
+: "${foreground:=black}"
+
+# Cut specified prefix from each line
+cut_prefixes() {
+  while IFS= read -r line; do
+    printf '%s' "${line##"${1}"}"
+    printf '\n'
+  done
+}
+
+case "${1}" in
+  graph)
+    # TODO: This query doesn't capture `[link]`' followed by `[link]: destination` links
+    # That'd been done on purpose because the following can't handle them without messy modifications
+    files="$(find "${2}" -type f -not -path '*/.*')"
+    query='(link (link_text) (link_destination)) @link'
+    matches="$(printf '%s' "${files}" | xargs tree-grepper -q markdown "${query}")"
+    escaped_prefix="$(printf '%s' "${2}" | sed 's|\/|\\\/|g')"
+    # vertices="$(
+    #   printf '%s' "${matches}" |
+    #     sed 's/:/\t/;s/:/\t/;s/:/\t/;s/:/\t/' |                                                                                                                          # replace four consequent colons with tabs to distinguish from colons inside of the matches
+    #     cut_prefixes "${2}" |                                                                                                                                            # cut common directory
+    #     perl -pe "s/^(.+?)\t(.+?)\t(.+?)\t(.+?)\$/  \"\1\" [ label = \"\1\" href = \"${escaped_prefix}\1\" color = \"${foreground}\" fontcolor = \"${foreground}\" ]/" | # transform to vertices
+    #     sort |                                                                                                                                                           # filter out dublicates
+    #     uniq |
+    #     grep -v http # filter out http (foreign) links
+    # )"
+    vertices="$(
+      echo "${files}" |
+        cut_prefixes "${2}" |
+        sort |
+        uniq |
+        sed -E "s/(.+)/  \"\1\" [ label = \"\1\" color = \"${foreground}\" fontcolor = \"${foreground}\" href = \"${escaped_prefix}\1\" ]/"
+    )"
+    edges="$(
+      printf '%s' "${matches}" |
+        sed 's/:/\t/; s/:/\t/; s/:/\t/; s/:/\t/' |                                               # replace four consequent colons with tabs to distinguish from colons inside the matches
+        perl -pe 's/^(.+?)\t(.+?)\t(.+?)\t(.+?)\t(.+?)$/\1\t\5/' |                               # cut names and matches (1 and 5 columns)
+        cut_prefixes "${2}" |                                                                    # cut common directory
+        perl -pe "s/(.+?)\t\[.*\]\((.+)\)\$/  \"\1\" -> \"\2\" [ color = \"${foreground}\" ]/" | # transform to edges
+        sed -E 's|\./||' |                                                                       # crop ./ path prefixes (so all the links are more or less normalized)
+        grep -v http                                                                             # filter out http (foreign) links
+    )"
+
+    # Print the graph in dot format
+    printf 'digraph {'
+    printf '\n'
+    printf '  bgcolor = "%s"' "${background}"
+    printf '\n'
+    printf '  color = "%s"' "${foreground}"
+    printf '\n'
+    printf '%s' "${vertices}"
+    printf '\n'
+    printf '%s' "${edges}"
+    printf '\n'
+    printf '}'
+    ;;
+  *) printf 'usage: %s <command> <subcommand>\n' "$(basename "${0}")" ;;
+esac

@@ -1,7 +1,11 @@
 #!/bin/sh
 
+: "${EDITOR:=vi}"
+: "${DOTFILES_HOME:="${HOME}/dot"}"
+: "${XDG_BIN_HOME:="${HOME}/.local/bi"}"
+
 bin_name="${1}"
-user_bin_path="${XDG_BIN_HOME:-"${HOME}/.local/bin"}"
+user_bin_path="${XDG_BIN_HOME}"
 dotfiles_bin_path="${DOTFILES_HOME}/bin/.local/bin"
 is_using_dotfiles='false'
 [ -d "${dotfiles_bin_path}" ] && is_using_dotfiles='true'
@@ -9,29 +13,29 @@ is_using_dotfiles='false'
 
 guard_bin_exists() {
   if [ -s "${1}/${bin_name}" ]; then
+    # shellcheck disable=2016
     printf '%s: error: file `%s` already exists in %s' "$(basename "${0}")" "${bin_name}" "${bin_path}"
     printf '\n'
-    exit 1
+    exit 0
   fi
 }
 
-if [ "${is_using_dotfiles}" ]; then
- guard_bin_exists "${dotfiles_bin_path}"
+if [ "${is_using_dotfiles}" = 'true' ]; then
+  guard_bin_exists "${dotfiles_bin_path}"
 fi
 
 guard_bin_exists "${user_bin_path}"
 
-if [ "${is_using_dotfiles}" ]; then
-  printf '#!/bin/sh\n\n\n' > "${dotfiles_bin_path}/${1}"
+if [ "${is_using_dotfiles}" = 'true' ]; then
+  printf '#!/bin/sh\n\n\n' >"${dotfiles_bin_path}/${1}"
   "${EDITOR}" '+ normal G $' '+startinsert' "${dotfiles_bin_path}/${1}"
 else
-printf '#!/bin/sh\n\n\n' > "${user_bin_path}/${1}"
+  printf '#!/bin/sh\n\n\n' >"${user_bin_path}/${1}"
   "${EDITOR}" '+ normal G $' '+startinsert' "${user_bin_path}/${1}"
 fi
 
-if [ "${is_using_dotfiles}" ]; then
+if [ "${is_using_dotfiles}" = 'true' ]; then
   stow -d "${DOTFILES_HOME}" -t "${HOME}" 'bin'
 fi
 
 chmod u+x "${user_bin_path}"/*
-

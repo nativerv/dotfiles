@@ -2,7 +2,6 @@
 
 set -ue
 
-
 do_open=
 while getopts 'o' name; do
   case "${name}" in
@@ -24,7 +23,16 @@ filename="$(basename "${1}")"
 rendered="${MD_TMP_DIR}/${prefix}-${filename%.*}.html" 
 
 # exec closes stderr (suppress browser output)
-pandoc --standalone --css github-markdown.css -f 'gfm' -t 'html' -o "${rendered}" "${1}"
+#--lua-filter pandoc-relative-paths-filter.lua \
+pandoc \
+  --standalone \
+  --css 'github-markdown.css' \
+  -f 'gfm' \
+  -t 'html' \
+  -o "${rendered}" \
+  "${1}"
+
+echo "${PWD}" > ~/desk/render.txt
 
 # shellcheck disable=2181
 # ignore stupid bullshit of 
