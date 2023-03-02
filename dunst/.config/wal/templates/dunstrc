@@ -1,0 +1,12 @@
+[global]
+frame_color = "{color2}"
+
+[urgency_low]
+background = "{background}"
+foreground = "{foreground}"
+
+[urgency_normal]
+background = "{background}"
+foreground = "{foreground}"
+
+# vim: ft=cfg

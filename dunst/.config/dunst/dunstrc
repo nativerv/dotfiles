@@ -2,16 +2,27 @@
 alignment = left
 bounce_freq = 0
 browser = firefox -new-tab
-corner_radius = 2
+corner_radius = 0
 dmenu = dmenu -p Dunst:
 follow = none
 font = monospace 10
 format = "<b>%s</b>\n%b"
 frame_color = "#1a1c25"
-frame_width = 1
+frame_width = 3
+progress_bar = true
 # geometry = [{width}]x{height}][+/-{x}+/-{y}]
-geometry = "440x15-20+20"
+origin = top-right
+offset = 20x38 # x: 10px gap + 10px offset
+               # y: 18px statusbar + 10px gap + 10px offset
+               # total: 10x10 offset relative to the window placement 
+               # with the default gaps of 5 inner + 5 outer pixels
+               # TODO: find a way to template that calculation maybe
+               # (probably will do this with Nix at the end)
 history_length = 200
+icon_path = /usr/share/icons:~/.local/share/icons/hicolor/256x256/notifications/
+enable_recursive_icon_lookup = true
+width = (300, 400) # Adaptive width
+# geometry = "1300x50-300+200"
 horizontal_padding = 16
 icon_position = left
 idle_threshold = 1200

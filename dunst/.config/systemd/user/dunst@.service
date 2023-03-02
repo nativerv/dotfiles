@@ -9,6 +9,7 @@ Requisite=xsession@%i.target
 Type=dbus
 BusName=org.freedesktop.Notifications
 ExecStart=/usr/bin/dunst
+; ExecStart=sh -c '/usr/bin/dunst -lb "$(cat "${XDG_CACHE_HOME:-"${HOME}/.cache"}/wal/background")" -nb "$(cat "${XDG_CACHE_HOME:-"${HOME}/.cache"}/wal/background")"'
 Restart=always
 
 # Sandboxing
