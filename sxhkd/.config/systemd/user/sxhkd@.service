@@ -12,6 +12,7 @@ StartLimitIntervalSec=60
 [Service]
 ExecStart=sh -c 'sxhkd'
 ExecReload=/usr/bin/kill -SIGUSR1 $MAINPID
+Environment=XDG_SESSION_TYPE=X11
 # Try to restart no matter how the process ended
 Restart=always
 # Restart in 5 second intervals

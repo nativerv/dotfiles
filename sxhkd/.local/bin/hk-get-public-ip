@@ -1,6 +1,13 @@
-#!/bin/sh
+#!/usr/bin/env bash
+
+set -euo pipefail
 
 XDG_DATA_HOME="${XDG_DATA_HOME:-"${HOME}/.local/share"}"
 
 # credit: https://github.com/rwxrob/dot/blob/main/scripts/myip
-dig +short 'myip.opendns.com' @resolver1.opendns.com | xargs notify-send -i "${XDG_DATA_HOME}/icons/hicolor/256x256/notifications/ip-address-256x256.png" 'IP Address'
+# dig +short 'myip.opendns.com' @resolver1.opendns.com \
+#   | xargs notify-send \
+#     -i "${XDG_DATA_HOME}/icons/hicolor/256x256/notifications/ip-address-256x256.png" \
+#     'IP Address'
+body="$(curl -sL https://ifconfig.co/json | jq -r '"Address: " + .ip, "Country: " + .country_iso')"
+notify-send -i "${XDG_DATA_HOME}/icons/hicolor/256x256/notifications/ip-address-256x256.png" 'IP' "${body}"

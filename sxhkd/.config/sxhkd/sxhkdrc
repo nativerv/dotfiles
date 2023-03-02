@@ -9,6 +9,15 @@
 # 
 # The valid modifier names are: super, hyper, meta, alt, control, ctrl, shift, mode_switch, lock, mod1, mod2, mod3, mod4, mod5 and any.
 
+# Up:
+#   xdotool mousemove_relative -- +0 -5
+# Left:
+#   xdotool mousemove_relative -- -5 +0
+# Down:
+#   xdotool mousemove_relative -- +0 +5
+# Right:
+#   xdotool mousemove_relative -- +5 +0
+
 ### Open a program 
 
 super + shift + o ; h
@@ -39,15 +48,18 @@ super + r ; c
 
 ### Screenshot 
 
-Print
-  flameshot full --clipboard
+super + s:
+  scr
 
-control + Print
-  flameshot gui
+super + shift + s:
+  scr -s
+
+super + control + s:
+  lastscr | xargs gimp --no-data --no-fonts --no-splash
 
 ### Zoom
 
-super + z
+super + z:
   boomer
 
 ### Dmenu

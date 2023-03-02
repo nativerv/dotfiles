@@ -1,9 +1,3 @@
 #!/bin/sh
 
-pactl set-sink-mute @DEFAULT_SINK@ toggle
-if [ "$(pactl get-sink-mute @DEFAULT_SINK@ | cut -d' ' -f2)" = 'yes' ]; then
-  paplay "${XDG_DATA_HOME:-$HOME/.local/share}/speech/sound-muted.wav"
-else
-  paplay "${XDG_DATA_HOME:-$HOME/.local/share}/speech/sound-unmuted.wav"
-fi
-
+pactl set-sink-mute '@DEFAULT_SINK@' toggle
