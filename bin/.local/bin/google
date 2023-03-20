@@ -1,0 +1,11 @@
+#!/bin/sh
+
+set -eu
+
+: "${BROWSER:=lynx}"
+
+urlencode() {
+  printf '%s' "${1}" | python -c "import urllib.parse;print(urllib.parse.quote(input()))"
+}
+
+"${BROWSER}" "https://google.com/search?q=$(urlencode "${*}")"

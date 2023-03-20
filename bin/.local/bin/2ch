@@ -1,0 +1,14 @@
+#!/bin/sh
+
+: "${BROWSER:=lynx}"
+
+args=$(if [ "${BROWSER}" = 'firefox' ]; then echo '-new-window'; else echo ''; fi)
+
+case "${1}" in
+  'linux')
+    gnu_linux_thread="$(curl -sL 'https://2ch.hk/s/threads.json' | jq -r '[ .threads[] | select(.subject | test("gnu|linux"; "ig")) ] | sort_by(.score) | reverse[0].num')"
+    # shellcheck disable=2086
+    "${BROWSER}" ${args} "https://2ch.hk/s/res/${gnu_linux_thread}.html#bottom"
+    ;;
+  *) ;;
+esac

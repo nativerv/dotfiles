@@ -1,0 +1,6 @@
+#!/bin/sh
+
+pictures_dir="$(xdg-user-dir PICTURES)"
+pictures_dir="${pictures_dir:-"${HOME}/Pictures"}"
+
+find "${pictures_dir}/scr" -type f -printf "%T+\t%p\n" | sort -r | sed "${1:-1}q;d" | cut -f2

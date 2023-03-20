@@ -1,0 +1,36 @@
+#!/bin/sh
+
+set -eu
+
+[ "${1}" = '--mpd' ] && mpc current |
+  sed 's/-/\//' |
+  sed 's/ //g' |
+  tr '[:upper:]' "[:lower:]" |
+  tr -d '.' |
+  xargs lyrics &&
+  exit
+
+urlencode() {
+  printf '%s' "${1}" | python -c "import urllib.parse;print(urllib.parse.quote(input()))"
+}
+
+current_song="$(mpc -f '%artist%/%title%' | tr -d ' ' | head -n1 | tr '[:upper:]' '[:lower:]')"
+# shellcheck disable=2236
+[ ! -z "${1}" ] && current_song="${1}"
+
+# shellcheck disable=2016
+url="https://www.azlyrics.com/lyrics/$(urlencode "${current_song}").html"
+
+# re
+curl \
+  --silent \
+  --header 'User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:108.0) Gecko/20100101 Firefox/108.0' \
+  "${url}" | 
+  pup '.col-xs-12 > div:nth-child(8)' | # get div with lyrics
+  sed -En 'H;${g;s/\n\s*<br>\n\s*<br>/\n/g;p}' | # replace double <br>s with empty lines
+  sed '/<br>/d' | # remove single <br>s
+  recode html..utf8 | # decode html entities
+  sed '/^\s*</d' | # remove extra tags with sed (because pup `text{}` leaves extra empty lines)
+  sed '/./,$!d' | # remove leading blank lines at top of file (only)
+  sed -e :a -e '/^\n*$/{$d;N;};/\n$/ba' | # remode trailing blank lines at end of file (only) 
+  awk '{$1=$1}; 1' # remove leading spaces from every line
