@@ -58,4 +58,6 @@ URxvt.color14: rgb:34/E2/E2
 URxvt.color15: rgb:EE/EE/EC
 URxvt.colorBD: rgb:ff/ff/ff
 
+allowWindowOps: true
+
 ! vim:syntax=xdefaults

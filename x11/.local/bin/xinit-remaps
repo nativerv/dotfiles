@@ -8,6 +8,10 @@ setxkbmap -layout "us,ru" -option "grp:switch" -variant qwerty
 # Map caps_lock -> escape
 xmodmap -e "clear lock"
 xmodmap -e "keycode 66 = Escape NoSymbol Escape"
+xmodmap -e "keycode 119 = BackSpace NoSymbol BackSpace"
+# Mouse button numbers are in order, then swapped:
+# xmodmap -e "pointer = 1 2 3 4 5 6 7 8 9 10" # original
+# xmodmap -e "pointer = 1 2 3 8 9 6 7 5 4 10" # swap scroll and side buttons 
 
 # Maps caps_lock -> control
 # Use with xcape -e 'Control_L=Escape' 
