@@ -5,6 +5,7 @@ set notification-bg "{background}"
 set index-bg "{background}"
 set completion-group-bg "{background}"
 set inputbar-bg "{background}"
+set statusbar-bg "{background}"
 
 # Foreground
 set default-fg "{foreground}"
@@ -12,6 +13,7 @@ set completion-highlight-fg "{background}"
 set index-active-fg "{background}"
 set render-loading-fg "{background}"
 set completion-group-fg "{color1}"
+# set statusbar-fg "{foreground}"
 
 # Selections
 set index-active-bg "{color2}"
