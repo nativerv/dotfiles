@@ -81,12 +81,12 @@ super + ctrl + p:
   dmenu_pass_current
 
 ### Translate selection
-super + u ; {t}:
+super + u ; t:
   {hk-translate-selection}
 
 ### Display current public ip address
-super + u ; {i}:
-  {hk-get-public-ip}
+super + u ; i:
+  hk-get-public-ip
 
 ### Notifications
 super + n ; {n,c}:
