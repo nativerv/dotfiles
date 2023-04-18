@@ -12,6 +12,7 @@ if_bin_exists() {
 XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-"${HOME}/.config"}"
 XDG_DATA_HOME="${XDG_DATA_HOME:-"${HOME}/.local/share"}"
 XDG_CACHE_HOME="${XDG_CACHE_HOME:-"${HOME}/.cache"}"
+XDG_BIN_HOME="${XDG_BIN_HOME:-"${HOME}/.local/bin"}"
 
 # Export environment.d env vars to zsh hacky way
 source <(
@@ -19,6 +20,22 @@ source <(
     | xargs cat \
     | sed -E "s/^([a-zA-Z])/export \1/g"
 )
+
+# Steal completions from the original things for mine wrappers for them
+# autoload -Uz compinit
+# compinit
+# compdef ytmdl=yt-dlp
+# for bin in $(find "${XDG_BIN_HOME}" -type f); do
+#   prefix='# completion: '
+#   line_2="$(sed '1d;q' < "${bin}")"
+#
+#   # guard for no completion setting requested
+#   printf '%s' "${line_2}" | grep -q "^${prefix}" || continue
+#
+#   comp_provider="${line_2#*: }"
+#   echo 'doing completion' "$(basename "${bin}")"="${comp_provider}"
+#   compdef "$(basename "${bin}")"="${comp_provider}"
+# done
 
 #### XDG stuff ====================================
 

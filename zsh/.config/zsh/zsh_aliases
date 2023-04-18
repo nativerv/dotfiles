@@ -28,9 +28,9 @@ alias nfj="firejail --noprofile "
 alias dfj="firejail --profile=default "
 alias pm="pulsemixer"
 alias tm="tmux"
+alias tma="tmux a"
 alias tmc="transmission-remote"
 alias tmd="transmission-daemon"
-alias dnd="dragon-drag-and-drop"
 alias ng="nvim +0G"
 alias sc="systemctl"
 alias scu="systemctl --user"
@@ -38,10 +38,14 @@ alias doc="docker"
 alias bj="bubblejail"
 alias dt="date +%F_%H-%M-%S | head -c-1"
 alias gr='grep --recursive --line-number'
+alias rtop='radeontop'
 
 # Noglobs
 alias tl='noglob tl'
-alias cl='noglob calc'
+alias cl='noglob cl'
+alias mpv='noglob mpv'
+alias devour="noglob devour"
+alias ytmdl="noglob ytmdl"
 
 # Mkdir and touch; also flag mkdir create nonexistent dirs
 alias md="mkdir -p"
@@ -50,7 +54,7 @@ alias mt="touch"
 # Simulate plan9 `walk` util
 alias walk="find ."
 
-# Fix sudo to take another alias like `nv`
+# Passthroughs
 alias sudo="sudo "
 
 # Fix lolcat to always output truecolor
@@ -77,8 +81,8 @@ alias git="git --no-pager "
 alias g="git"
 alias gs="git status"
 alias gl="git log"
-alias gll="git log --pretty=oneline"
-alias gllg="git log --graph --pretty=oneline"
+alias gll="env GIT_PAGER= unbuffer git log --pretty=oneline"
+alias gllg="env GIT_PAGER= unbuffer git log --graph --pretty=oneline"
 alias gd="git diff"
 alias ga="git add"
 alias gc="git commit"

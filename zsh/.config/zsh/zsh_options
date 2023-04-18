@@ -1,7 +1,7 @@
 ### ZSH OPTIONS/SETTINGS FILE
 
 # some useful options (man zshoptions)
-setopt extendedglob nomatch menucomplete notify incappendhistory sharehistory
+setopt nomatch menucomplete notify incappendhistory sharehistory
 
 setopt interactive_comments
 
