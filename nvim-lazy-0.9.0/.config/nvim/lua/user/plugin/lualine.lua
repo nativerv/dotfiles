@@ -20,6 +20,7 @@ M.setup = function()
       theme = 'wal',
       globalstatus = true,
     },
+    extensions = { 'lazy' },
     sections = {
       lualine_c = {
         "os.data('%a')",

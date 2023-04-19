@@ -26,3 +26,6 @@ require 'user.autocmds'
 
 -- Install and configure plugins with `lazy.nvim`
 require 'user.plugins' 
+
+-- Colorscheme
+require 'user.colorscheme'

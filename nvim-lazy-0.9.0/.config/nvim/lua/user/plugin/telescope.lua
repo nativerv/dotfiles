@@ -1,5 +1,18 @@
 local M = {}
 
+M.keys = {
+  find_files_smart = { '<C-p>' },
+  find_files = { '<leader>ff' },
+  find_git_files = { '<leader>fg' },
+  find_in_buffer = { '<leader>fb' },
+  find_help = { '<leader>fh' },
+  find_ctags = { '<leader>ft' },
+  find_in_files = { '<leader>fp' },
+  recent_files = { '<leader>f?' },
+  resume_last = { '<leader>f.' },
+  find_diagnostics = { '<leader>fd' },
+}
+
 M.setup = function()
   local config = {}
   config.extensions = {}
@@ -35,7 +48,7 @@ M.setup = function()
 
   -- Find files (Ctrl-P) - dynamically chooses git files or all files
   -- depending on whether you're in a git repo
-  vim.keymap.set('n', '<C-p>', function()
+  require'user.utils'.map_keys('n', M.keys.find_files_smart, function()
     if require('user.utils').is_inside_git_worktree() then
       require('telescope.builtin').git_files {}
     else
@@ -43,40 +56,40 @@ M.setup = function()
     end
   end, { desc = 'Find files' })
 
-  vim.keymap.set('n', '<leader>ff', function()
+  require'user.utils'.map_keys('n', M.keys.find_files, function()
     require('telescope.builtin').find_files { hidden = true }
   end, { desc = 'Find files (ctrl-p)' })
 
-  vim.keymap.set('n', '<leader>fg', function()
+  require'user.utils'.map_keys('n', M.keys.find_git_files, function()
     require('telescope.builtin').git_files {}
   end, { desc = 'Find files, but only git-managed' })
 
   -- The rest junk
-  vim.keymap.set('n', '<leader>fb', function()
+  require'user.utils'.map_keys('n', M.keys.find_in_buffer, function()
     require('telescope.builtin').current_buffer_fuzzy_find()
   end, { desc = 'Find in current buffer' })
 
-  vim.keymap.set('n', '<leader>fh', function()
+  require'user.utils'.map_keys('n', M.keys.find_help, function()
     require('telescope.builtin').help_tags()
   end, { desc = 'Find help page' })
 
-  vim.keymap.set('n', '<leader>ft', function()
+  require'user.utils'.map_keys('n', M.keys.find_ctags, function()
     require('telescope.builtin').tags()
   end, { desc = 'Find ctags' })
 
-  vim.keymap.set('n', '<leader>fp', function()
+  require'user.utils'.map_keys('n', M.keys.find_in_files, function()
     require('telescope.builtin').live_grep()
   end, { desc = 'Find in files (live grep)' })
 
-  vim.keymap.set('n', '<leader>f?', function()
+  require'user.utils'.map_keys('n', M.keys.recent_files, function()
     require('telescope.builtin').oldfiles()
   end, { desc = 'Recent files' })
 
-  vim.keymap.set('n', '<leader>f.', function()
+  require'user.utils'.map_keys('n', M.keys.resume_last, function()
     require('telescope.builtin').resume()
   end, { desc = 'Resume last' })
 
-  vim.keymap.set('n', '<leader>fd', function()
+  require'user.utils'.map_keys('n', M.keys.find_diagnostics, function()
     require('telescope.builtin').diagnostics()
   end, { desc = 'Find diagnostics' })
 end

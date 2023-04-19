@@ -29,6 +29,8 @@ vim.opt.autochdir = false -- Automatically cd to buffer's dir
 vim.opt.signcolumn = 'yes:2' -- FIX FUCKING GITSIGNS JUMPING BACK AND FORTH
 vim.opt.undodir = undodir_path -- Enable persistent undo
 vim.opt.undofile = true -- Enable persistent undo
+vim.opt.undolevels = 10000 -- Keep more undos
+vim.opt.timeoutlen = 300 -- Time in milliseconds to wait for a mapped sequence to complete
 vim.opt.laststatus = 3 -- Use only one statusline (without lualine)
 vim.g.netrw_browsex_viewer = 'cd %:h && xdg-open'
 vim.o.conceallevel = 2
@@ -37,6 +39,6 @@ vim.o.scrolloff = 8
 vim.g.compile_tex = true -- Compile latex on save by default (i have autocmds for that)
 
 -- TODO: enable built-in colorscheme that is not ugly by default
-vim.cmd.colorscheme 'habamax'
+--vim.cmd.colorscheme 'habamax'
 
 -- vim.g.loaded_netrw = 1
