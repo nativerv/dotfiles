@@ -20,6 +20,10 @@ nowhitelist ${HOME}/dl
 noblacklist ${HOME}/dl
 whitelist ${HOME}/dl/chromium
 
+# Allow public (drag'n'drop) dir
+noblacklist ${HOME}/pub
+whitelist ${HOME}/pub
+
 # Allow programming dirs
 include allow-pr.inc
 

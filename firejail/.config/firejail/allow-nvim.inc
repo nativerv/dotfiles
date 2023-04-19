@@ -11,6 +11,7 @@
 #whitelist-ro ${HOME}/.cache/nvim
 
 noblacklist /usr/share/nvim
+noblacklist /usr/lib/lua*
 whitelist-ro /usr/share/nvim
 
 # vim:syntax=firejail

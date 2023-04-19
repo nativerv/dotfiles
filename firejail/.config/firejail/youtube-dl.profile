@@ -76,7 +76,7 @@ seccomp
 seccomp.block-secondary
 tracelog
 
-private-bin env,ffmpeg,python*,youtube-dl,bash,sh,dash,zsh,yt-dlp
+private-bin env,ffmpeg,ffprobe,python*,youtube-dl,bash,sh,dash,zsh,yt-dlp
 private-cache
 private-dev
 private-etc alternatives,ca-certificates,crypto-policies,hostname,hosts,ld.so.cache,mime.types,pki,resolv.conf,ssl,youtube-dl.conf

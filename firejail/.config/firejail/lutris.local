@@ -29,6 +29,9 @@ whitelist ${HOME}/vg
 noblacklist /media/win_d_drive/Games
 whitelist /media/win_d_drive/Games
 
+noblacklist /usr/lib/libMangoHud*
+whitelist /usr/lib/libMangoHud* 
+
 noblacklist /media/win_d_drive/vg
 whitelist /media/win_d_drive/vg
 

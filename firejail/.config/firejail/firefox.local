@@ -23,6 +23,10 @@ blacklist ${HOME}/.bashrc
 noblacklist ${HOME}/pub
 whitelist ${HOME}/pub
 
+# Allow books
+noblacklist ${HOME}/dox/books
+whitelist-ro ${HOME}/dox/books
+
 # Allow programming dirs
 include allow-pr.inc
 
