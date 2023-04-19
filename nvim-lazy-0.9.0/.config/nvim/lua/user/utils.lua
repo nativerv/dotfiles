@@ -15,6 +15,7 @@ end
 
 -- Map multiple left hand sides to the same rhs
 function M.map_keys(mode, lhss, rhs, opts)
+  opts = opts or {}
   for _, lhs in ipairs(lhss) do
     vim.keymap.set(mode, lhs, rhs, opts)
   end
@@ -31,11 +32,12 @@ end
 
 M.is_inside_git_worktree = function()
   vim.fn.system { 'git', 'rev-parse', '--is-inside-work-tree' }
-  if vim.v.shell_error == 0 then
-    return true
-  else
-    return false
-  end
+  return vim.v.shell_error == 0
+end
+
+M.is_nerdfont_installed = function()
+  vim.fn.system 'fc-list | grep -qi nerd'
+  return vim.v.shell_error == 0
 end
 
 -- Define constants

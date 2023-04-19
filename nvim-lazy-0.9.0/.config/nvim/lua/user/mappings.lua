@@ -57,13 +57,19 @@ vim.keymap.set('v', '<leader><leader>s', '<cmd>so<cr>', { desc = 'Source selecti
 vim.keymap.set('v', 'p', '"_dP') -- if i do lowercase p then it pastes one char to the right
 vim.keymap.set('v', 'P', '"_dP') -- but uppercase P for both cases sometimes does incorrect things too
 
--- Dublicate lines
+-- Duplicate lines
 vim.keymap.set('n', '<M-J>', ':t .<cr>==')
 vim.keymap.set('n', '<M-K>', ':t .-1<cr>==')
 vim.keymap.set('i', '<M-K>', '<Esc>:t .<cr>==gi')
 vim.keymap.set('v', '<M-K>', ":t '><cr>gv=gv")
 vim.keymap.set('i', '<M-J>', '<Esc>:t .-1<cr>==gi')
 vim.keymap.set('v', '<M-J>', ":t '<-1<cr>gv=gv")
+vim.keymap.set('n', '<M-S-о>', ':t .<cr>==')
+vim.keymap.set('n', '<M-S-л>', ':t .-1<cr>==')
+vim.keymap.set('i', '<M-S-л>', '<Esc>:t .<cr>==gi')
+vim.keymap.set('v', '<M-S-л>', ":t '><cr>gv=gv")
+vim.keymap.set('i', '<M-S-о>', '<Esc>:t .-1<cr>==gi')
+vim.keymap.set('v', '<M-S-о>', ":t '<-1<cr>gv=gv")
 
 -- Move cursor on wrapped lines with j/k
 vim.cmd [[

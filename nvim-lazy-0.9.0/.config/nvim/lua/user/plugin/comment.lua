@@ -1,23 +1,31 @@
 local M = {}
 
+M.keys = {
+  toggle_line = { 'gcc', },
+  toggle_block = { 'gCC', },
+
+  opleader_line = { 'gc', },
+  opleader_block = { 'gC', },
+}
+
 M.setup = function ()
   require'Comment'.setup {
    -- | LHS of toggle mappings in NORMAL + VISUAL mode
    -- | type table
    toggler = {
        -- | line-comment keymap
-       line = 'gcc',
+       line = M.keys.toggle_line[1],
        -- | block-comment keymap
-       block = 'gCC',
+       block = M.keys.toggle_block[1], 
    },
 
    -- | LHS of operator-pending mappings in NORMAL + VISUAL mode
    -- | @type table
    opleader = {
        -- | line-comment keymap
-       line = 'gc',
+       line = M.keys.opleader_line[1],
        -- | block-comment keymap
-       block = 'gC',
+       block = M.keys.opleader_block[1],
    },
    -- | @param ctx Ctx
    -- pre_hook = function(ctx)

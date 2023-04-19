@@ -16,7 +16,6 @@ M.setup = function()
   -- Setup lualine
   require 'lualine'.setup {
     options = {
-      -- | theme = 'pywal'
       theme = 'wal',
       globalstatus = true,
     },

@@ -10,10 +10,10 @@ local M = {}
 -- { "<M-д>", function () require'tmux'.move_right, desc = "Switch to pane right" end },
 
 M.keys = { 
-  move_left = { "<M-h>",   "<M-р>",}, 
-  move_bottom = { "<M-j>", "<M-о>",}, 
-  move_top = { "<M-k>",    "<M-л>",},
-  move_right = { "<M-l>",  "<M-д>",}, 
+  move_left = { "<M-h>", "<M-р>" }, 
+  move_bottom = { "<M-j>", "<M-о>" }, 
+  move_top = { "<M-k>", "<M-л>" },
+  move_right = { "<M-l>", "<M-д>" }, 
 }
 
 M.setup = function()

@@ -1,10 +1,17 @@
 {
+  "Comment.nvim": { "branch": "master", "commit": "a89339ffbee677ab0521a483b6dac7e2e67c907e" },
   "gitsigns.nvim": { "branch": "main", "commit": "bb808fc7376ed7bac0fbe8f47b83d4bf01738167" },
   "lazy.nvim": { "branch": "main", "commit": "5f13f69851d2b244891d77590db9e3370197facc" },
+  "lualine-wal.nvim": { "branch": "master", "commit": "e357c0a16afb33e8a449ff89ab3da87a537bf367" },
   "lualine.nvim": { "branch": "master", "commit": "84ffb80e452d95e2c46fa29a98ea11a240f7843e" },
+  "move.nvim": { "branch": "main", "commit": "97d2ce8184ad70601fed9c7867c1bb22cccde46e" },
+  "nvim-surround": { "branch": "main", "commit": "e6047128e57c1aff1566fb9f627521d2887fc77a" },
   "nvim-web-devicons": { "branch": "master", "commit": "4ec26d67d419c12a4abaea02f1b6c57b40c08d7e" },
   "plenary.nvim": { "branch": "master", "commit": "9ac3e9541bbabd9d73663d757e4fe48a675bb054" },
   "telescope-ui-select.nvim": { "branch": "master", "commit": "62ea5e58c7bbe191297b983a9e7e89420f581369" },
   "telescope.nvim": { "branch": "master", "commit": "6258d50b09f9ae087317e392efe7c05a7323492d" },
-  "tmux.nvim": { "branch": "main", "commit": "b6da35847df972f50df27d938b6e5ea09bcc8391" }
+  "tmux.nvim": { "branch": "main", "commit": "b6da35847df972f50df27d938b6e5ea09bcc8391" },
+  "tokyonight.nvim": { "branch": "main", "commit": "dc5b5e20bc232a10e833fd3e81fea149bd4a902f" },
+  "vim-repeat": { "branch": "master", "commit": "24afe922e6a05891756ecf331f39a1f6743d3d5a" },
+  "vim-visual-multi": { "branch": "master", "commit": "724bd53adfbaf32e129b001658b45d4c5c29ca1a" }
 }
