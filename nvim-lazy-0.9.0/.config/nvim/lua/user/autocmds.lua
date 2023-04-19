@@ -24,10 +24,6 @@ local function get_visual_text()
   lines[1] = string.sub(lines[1], col_start, #lines[1])
   lines[#lines] = string.sub(lines[#lines], 1, col_end)
 
-  vim.pretty_print '---'
-  vim.pretty_print(lines)
-  vim.pretty_print(lines)
-
   return table.concat(lines, '\n')
 end
 

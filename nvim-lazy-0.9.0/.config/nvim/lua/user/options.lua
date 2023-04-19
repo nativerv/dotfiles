@@ -36,4 +36,7 @@ vim.o.scrolloff = 8
 
 vim.g.compile_tex = true -- Compile latex on save by default (i have autocmds for that)
 
+-- TODO: enable built-in colorscheme that is not ugly by default
+vim.cmd.colorscheme 'habamax'
+
 -- vim.g.loaded_netrw = 1
