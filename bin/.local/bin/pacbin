@@ -1,3 +1,3 @@
 #!/bin/sh
 
-pacman -Ql "${1}" | grep 'bin' | cut -d' ' -f2 | xargs whatis
+pacman -Ql "${1}" | grep 'bin' | cut -d' ' -f2 | stest -f | xargs whatis

@@ -27,7 +27,7 @@ rendered="${MD_TMP_DIR}/${prefix}-${filename%.*}.html"
 pandoc \
   --standalone \
   --css 'github-markdown.css' \
-  -f 'gfm' \
+  -f 'gfm+smart' \
   -t 'html' \
   -o "${rendered}" \
   "${1}"

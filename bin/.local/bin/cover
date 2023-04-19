@@ -1,0 +1,16 @@
+#!/bin/sh
+
+# Author: nrv
+# Description: output song cover image in sixel format
+
+file="${1}"
+shift
+
+ffmpeg \
+  -i "${file}" \
+  -an \
+  -c:v 'copy' \
+  -f 'image2pipe' - \
+  2>/dev/null |
+  convert - -gravity 'center' -crop '1:1' -gravity 'center' - |
+  chafa -f 'sixel' "${@}" -

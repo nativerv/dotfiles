@@ -1,16 +1,30 @@
 #!/bin/sh
 
 # Author: nrv
-# Description: hardlink the file to XDG_PUBLICSHARE dir with name
-# *sha256sum* of that file, so you can use it from firejailed apps
+# Description: hardlink the file to XDG_PUBLICSHARE dir inside folder
+# with name of *sha256sum* of that file, so you can use it from firejailed apps
+# example: ~/pub/dnd/0d16530cd4e06015d1d8a71309c297e67abf923451afccbd89e5aadf08213689/cat.jpg
 
 set -eu
 
-pub_dir="$(xdg-user-dir PUBLICSHARE)"
+pub_dir="$(xdg-user-dir PUBLICSHARE)/dnd"
 file_path="${1}"
-file_ext="${1##*.}"
+file_name="${file_path##*/}"
 hash="$(sha256sum "${file_path}" | cut -d' ' -f1)"
-pub_file_name="${pub_dir}/${hash}.${file_ext}"
+pub_file_dir="${pub_dir}/${hash}"
+pub_file_path="${pub_file_dir}/${file_name}"
 
-ln -f "${file_path}" "${pub_file_name}" \
-  && printf '%s' "${pub_file_name}"
+pub_dir_drive="$(stat -c '%d' "${pub_dir}")"
+source_dir_drive="$(stat -c '%d' "${file_path}")"
+
+mkdir -p "${pub_file_dir}"
+
+if [ "${file_path}" = "${pub_file_path}" ]; then
+  printf '%s' "${pub_file_path}"
+elif [ "${pub_dir_drive}" = "${source_dir_drive}" ]; then
+  ln -f "${file_path}" "${pub_file_path}" &&
+    printf '%s' "${pub_file_path}"
+else
+  cp -f "${file_path}" "${pub_file_path}" &&
+    printf '%s' "${pub_file_path}"
+fi

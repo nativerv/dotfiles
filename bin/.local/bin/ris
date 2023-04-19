@@ -1,20 +1,41 @@
 #!/bin/sh
 
-set -eux
-# --data '{ "rpt": "imageview", "format": "json", "request": { "blocks": [{ "block": "b-page_type_search-by-image__link" }]} }' \
+# Author: nrv
+# Description: supposed to give you images from yandex reverse image search
+# (or at least the link to the search page on yandex.com/images), but does
+# not work for now (mainly bc of captcha)
 
-image_search_url='https://yandex.ru/images/search'
+DEBUG="${DEBUG-}"
+
+search_url='https://yandex.com/images/search'
+params='rpt=imageview&format=json&request=%7B%22blocks%22%3A%5B%7B%22block%22%3A%22b-page_type_search-by-image__link%22%7D%5D%7D'
+
+# file="$(mktemp)"
+file="${1:-/dev/stdin}"
+
+# cat '/dev/stdin' > "${file}"
+
 response="$(
   curl \
-    --no-buffer \
-    --request POST \
-    --header 'Content-Type: application/json' \
-    --form "upfile=@-" \
-    "${image_search_url}"
+    -s \
+    -X POST \
+    -F "upfile=@-" \
+    -H "Content-Type: multipart/form-data" \
+    "${search_url}?${params}" <"${file}"
 )"
-query_string="$(echo "${response}" | njq 'this.blocks[0].params.url')"
-img_search_url="${image_search_url}?${query_string}"
 
-echo "${img_search_url}"
+[ -n "${DEBUG}" ] && printf '%s' "${response}" | jq . >&2
 
+query_string="$(
+  printf '%s' "${response}" |
+    jq -r '.blocks[0].params.url'
+)"
 
+img_search_url="${search_url}?${query_string}"
+
+printf '%s' "${img_search_url}"
+# #!/bin/sh
+#
+# params='{"rpt": "imageview", "format": "json", "request": {"blocks":[{"block":"b-page_type_search-by-image__link"}]}}'
+# curl -X POST -F'upfile=@-' -d "${params}" 'https://yandex.com/images/search' < "${1:-"/dev/stdin"}"
+#
