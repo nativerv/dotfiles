@@ -23,7 +23,8 @@ urgency="${5}"
 
 case "${urgency}" in
   "LOW") exit ;;
-  "NORMAL"|"CRITICAL") paplay "${XDG_DATA_HOME}/dunst/sounds/Iapetus.ogg" ;;
+  "NORMAL") paplay --volume=$((65535/2)) "${XDG_DATA_HOME}/dunst/sounds/Iapetus.ogg" ;;
+  "CRITICAL") paplay --volume=$((65535)) "${XDG_DATA_HOME}/dunst/sounds/Iapetus.ogg" ;;
   *) ;;
 esac
 
