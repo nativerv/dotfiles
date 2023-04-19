@@ -6,7 +6,7 @@
 #   Select password from password-store, 
 #   write it to ${DMENU_PASS_CURRENT} record and run `dmenu_pass_current`
 
-set -e
+set -ex
 
 PASSWORD_STORE_DIR="${PASSWORD_STORE_DIR:-"${HOME}/.local/share/pass"}"
 DMENU_PASS_CURRENT="${DMENU_PASS_CURRENT:-"dmenu_pass_current"}"
@@ -14,6 +14,7 @@ DMENU_PASS_CURRENT="${DMENU_PASS_CURRENT:-"dmenu_pass_current"}"
 cut_pass_dir="$(printf 's|^%s/||g; s|.gpg$||g' "${PASSWORD_STORE_DIR}")"
 filter_dmenu_pass_current="${DMENU_PASS_CURRENT}"
 
+# Find desired password container
 pass_file="$(
   find "${PASSWORD_STORE_DIR}" -iname "*.gpg" \
     | sed "${cut_pass_dir}" \
@@ -21,8 +22,10 @@ pass_file="$(
     | dmenu -l 10 -p "Select field: "
 )"
 
-pass show "${pass_file}" | pass insert --multiline "${DMENU_PASS_CURRENT}" >/dev/null 2>&1
+# Symlink it - so it is "currently selected"
+ln -sf "${PASSWORD_STORE_DIR}/${pass_file}.gpg" "${PASSWORD_STORE_DIR}/${DMENU_PASS_CURRENT}.gpg"
 
+# The dmenu_pass_current will handle currently selected container
 dmenu_pass_current "${@}"
 
 # shopt -s nullglob globstar

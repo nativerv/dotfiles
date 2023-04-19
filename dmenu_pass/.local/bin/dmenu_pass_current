@@ -1,37 +1,53 @@
 #!/bin/sh
 
 # Author: nrv
-# License: https://www.gnu.org/licenses/gpl-3.0.en.html 
+# License: https://www.gnu.org/licenses/gpl-3.0.en.html
 # Description:
 #   In password-store,
 #   for a selected pass record of form:
 #     password
 #     key: value
 #     key: value
-#     key: value
-#   Yank value to clipboard or type it
+#     secret key*: value
+#   1. Prompt user to select an entry in dmenu, replacing password and 
+#      keys with * at the end with password_placeholder;
+#   2. Prompt the user to select whether to yank it's value to clipboard
+#      or type it
 
-set -e
+set -ex
 
+self="${$}"
+
+PASSWORD_PLACEHOLDER='****************'
 DMENU_PASS_CURRENT="${DMENU_PASS_CURRENT:-'dmenu_pass_current'}"
 
-password_placeholder='****************                                                                                                '
-password="$(pass show "${DMENU_PASS_CURRENT}" | head -n1)"
+entries="$(pass show "${DMENU_PASS_CURRENT}")"
 
 # Select value from password-store record
-selected_value="$(
-  pass show "${DMENU_PASS_CURRENT}" \
-    | sed "1 s/.*/password: ${password_placeholder}/g" \
-    | dmenu -l 10 -p 'Select field: ' \
-    | sed 's/: /\t/g' \
-    | cut -f2
+selected_key="$(
+  printf '%s' "${entries}" |
+    sed "1 s/.*/password*: ${PASSWORD_PLACEHOLDER}/" |       # add password key to the first line (does not have it by convention) and replace value with `PASSWORD_PLACEHOLDER`
+    sed "s/\*: .*/*: ${PASSWORD_PLACEHOLDER}/" |             # replace every value which key is marked with * symbol at the end with password placeholder with `PASSWORD_PLACEHOLDER`
+    { dmenu -l 10 -p 'Select field: ' || kill "${self}"; } | # select entry with dmenu
+    sed 's/: /\t/' |                                         # replace first ': ' (human-readable key-value separator with tab character)
+    cut -f1                                                  # cut the key for further processing. it should be in the form of 'key' or 'key*' at this point
 )"
 
-# Replace placeholder with actual password if password was selected
-[ "${selected_value}" = "${password_placeholder}" ] && selected_value="${password}"
+selected_value="$(
+  if [ "${selected_key}" = "password*" ]; then
+    printf '%s' "${entries}" |
+      head -n1                       # cut just first line if it's 'password*'
+  else
+    printf '%s' "${entries}" |
+      grep -F "${selected_key}: " |  # find the selected key
+      sed 's/: /\t/' |               # replace first ': ' (human-readable key-value separator with tab character)
+      cut -f2                        # cut the value for further processing
+  fi
+)"
 
 action="$(
-  printf 'Type\nYank' | dmenu -p 'Choose an antion: ' -l 2
+  printf 'Type\nYank' |
+    dmenu -l 2 -p 'Choose an antion: '
 )"
 
 # Perform action - type or copy
