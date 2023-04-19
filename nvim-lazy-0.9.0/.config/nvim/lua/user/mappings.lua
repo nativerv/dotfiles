@@ -78,7 +78,7 @@ vim.cmd [[
 --vim.cmd.cnoreabbrev('q!', 'BufDel!')
 
 -- Like "p", but adjust the indent to the current line
-vim.keymap.set('n', 'p', ']p')
+--vim.keymap.set('n', 'p', ']p')
 
 -- Latex
 -- Toggle compile on save
