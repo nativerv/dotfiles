@@ -26,12 +26,12 @@ M.setup = function()
       { 'i', 's' }
     ),
   }
-  config.formatting = {
-    format = require('lspkind').cmp_format {
-      with_text = true,
-      maxwidth = 50,
-    },
-  }
+  -- config.formatting = {
+  --   format = require('lspkind').cmp_format {
+  --     with_text = true,
+  --     maxwidth = 50,
+  --   },
+  -- }
   config.sources = {
     -- `keyword_length` is for debouncing cmp for text until at least 5 symbols is typed
     { name = 'nvim_lsp', keyword_length = 2, priority = 100 },

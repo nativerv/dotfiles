@@ -6,10 +6,10 @@ M.setup = function()
     providers = {
       'lsp',
       'treesitter',
-      'regex',
+      -- 'regex',
     },
     -- delay: delay in milliseconds
-    delay = 120,
+    delay = 200,
     -- filetypes_denylist: filetypes to not illuminate, this overrides filetypes_allowlist
     filetypes_denylist = {
       'dirvish',

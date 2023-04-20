@@ -12,7 +12,7 @@ M.setup = function()
       require 'lualine'.setup {}
     end,
   })
-
+  
   -- Setup lualine
   require 'lualine'.setup {
     options = {

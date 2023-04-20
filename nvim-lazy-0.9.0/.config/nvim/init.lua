@@ -8,9 +8,6 @@
 -- Author: nrv
 -- URL: https://github.com/nativerv/dotfiles
 
--- Cache lua to improve startuptime - needs to be loaded as early as possible
-pcall(require, 'impatient')
-
 -- Bootstrap (download) `lazy.nvim` plugin manager
 require 'user.bootstrap' 
 
