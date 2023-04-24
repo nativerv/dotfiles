@@ -68,8 +68,17 @@ M.setup = function ()
   }
   -- Customize comment strings
   require'Comment.ft'
-  --             line comment  block comment
    .set('lua', { '-- %s',      '--[[ %s ]]' })
+
+  -- Which-Key descriptions
+  if pcall(require, 'which-key') then
+    require('which-key').register {
+      g = {
+        c = 'Comment linewise...',
+        C = 'Comment blockwise...',
+      }
+    }
+  end
 end
 
 

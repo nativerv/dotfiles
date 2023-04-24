@@ -76,6 +76,15 @@ M.setup = function()
     ':<C-U>lua require"gitsigns".select_hunk()<cr>',
     { desc = 'Inside git hunk' }
   )
+
+  -- Which-Key descriptions
+  if pcall(require, 'which-key') then
+    require('which-key').register {
+      ['<leader>'] = {
+        g = { name = 'Git...' },
+      },
+    }
+  end
 end
 
 return M

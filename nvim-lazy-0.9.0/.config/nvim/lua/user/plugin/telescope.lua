@@ -141,6 +141,16 @@ M.setup = function()
 
   -- Setup Telescope with the `config`
   require('telescope').setup(config)
+
+  -- Which-Key descriptions
+  if pcall(require, 'which-key') then
+    require('which-key').register {
+      ['<leader>'] = {
+        f = { name = 'Telescope...' },
+      },
+    }
+  end
+
 end
 
 return M

@@ -200,7 +200,7 @@ M.setup = function()
     },
   }
 
-  -- which-key descriptions
+  -- Which-Key descriptions
   if pcall(require, 'which-key') then
     require('which-key').register {
       ['<leader>'] = {

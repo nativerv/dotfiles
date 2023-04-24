@@ -1,11 +1,17 @@
 local M = {}
 
 M.setup = function()
+  -- Disable the 'v' which-keying for some reason ¯\_(ツ)_/¯
   local presets = require 'which-key.plugins.presets'
   presets.operators['v'] = nil
 
-  -- Show which-key window
-  vim.keymap.set({ 'n' }, '<leader>?', require'which-key'.show, { desc = 'Show key mappings' })
+  -- Mapping: show which-key window
+  vim.keymap.set(
+    { 'n' },
+    '<leader>?',
+    require('which-key').show,
+    { desc = 'Show key mappings' }
+  )
 
   -- Which-key settings
   require('which-key').setup {
@@ -26,17 +32,41 @@ M.setup = function()
     },
   }
 
+  -- TODO: migrate these to their places when they're implemented:
+  -- Which-Key descriptions
+  if pcall(require, 'which-key') then
+    require('which-key').register {
+      ['<leader>'] = {
+        d = { name = 'Debug...' },
+      }
+    }
+  end
+  -- Which-Key descriptions
+  if pcall(require, 'which-key') then
+    require('which-key').register {
+      ['<leader>'] = {
+        l = { name = 'Lsp...' },
+      }
+    }
+  end
+  -- Which-Key descriptions
+  if pcall(require, 'which-key') then
+    require('which-key').register {
+      ['<leader>'] = {
+        t = { name = 'Tests...' },
+      }
+    }
+  end
+
   -- Default descriptions
   require('which-key').register {
-    g = {
-      c = 'Comment linewise...',
-      C = 'Comment blockwise...',
-    },
+    z = 'Folds, screen, spelling and more...',
+    p = 'Put (after cursor)',
+    P = 'Put (before cursor)',
+    y = 'Yank',
+    Y = 'Yank to the end of the line',
+
     ['<C-l>'] = 'Clear search highlight',
-    ['<ScrollWheelUp>'] = 'which_key_ignore',
-    ['<ScrollWheelDown>'] = 'which_key_ignore',
-    ['<LeftMouse>'] = 'which_key_ignore',
-    ['<RightMouse>'] = 'which_key_ignore',
     ['<C-w>'] = 'Window...',
     ['`'] = 'Marks...',
     ['\''] = 'Marks...',
@@ -44,18 +74,17 @@ M.setup = function()
     ['"'] = 'Use register for next action...',
     ['['] = 'To previous...',
     [']'] = 'To next...',
+
+    -- This is my tmux prefix
     ['<M-`>'] = 'which_key_ignore',
-    z = 'Folds, screen, spelling and more...',
-    p = 'Put (after cursor)',
-    P = 'Put (before cursor)',
-    y = 'Yank',
-    Y = 'Yank to the end of the line',
+    -- These are bound by `nvim-scrollview`, but i would never need them anyway so here they go
+    ['<ScrollWheelUp>'] = 'which_key_ignore',
+    ['<ScrollWheelDown>'] = 'which_key_ignore',
+    ['<LeftMouse>'] = 'which_key_ignore',
+    ['<RightMouse>'] = 'which_key_ignore',
+
     ['<leader>'] = {
       name = 'More...',
-      f = { name = 'Telescope...' },
-      d = { name = 'Debug...' },
-      l = { name = 'Lsp...' },
-      t = { name = 'Tests...' },
       ['<leader>'] = {
         name = 'More...',
         u = { name = 'Utilities and toggleables...' },
@@ -64,6 +93,7 @@ M.setup = function()
     },
   }
 
+  -- Use terminal's bg
   vim.api.nvim_set_hl(0, 'WhichKeyFloat', {
     bg = 'NONE',
     ctermbg = 'NONE',
