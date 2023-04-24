@@ -12,11 +12,11 @@ M.navic_filename = function()
     filename = '[No Name]'
   end
   local file_icon, file_icon_color =
-  require('nvim-web-devicons').get_icon_color(
-    filename,
-    extension,
-    { default = true }
-  )
+    require('nvim-web-devicons').get_icon_color(
+      filename,
+      extension,
+      { default = true }
+    )
 
   local hl_group = 'FileIconColor' .. extension
 
@@ -133,7 +133,7 @@ M.setup = function()
 
   -- Set the winbar to the navic stuff
   vim.o.winbar =
-  "%{%v:lua.require'user.plugin.navic'.navic_filename()%}%{%v:lua.require'nvim-navic'.get_location()%}"
+    "%{%v:lua.require'user.plugin.navic'.navic_filename()%}%{%v:lua.require'nvim-navic'.get_location()%}"
 end
 
 return M

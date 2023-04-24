@@ -1,10 +1,15 @@
 local M = {}
 
+M.mappings = {
+  hint_words = {
+    keys = { 'f' },
+    opts = { desc = 'Hint words' },
+    { { 'n' }, function() require('hop').hint_words() end }
+  },
+}
+
 M.setup = function()
   require('hop').setup { keys = 'etovxqpdygfblzhckisuran' }
-
-  -- Display words
-  vim.keymap.set('n', 'f', require('hop').hint_words)
 end
 
 return M

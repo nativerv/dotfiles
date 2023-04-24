@@ -4,15 +4,17 @@ require("lazy").setup({
   -- Navigation,
   {
     'phaazon/hop.nvim',
+    keys = require'user.lib.plugin-management'.extract_keys_from_module_mappings(require('user.plugin.hop').mappings, true),
     config = require('user.plugin.hop').setup,
   },
   {
     'bkad/CamelCaseMotion',
-    config = require('user.plugin.camel-case-motion').setup(),
+    keys = require'user.lib.plugin-management'.extract_keys_from_module_mappings(require('user.plugin.camel-case-motion').mappings, true),
+    config = require('user.plugin.camel-case-motion').setup,
   }, -- Vimscript
   {
     'aserowy/tmux.nvim',
-    keys = require'user.utils'.flatten_keys(require('user.plugin.tmux').keys),
+    keys = require'user.lib.plugin-management'.extract_keys_from_module_mappings(require('user.plugin.tmux').mappings, true),
     config = require('user.plugin.tmux').setup,
   },
 
@@ -26,8 +28,8 @@ require("lazy").setup({
   {
     'nvim-telescope/telescope.nvim',
     dependencies = { 'nvim-lua/plenary.nvim' },
-    keys = require'user.utils'.flatten_keys(require('user.plugin.telescope').keys),
-      cmd = 'Telescope',
+    keys = require'user.lib.plugin-management'.extract_keys_from_module_mappings(require('user.plugin.telescope').mappings, true),
+    cmd = 'Telescope',
     config = require('user.plugin.telescope').setup,
   },
 
@@ -48,7 +50,7 @@ require("lazy").setup({
   {
     'nvim-lualine/lualine.nvim',
     dependencies = { 
-      { 'kyazdani42/nvim-web-devicons' },  
+      { 'nvim-tree/nvim-web-devicons' },  
       {
         'nativerv/lualine-wal.nvim',
         event = 'VeryLazy',
@@ -56,6 +58,11 @@ require("lazy").setup({
     },
     event = "VeryLazy",
     config = require('user.plugin.lualine').setup,
+  },
+  {
+    'SmiteshP/nvim-navic',
+    event = 'BufEnter',
+    config = require('user.plugin.navic').setup,
   },
 
   -- Editing
@@ -66,27 +73,29 @@ require("lazy").setup({
   },
   {
     'tpope/vim-repeat',
-    keys = '.',
+    keys = { { '.',  desc = 'Repeat last command' } },
   }, -- Vimscript
   {
     'kylechui/nvim-surround',
-    event = 'VeryLazy',
+    -- event = 'VeryLazy',
+    keys = require'user.lib.plugin-management'.extract_keys_from_module_mappings(require('user.plugin.nvim-surround').mappings, true),
     config = require('user.plugin.nvim-surround').setup,
   },
   {
     'fedepujol/move.nvim',
-    keys = require'user.utils'.flatten_keys(require('user.plugin.move').keys),
-      config = require('user.plugin.move').setup,
+    keys = require'user.lib.plugin-management'.extract_keys_from_module_mappings(require('user.plugin.move').mappings, true),
+    config = require('user.plugin.move').setup,
   },
   {
     'mg979/vim-visual-multi',
-    keys = require'user.utils'.flatten_keys(require('user.plugin.vim-visual-multi').keys),
-      config = require('user.plugin.vim-visual-multi').setup,
+    keys = require'user.lib.plugin-management'.extract_keys_from_module_mappings(require('user.plugin.vim-visual-multi').mappings, true),
+    init = require('user.plugin.vim-visual-multi').init,
   }, -- Vimscript
   {
     'numToStr/Comment.nvim',
-    keys = require'user.utils'.flatten_keys(require('user.plugin.comment').keys),
-      config = require('user.plugin.comment').setup,
+    keys = require'user.lib.plugin-management'.extract_keys_from_module_mappings(require('user.plugin.comment').mappings, false),
+    -- event = 'VeryLazy',
+    config = require('user.plugin.comment').setup,
   },
 
   -- Autocompletion - core plugin
@@ -105,13 +114,8 @@ require("lazy").setup({
   {
     'nvim-treesitter/nvim-treesitter',
     dependencies = {
-      {
-        'nvim-treesitter/nvim-treesitter-textobjects',
-      },
-      {
-        'HiPhish/nvim-ts-rainbow2',
-        event = 'VeryLazy',
-      },
+      { 'nvim-treesitter/nvim-treesitter-textobjects', },
+      { 'HiPhish/nvim-ts-rainbow2', --[[event = 'VeryLazy',]] },
     },
     event = { "BufReadPost", "BufNewFile" },
     -- event = { "UIEnter" },
@@ -119,11 +123,11 @@ require("lazy").setup({
   },
   {
     'JoosepAlviste/nvim-ts-context-commentstring',
-    keys = require'user.utils'.flatten_keys(require('user.plugin.comment').keys),
+    keys = require'user.lib.plugin-management'.extract_keys_from_module_mappings(require('user.plugin.comment').mappings, false),
   }, 
   {
     'nvim-treesitter/playground',
-    cmd = { 'TSPlaygroundToggle', 'TSNodeUnderCursor' },
+    cmd = { 'TSPlaygroundToggle', 'TSNodeUnderCursor', 'TSHighlightCapturesUnderCursor' },
   },
   {
     'windwp/nvim-ts-autotag',
@@ -154,8 +158,27 @@ require("lazy").setup({
     'lewis6991/gitsigns.nvim',
     dependencies = { 'nvim-lua/plenary.nvim' },
     event = { "BufReadPre", "BufNewFile" },
-    -- event = { "UIEnter" },
     tag = 'release',
     config = require('user.plugin.gitsigns').setup,
+  },
+  {
+    'NvChad/nvim-colorizer.lua',
+    cmd = { 'ColorizerToggle', },
+    config = require('user.plugin.colorizer').setup,
+  },
+  {
+    'folke/which-key.nvim',
+    config = require('user.plugin.which-key').setup,
+  },
+  {
+    'dstein64/nvim-scrollview',
+    event = { "VeryLazy" },
+  },
+  {
+    'ghillb/cybu.nvim',
+    dependencies = { 'nvim-tree/nvim-web-devicons', 'nvim-lua/plenary.nvim' },
+    keys = require'user.lib.plugin-management'.extract_keys_from_module_mappings(require('user.plugin.cybu').mappings, true),
+    init = require('user.plugin.cybu').init,
+    config = require('user.plugin.cybu').setup,
   },
 }, require'user.plugin.lazy'.spec)

@@ -29,7 +29,7 @@ M.setup = function()
     -- filetypes_allowlist: filetypes to illuminate, this is overridden by filetypes_denylist
     filetypes_allowlist = {},
     -- modes_denylist: modes to not illuminate, this overrides modes_allowlist
-    modes_denylist = {},
+    modes_denylist = { 'v' },
     -- modes_allowlist: modes to illuminate, this is overridden by modes_denylist
     modes_allowlist = {},
     large_file_cutoff = 5000,
@@ -46,6 +46,21 @@ M.setup = function()
     under_cursor = true,
   }
 
+  -- Disable default mappings
+  if not require('illuminate.util').has_keymap('n', '<a-n>') then
+    vim.keymap.set('n', '<a-n>', '<nop>', { desc = 'which_key_ignore' })
+  end
+  if not require('illuminate.util').has_keymap('n', '<a-p>') then
+    vim.keymap.set('n', '<a-p>', '<nop>', { desc = 'which_key_ignore' })
+  end
+  if not require('illuminate.util').has_keymap('o', '<a-i>') then
+    vim.keymap.set('o', '<a-i>', '<nop>', { desc = 'which_key_ignore' })
+  end
+  if not require('illuminate.util').has_keymap('x', '<a-i>') then
+    vim.keymap.set('x', '<a-i>', '<nop>', { desc = 'which_key_ignore' })
+  end
+
+  -- Colors
   vim.api.nvim_create_autocmd({ 'VimEnter' }, {
     group = vim.api.nvim_create_augroup(
       'nrv#illuminate_set_highlights',
@@ -55,7 +70,7 @@ M.setup = function()
       -- Set illuminate colors to be slightly lightened CursorLine color
       local cursor_line_color = vim.api.nvim_get_hl_by_name('CursorLine', true)
       local illuminate_color =
-        require('user.lib.colors').lighten(cursor_line_color.background, 1.3, 0x000000)
+      require('user.lib.colors').lighten(cursor_line_color.background, 1.3, 0x000000)
       vim.api.nvim_set_hl(0, 'IlluminatedWordText', { bg =  'NONE'})
       vim.api.nvim_set_hl(0, 'IlluminatedWordRead', { bg = illuminate_color })
       vim.api.nvim_set_hl(0, 'IlluminatedWordWrite', { bg = illuminate_color })

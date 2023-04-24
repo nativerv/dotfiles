@@ -25,7 +25,7 @@ M.setup = function()
   -- Cycle hunks
   vim.keymap.set({ 'n' }, '<leader>g[', function()
     require('gitsigns').prev_hunk()
-  end, { desc = 'Go to prev hunk' })
+  end, { desc = 'Go to previous hunk' })
 
   vim.keymap.set({ 'n' }, '<leader>g]', function()
     require('gitsigns').next_hunk()

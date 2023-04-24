@@ -1,12 +1,35 @@
 local M = {}
 
+M.mappings = {
+  {
+    keys = { 'S' },
+    { { 'n' }, 'ysiw' },
+    opts = {
+      remap = true,
+      silent = true,
+      desc = 'Add a surrounding pair around a word',
+    },
+  },
+  {
+    keys = { 'S' },
+    { { 'v' } },
+    opts = { desc = 'Add a surrounding pair around a selection', },
+  },
+  {
+    keys = { 'ys' },
+    { 'n' },
+    opts = { desc = 'Add a surrounding pair around a motion' },
+  },
+  {
+    keys = { 'cs' },
+    { 'n' },
+    opts = { desc = 'Change a surrounding pair' },
+  },
+}
+
 M.setup = function()
   require('nvim-surround').setup {}
-  -- TODO: seems like this plugin updated/more treesitter stuff addeed
-
-  -- Keymaps
-  -- Surround word
-  vim.api.nvim_set_keymap('n', 'S', 'ysiw', { noremap = false, silent = true })
+  require('user.lib.plugin-management').apply_module_mappings(M.mappings)
 end
 
 return M

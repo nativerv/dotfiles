@@ -67,10 +67,9 @@ vim.api.nvim_create_autocmd({ 'BufWinEnter' }, {
     { clear = true }
   ),
   callback = function()
-    if vim.tbl_contains({ 'commit', 'rebase' }, vim.o.ft) then return end
-    if vim.fn.line '\'"' <= vim.fn.line '$' then
-      vim.cmd [[ normal! g`"zz ]]
-    end
+    if vim.tbl_contains({ 'commit', 'rebase', 'help' }, vim.o.ft) then return end
+    if not (vim.fn.line '\'"' <= vim.fn.line '$') then return end
+    vim.cmd [[ normal! g`"zz ]]
   end,
 })
 

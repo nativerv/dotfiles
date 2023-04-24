@@ -1,6 +1,6 @@
-local m = {}
+local M = {}
 
-m.rainbow_colors = {
+M.rainbow_colors = {
   '#e06c75',
   '#e5c07b',
   '#98c379',
@@ -9,8 +9,10 @@ m.rainbow_colors = {
   '#c678dd',
 }
 
-m.setup = function()
+M.setup = function()
+
   local configs = {}
+
   local captures = {}
   -- | ensure_installed = 'all',
   --{
@@ -22,6 +24,7 @@ m.setup = function()
   --  "ruby",       "rust",   "scheme", "scss",       "svelte",  "todotxt", "toml",       "tsx",
   --  "typescript", "vim",    "vue",    "wgsl",       "yaml",
   --}, -- one of "all", "maintained" (parsers with maintainers), or a list of languages
+  configs.parser_install_dir = require'user.utils'.XDG_DATA_HOME .. '/tree-sitter/parsers'
   configs.sync_install = true -- install languages synchronously (only applied to `ensure_installed`)
   configs.ignore_install = {} -- list of parsers to ignore installing
   configs.highlight = {
@@ -41,14 +44,22 @@ m.setup = function()
     -- disable = { "jsx", "cpp" }, list of languages you want to disable the plugin for
     extended_mode = true, -- also highlight non-bracket delimiters like html tags, boolean or table: lang -> boolean
     max_file_lines = 10000, -- do not enable for files with more than n lines, int
-    -- colors = {}, -- table of hex strings
-    -- termcolors = {} -- table of colour name strings
+    hlgroups = {
+      'rainbowcol1',
+      'rainbowcol2',
+      'rainbowcol3',
+      'rainbowcol4',
+      'rainbowcol5',
+      'rainbowcol6',
+    },
   }
-  for index, color in ipairs(m.rainbow_colors) do -- p00f/rainbow#81
+  -- Define hlgroups for nvim-ts-rainbow
+  for index, color in ipairs(M.rainbow_colors) do -- p00f/rainbow#81
     vim.api.nvim_set_hl(0, ('rainbowcol%d'):format(index), {
       fg = color,
     })
   end
+
 
   configs.context_commentstring = {
     enable = true,
@@ -61,7 +72,7 @@ m.setup = function()
       node_incremental = '<c-space>',
       node_decremental = '<bs>',
       scope_incremental = 'gss',
-      scope_decremental = 'gss', -- there's no such thing for some reason
+      -- scope_decremental = 'gss', -- there's no such thing for some reason
     },
   }
 
@@ -198,9 +209,9 @@ m.setup = function()
     }
   end
 
-  -- actual treesitter setup executes here - above are just config tablese
+  -- Actual treesitter setup executes here - above are just config tablese
+  vim.opt.runtimepath:append(configs.parser_install_dir)
   require('nvim-treesitter.configs').setup(configs)
-  -- require('nvim-treesitter.highlight').set_custom_captures(captures)
 end
 
-return m
+return M

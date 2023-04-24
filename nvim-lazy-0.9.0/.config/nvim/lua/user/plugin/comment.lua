@@ -1,42 +1,57 @@
 local M = {}
 
-M.keys = {
-  toggle_line = { 'gcc', },
-  toggle_block = { 'gCC', },
-
-  opleader_line = { 'gc', },
-  opleader_block = { 'gC', },
+M.mappings = {
+  toggle_line = {
+    keys = { 'gcc', },
+    opts = { desc = 'Comment line' },
+    { { 'n' } },
+  },
+  toggle_block = {
+    keys = { 'gCC', },
+    opts = { desc = 'Comment line as block comment' },
+    { { 'n' } },
+  },
+  opleader_line = {
+    keys = { 'gc', },
+    opts = { desc = 'Comment linewise...' },
+    { { 'o', 'v', 'n' } },
+  },
+  opleader_block = {
+    keys = { 'gC', },
+    opts = { desc = 'Comment blockwise...' },
+    { { 'o', 'v', 'n' } },
+  },
 }
 
 M.setup = function ()
   require'Comment'.setup {
-   -- | LHS of toggle mappings in NORMAL + VISUAL mode
-   -- | type table
+   -- LHS of toggle mappings in NORMAL + VISUAL mode
+   -- type table
    toggler = {
-       -- | line-comment keymap
-       line = M.keys.toggle_line[1],
-       -- | block-comment keymap
-       block = M.keys.toggle_block[1], 
+       -- line-comment keymap
+       line = M.mappings.toggle_line.keys[1],
+       -- block-comment keymap
+       block = M.mappings.toggle_block.keys[1], 
    },
 
-   -- | LHS of operator-pending mappings in NORMAL + VISUAL mode
-   -- | @type table
+   -- LHS of operator-pending mappings in NORMAL + VISUAL mode
+   -- @type table
    opleader = {
-       -- | line-comment keymap
-       line = M.keys.opleader_line[1],
-       -- | block-comment keymap
-       block = M.keys.opleader_block[1],
+       -- line-comment keymap
+       line = M.mappings.opleader_line.keys[1],
+       -- block-comment keymap
+       block = M.mappings.opleader_block.keys[1],
    },
-   -- | @param ctx Ctx
+   -- @param ctx Ctx
    -- pre_hook = function(ctx)
-   --   -- | Only calculate commentstring for tsx filetypes
+   --   -- Only calculate commentstring for tsx filetypes
    --   if vim.bo.filetype == 'typescriptreact' then
    --     local U = require('Comment.utils')
    --
-   --     -- | Detemine whether to use linewise or blockwise commentstring
+   --     -- Detemine whether to use linewise or blockwise commentstring
    --     local type = ctx.ctype == U.ctype.line and '__default' or '__multiline'
    --
-   --     -- | Determine the location where to calculate commentstring from
+   --     -- Determine the location where to calculate commentstring from
    --     local location = nil
    --     if ctx.ctype == U.ctype.block then
    --       location = require('ts_context_commentstring.utils').get_cursor_location()
@@ -51,10 +66,10 @@ M.setup = function ()
    --   end
    -- end,
   }
-  -- | Customize comment strings
+  -- Customize comment strings
   require'Comment.ft'
-  -- |            line comment  block comment
-   .set('lua', { '-- %s',    '-- [[ %s ]]' })
+  --             line comment  block comment
+   .set('lua', { '-- %s',      '--[[ %s ]]' })
 end
 
 
