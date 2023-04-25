@@ -37,9 +37,9 @@ M.setup = function()
           colored = true, -- Displays a colored diff status if set to true
           diff_color = {
             -- Same color values as the general color option can be used here.
-            added    = { fg = '#14a573', },
-            modified = { fg = '#deaf6c', },
-            removed  = { fg = '#af404a', },
+            added    = { fg = require'user.config'.colors.git.added, },
+            modified = { fg = require'user.config'.colors.git.modified, },
+            removed  = { fg = require'user.config'.colors.git.removed, },
           },
           symbols = { added = '+', modified = '~', removed = '-' }, -- Changes the symbols used by the diff.
           -- A function that works as a data source for diff.

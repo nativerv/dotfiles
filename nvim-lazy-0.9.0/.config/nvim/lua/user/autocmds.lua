@@ -83,167 +83,183 @@ vim.api.nvim_create_autocmd({ 'BufWinEnter' }, {
 -- WARNING:
 -- FIXME:
 
-vim.cmd [[
-  augroup nrv#remove_background_color
-    autocmd!
-    autocmd ColorScheme * highlight Normal ctermbg=NONE guibg=NONE
-    autocmd ColorScheme * highlight NormalNC ctermbg=NONE guibg=NONE
-    autocmd ColorScheme * highlight NormalSB ctermbg=NONE guibg=NONE
-    autocmd ColorScheme * highlight NormalFloat ctermbg=NONE guibg=NONE
+vim.api.nvim_create_autocmd({ 'ColorScheme' }, {
+  pattern = '*',
+  group = vim.api.nvim_create_augroup(
+    'nrv#remove_background_color',
+    { clear = true }
+  ),
+  callback = function()
+    vim.cmd [[ highlight Normal ctermbg=NONE guibg=NONE ]] 
+    vim.cmd [[ highlight NormalNC ctermbg=NONE guibg=NONE ]] 
+    vim.cmd [[ highlight NormalSB ctermbg=NONE guibg=NONE ]] 
+    vim.cmd [[ highlight NormalFloat ctermbg=NONE guibg=NONE ]] 
 
-    " Floats
-    autocmd ColorScheme * highlight FloatBorder ctermbg=NONE guibg=NONE
-    autocmd ColorScheme * highlight LspInfoBorder ctermbg=NONE guibg=NONE
+    -- Floats
+    vim.cmd [[ highlight FloatBorder ctermbg=NONE guibg=NONE ]] 
+    vim.cmd [[ highlight LspInfoBorder ctermbg=NONE guibg=NONE ]] 
 
-    " Line numbers
-    autocmd ColorScheme * highlight LineNr ctermbg=NONE guibg=NONE
-    autocmd ColorScheme * highlight CursorLineNr ctermbg=NONE guibg=NONE
+    -- Line numbers
+    vim.cmd [[ highlight LineNr ctermbg=NONE guibg=NONE ]] 
+    vim.cmd [[ highlight CursorLineNr ctermbg=NONE guibg=NONE ]] 
 
-    " Signcolumn
-    autocmd ColorScheme * highlight SignColumn ctermbg=NONE guibg=NONE
-    autocmd ColorScheme * highlight SignColumnSB ctermbg=NONE guibg=NONE
+    -- Signcolumn
+    vim.cmd [[ highlight SignColumn ctermbg=NONE guibg=NONE ]] 
+    vim.cmd [[ highlight SignColumnSB ctermbg=NONE guibg=NONE ]] 
 
-    autocmd ColorScheme * highlight Tabline                          ctermbg=NONE guibg=NONE
-    autocmd ColorScheme * highlight TelescopeBorder                  ctermbg=NONE guibg=NONE
-    autocmd ColorScheme * highlight TelescopeMatching                ctermbg=NONE guibg=NONE
-    autocmd ColorScheme * highlight TelescopePromptPrefix            ctermbg=NONE guibg=NONE
-    autocmd ColorScheme * highlight TelescopePromptCounter           ctermbg=NONE guibg=NONE
-    autocmd ColorScheme * highlight TelescopeMultiSelection          ctermbg=NONE guibg=NONE
-    autocmd ColorScheme * highlight TelescopeBorder                  ctermbg=NONE guibg=NONE
-    autocmd ColorScheme * highlight TelescopeMatching                ctermbg=NONE guibg=NONE
-    autocmd ColorScheme * highlight TelescopeMultiIcon               ctermbg=NONE guibg=NONE
-    autocmd ColorScheme * highlight TelescopeMultiSelection          ctermbg=NONE guibg=NONE
-    autocmd ColorScheme * highlight TelescopeNormal                  ctermbg=NONE guibg=NONE
-    autocmd ColorScheme * highlight TelescopePreviewBlock            ctermbg=NONE guibg=NONE
-    autocmd ColorScheme * highlight TelescopePreviewBorder           ctermbg=NONE guibg=NONE
-    autocmd ColorScheme * highlight TelescopePreviewCharDev          ctermbg=NONE guibg=NONE
-    autocmd ColorScheme * highlight TelescopePreviewDate             ctermbg=NONE guibg=NONE
-    autocmd ColorScheme * highlight TelescopePreviewDirectory        ctermbg=NONE guibg=NONE
-    autocmd ColorScheme * highlight TelescopePreviewExecute          ctermbg=NONE guibg=NONE
-    autocmd ColorScheme * highlight TelescopePreviewGroup            ctermbg=NONE guibg=NONE
-    autocmd ColorScheme * highlight TelescopePreviewHyphen           ctermbg=NONE guibg=NONE
-    autocmd ColorScheme * highlight TelescopePreviewLine             ctermbg=NONE guibg=NONE
-    autocmd ColorScheme * highlight TelescopePreviewLink             ctermbg=NONE guibg=NONE
-    autocmd ColorScheme * highlight TelescopePreviewMatch            ctermbg=NONE guibg=NONE
-    autocmd ColorScheme * highlight TelescopePreviewMessage          ctermbg=NONE guibg=NONE
-    autocmd ColorScheme * highlight TelescopePreviewMessageFillchar  ctermbg=NONE guibg=NONE
-    autocmd ColorScheme * highlight TelescopePreviewNormal           ctermbg=NONE guibg=NONE
-    autocmd ColorScheme * highlight TelescopePreviewPipe             ctermbg=NONE guibg=NONE
-    autocmd ColorScheme * highlight TelescopePreviewRead             ctermbg=NONE guibg=NONE
-    autocmd ColorScheme * highlight TelescopePreviewSize             ctermbg=NONE guibg=NONE
-    autocmd ColorScheme * highlight TelescopePreviewSocket           ctermbg=NONE guibg=NONE
-    autocmd ColorScheme * highlight TelescopePreviewSticky           ctermbg=NONE guibg=NONE
-    autocmd ColorScheme * highlight TelescopePreviewTitle            ctermbg=NONE guibg=NONE
-    autocmd ColorScheme * highlight TelescopePreviewUser             ctermbg=NONE guibg=NONE
-    autocmd ColorScheme * highlight TelescopePreviewWrite            ctermbg=NONE guibg=NONE
-    autocmd ColorScheme * highlight TelescopePromptBorder            ctermbg=NONE guibg=NONE
-    autocmd ColorScheme * highlight TelescopePromptCounter           ctermbg=NONE guibg=NONE
-    autocmd ColorScheme * highlight TelescopePromptNormal            ctermbg=NONE guibg=NONE
-    autocmd ColorScheme * highlight TelescopePromptPrefix            ctermbg=NONE guibg=NONE
-    autocmd ColorScheme * highlight TelescopePromptTitle             ctermbg=NONE guibg=NONE
-    autocmd ColorScheme * highlight TelescopeResultsBorder           ctermbg=NONE guibg=NONE
-    autocmd ColorScheme * highlight TelescopeResultsClass            ctermbg=NONE guibg=NONE
-    autocmd ColorScheme * highlight TelescopeResultsComment          ctermbg=NONE guibg=NONE
-    autocmd ColorScheme * highlight TelescopeResultsConstant         ctermbg=NONE guibg=NONE
-    autocmd ColorScheme * highlight TelescopeResultsDiffAdd          ctermbg=NONE guibg=NONE
-    autocmd ColorScheme * highlight TelescopeResultsDiffChange       ctermbg=NONE guibg=NONE
-    autocmd ColorScheme * highlight TelescopeResultsDiffDelete       ctermbg=NONE guibg=NONE
-    autocmd ColorScheme * highlight TelescopeResultsDiffUntracked    ctermbg=NONE guibg=NONE
-    autocmd ColorScheme * highlight TelescopeResultsField            ctermbg=NONE guibg=NONE
-    autocmd ColorScheme * highlight TelescopeResultsFunction         ctermbg=NONE guibg=NONE
-    autocmd ColorScheme * highlight TelescopeResultsIdentifier       ctermbg=NONE guibg=NONE
-    autocmd ColorScheme * highlight TelescopeResultsLineNr           ctermbg=NONE guibg=NONE
-    autocmd ColorScheme * highlight TelescopeResultsMethod           ctermbg=NONE guibg=NONE
-    autocmd ColorScheme * highlight TelescopeResultsNormal           ctermbg=NONE guibg=NONE
-    autocmd ColorScheme * highlight TelescopeResultsNumber           ctermbg=NONE guibg=NONE
-    autocmd ColorScheme * highlight TelescopeResultsOperator         ctermbg=NONE guibg=NONE
-    autocmd ColorScheme * highlight TelescopeResultsSpecialComment   ctermbg=NONE guibg=NONE
-    autocmd ColorScheme * highlight TelescopeResultsStruct           ctermbg=NONE guibg=NONE
-    autocmd ColorScheme * highlight TelescopeResultsTitle            ctermbg=NONE guibg=NONE
-    autocmd ColorScheme * highlight TelescopeResultsVariable         ctermbg=NONE guibg=NONE
-    autocmd ColorScheme * highlight TelescopeSelection               ctermbg=NONE guibg=NONE
-    autocmd ColorScheme * highlight TelescopeSelectionCaret          ctermbg=NONE guibg=NONE
-    autocmd ColorScheme * highlight TelescopeTitle                   ctermbg=NONE guibg=NONE
+    vim.cmd [[ highlight Tabline                          ctermbg=NONE guibg=NONE ]] 
+    vim.cmd [[ highlight TelescopeBorder                  ctermbg=NONE guibg=NONE ]] 
+    vim.cmd [[ highlight TelescopeMatching                ctermbg=NONE guibg=NONE ]] 
+    vim.cmd [[ highlight TelescopePromptPrefix            ctermbg=NONE guibg=NONE ]] 
+    vim.cmd [[ highlight TelescopePromptCounter           ctermbg=NONE guibg=NONE ]] 
+    vim.cmd [[ highlight TelescopeMultiSelection          ctermbg=NONE guibg=NONE ]] 
+    vim.cmd [[ highlight TelescopeBorder                  ctermbg=NONE guibg=NONE ]] 
+    vim.cmd [[ highlight TelescopeMatching                ctermbg=NONE guibg=NONE ]] 
+    vim.cmd [[ highlight TelescopeMultiIcon               ctermbg=NONE guibg=NONE ]] 
+    vim.cmd [[ highlight TelescopeMultiSelection          ctermbg=NONE guibg=NONE ]] 
+    vim.cmd [[ highlight TelescopeNormal                  ctermbg=NONE guibg=NONE ]] 
+    vim.cmd [[ highlight TelescopePreviewBlock            ctermbg=NONE guibg=NONE ]] 
+    vim.cmd [[ highlight TelescopePreviewBorder           ctermbg=NONE guibg=NONE ]] 
+    vim.cmd [[ highlight TelescopePreviewCharDev          ctermbg=NONE guibg=NONE ]] 
+    vim.cmd [[ highlight TelescopePreviewDate             ctermbg=NONE guibg=NONE ]] 
+    vim.cmd [[ highlight TelescopePreviewDirectory        ctermbg=NONE guibg=NONE ]] 
+    vim.cmd [[ highlight TelescopePreviewExecute          ctermbg=NONE guibg=NONE ]] 
+    vim.cmd [[ highlight TelescopePreviewGroup            ctermbg=NONE guibg=NONE ]] 
+    vim.cmd [[ highlight TelescopePreviewHyphen           ctermbg=NONE guibg=NONE ]] 
+    vim.cmd [[ highlight TelescopePreviewLine             ctermbg=NONE guibg=NONE ]] 
+    vim.cmd [[ highlight TelescopePreviewLink             ctermbg=NONE guibg=NONE ]] 
+    vim.cmd [[ highlight TelescopePreviewMatch            ctermbg=NONE guibg=NONE ]] 
+    vim.cmd [[ highlight TelescopePreviewMessage          ctermbg=NONE guibg=NONE ]] 
+    vim.cmd [[ highlight TelescopePreviewMessageFillchar  ctermbg=NONE guibg=NONE ]] 
+    vim.cmd [[ highlight TelescopePreviewNormal           ctermbg=NONE guibg=NONE ]] 
+    vim.cmd [[ highlight TelescopePreviewPipe             ctermbg=NONE guibg=NONE ]] 
+    vim.cmd [[ highlight TelescopePreviewRead             ctermbg=NONE guibg=NONE ]] 
+    vim.cmd [[ highlight TelescopePreviewSize             ctermbg=NONE guibg=NONE ]] 
+    vim.cmd [[ highlight TelescopePreviewSocket           ctermbg=NONE guibg=NONE ]] 
+    vim.cmd [[ highlight TelescopePreviewSticky           ctermbg=NONE guibg=NONE ]] 
+    vim.cmd [[ highlight TelescopePreviewTitle            ctermbg=NONE guibg=NONE ]] 
+    vim.cmd [[ highlight TelescopePreviewUser             ctermbg=NONE guibg=NONE ]] 
+    vim.cmd [[ highlight TelescopePreviewWrite            ctermbg=NONE guibg=NONE ]] 
+    vim.cmd [[ highlight TelescopePromptBorder            ctermbg=NONE guibg=NONE ]] 
+    vim.cmd [[ highlight TelescopePromptCounter           ctermbg=NONE guibg=NONE ]] 
+    vim.cmd [[ highlight TelescopePromptNormal            ctermbg=NONE guibg=NONE ]] 
+    vim.cmd [[ highlight TelescopePromptPrefix            ctermbg=NONE guibg=NONE ]] 
+    vim.cmd [[ highlight TelescopePromptTitle             ctermbg=NONE guibg=NONE ]] 
+    vim.cmd [[ highlight TelescopeResultsBorder           ctermbg=NONE guibg=NONE ]] 
+    vim.cmd [[ highlight TelescopeResultsClass            ctermbg=NONE guibg=NONE ]] 
+    vim.cmd [[ highlight TelescopeResultsComment          ctermbg=NONE guibg=NONE ]] 
+    vim.cmd [[ highlight TelescopeResultsConstant         ctermbg=NONE guibg=NONE ]] 
+    vim.cmd [[ highlight TelescopeResultsDiffAdd          ctermbg=NONE guibg=NONE ]] 
+    vim.cmd [[ highlight TelescopeResultsDiffChange       ctermbg=NONE guibg=NONE ]] 
+    vim.cmd [[ highlight TelescopeResultsDiffDelete       ctermbg=NONE guibg=NONE ]] 
+    vim.cmd [[ highlight TelescopeResultsDiffUntracked    ctermbg=NONE guibg=NONE ]] 
+    vim.cmd [[ highlight TelescopeResultsField            ctermbg=NONE guibg=NONE ]] 
+    vim.cmd [[ highlight TelescopeResultsFunction         ctermbg=NONE guibg=NONE ]] 
+    vim.cmd [[ highlight TelescopeResultsIdentifier       ctermbg=NONE guibg=NONE ]] 
+    vim.cmd [[ highlight TelescopeResultsLineNr           ctermbg=NONE guibg=NONE ]] 
+    vim.cmd [[ highlight TelescopeResultsMethod           ctermbg=NONE guibg=NONE ]] 
+    vim.cmd [[ highlight TelescopeResultsNormal           ctermbg=NONE guibg=NONE ]] 
+    vim.cmd [[ highlight TelescopeResultsNumber           ctermbg=NONE guibg=NONE ]] 
+    vim.cmd [[ highlight TelescopeResultsOperator         ctermbg=NONE guibg=NONE ]] 
+    vim.cmd [[ highlight TelescopeResultsSpecialComment   ctermbg=NONE guibg=NONE ]] 
+    vim.cmd [[ highlight TelescopeResultsStruct           ctermbg=NONE guibg=NONE ]] 
+    vim.cmd [[ highlight TelescopeResultsTitle            ctermbg=NONE guibg=NONE ]] 
+    vim.cmd [[ highlight TelescopeResultsVariable         ctermbg=NONE guibg=NONE ]] 
+    vim.cmd [[ highlight TelescopeSelection               ctermbg=NONE guibg=NONE ]] 
+    vim.cmd [[ highlight TelescopeSelectionCaret          ctermbg=NONE guibg=NONE ]] 
+    vim.cmd [[ highlight TelescopeTitle                   ctermbg=NONE guibg=NONE ]] 
 
-    "autocmd ColorScheme * highlight lCursor ctermbg=NONE guibg=NONE
-    "autocmd ColorScheme * highlight CursorIM ctermbg=NONE guibg=NONE
+    --vim.cmd [[ highlight lCursor ctermbg=NONE guibg=NONE ]] 
+    --vim.cmd [[ highlight CursorIM ctermbg=NONE guibg=NONE ]] 
 
-    " Foldcolumn
-    autocmd ColorScheme * highlight FoldColumn ctermbg=NONE guibg=NONE
+    -- Foldcolumn
+    vim.cmd [[ highlight FoldColumn ctermbg=NONE guibg=NONE ]] 
 
-    " Popup menu
-    "autocmd ColorScheme * highlight Pmenu ctermbg=NONE guibg=NONE " Popup menu: normal item.
-    "autocmd ColorScheme * highlight PmenuSel ctermbg=NONE guibg=NONE " Popup menu: selected item.at
-    "autocmd ColorScheme * highlight PmenuSbar ctermbg=NONE guibg=NONE " Popup menu: scrollbar.
-    "autocmd ColorScheme * highlight PmenuThumb ctermbg=NONE guibg=NONE " Popup menu: Thumb of the scrollbar.
+    -- Popup menu
+    --vim.cmd [[ highlight Pmenu ctermbg=NONE guibg=NONE ]]  -- Popup menu: normal item.
+    --vim.cmd [[ highlight PmenuSel ctermbg=NONE guibg=NONE ]]  -- Popup menu: selected item.at
+    --vim.cmd [[ highlight PmenuSbar ctermbg=NONE guibg=NONE ]]  -- Popup menu: scrollbar.
+    --vim.cmd [[ highlight PmenuThumb ctermbg=NONE guibg=NONE ]]  -- Popup menu: Thumb of the scrollbar.
 
-    " Status line
-    autocmd ColorScheme * highlight StatusLine ctermbg=NONE guibg=NONE " Status line of current window
-    autocmd ColorScheme * highlight StatusLineNC ctermbg=NONE guibg=NONE " Status line of noncurrent window
+    -- Status line
+    vim.cmd [[ highlight StatusLine ctermbg=NONE guibg=NONE ]]  -- Status line of current window
+    vim.cmd [[ highlight StatusLineNC ctermbg=NONE guibg=NONE ]]  -- Status line of noncurrent window
 
-    " Popup windows
-    "autocmd ColorScheme * highlight debugPC ctermbg=NONE guibg=NONE " used for highlighting the current line in terminal-debug
-    "autocmd ColorScheme * highlight BufferTabpageFill ctermbg=NONE guibg=NONE
-    "autocmd ColorScheme * highlight BufferInactive ctermbg=NONE guibg=NONE
-    "autocmd ColorScheme * highlight BufferInactiveIndex ctermbg=NONE guibg=NONE
-    "autocmd ColorScheme * highlight BufferInactiveMod ctermbg=NONE guibg=NONE
-    "autocmd ColorScheme * highlight BufferInactiveTarget ctermbg=NONE guibg=NONE
-    "autocmd ColorScheme * highlight LspTroubleNormal ctermbg=NONE guibg=NONE
-    "autocmd ColorScheme * highlight WhichKeyFloat ctermbg=NONE guibg=NONE
-  augroup END
-]]
+    -- Popup windows
+    --vim.cmd [[ highlight debugPC ctermbg=NONE guibg=NONE ]]  -- used for highlighting the current line in terminal-debug
+    --vim.cmd [[ highlight BufferTabpageFill ctermbg=NONE guibg=NONE ]] 
+    --vim.cmd [[ highlight BufferInactive ctermbg=NONE guibg=NONE ]] 
+    --vim.cmd [[ highlight BufferInactiveIndex ctermbg=NONE guibg=NONE ]] 
+    --vim.cmd [[ highlight BufferInactiveMod ctermbg=NONE guibg=NONE ]] 
+    --vim.cmd [[ highlight BufferInactiveTarget ctermbg=NONE guibg=NONE ]] 
+    --vim.cmd [[ highlight LspTroubleNormal ctermbg=NONE guibg=NONE ]] 
+    --vim.cmd [[ highlight WhichKeyFloat ctermbg=NONE guibg=NONE ]] 
+  end,
+})
 
--- Uniform colors for notes/marginalias/mics
-vim.cmd [[
-  augroup nrv#uniform_mics_color
-    autocmd!
+-- Uniform colors for errors/notes/marginalias/etc
+vim.api.nvim_create_autocmd({ 'ColorScheme' }, {
+  pattern = '*',
+  group = vim.api.nvim_create_augroup(
+    'nrv#uniform_mics_color',
+    { clear = true }
+  ),
+  callback = function()
+    -- hlgroups for nvim-ts-rainbow and personal use (markdown headers, etc)
+    for index, pair in ipairs(require'user.config'.colors.rainbow_colors) do -- p00f/rainbow#81
+      local hlgroup, color = pair[1], pair[2]
+      vim.api.nvim_set_hl(0, hlgroup, { fg = color, })
+      vim.api.nvim_set_hl(0, ('rainbowcol%d'):format(index), { fg = color, })
+      vim.api.nvim_set_hl(0, ('RainbowColor%d'):format(index), { fg = color, })
+    end
 
-    " Treesitter comment notes
-    " NOTE:
-    " TODO:
-    " WARNING:
-    " FIXME:
-    autocmd ColorScheme * highlight TSNote ctermbg=NONE guibg=NONE guifg='#61afef'
-    autocmd ColorScheme * highlight TSWarning ctermbg=NONE guibg=NONE guifg='#e5c07b'
-    autocmd ColorScheme * highlight TSDanger ctermbg=NONE guibg=NONE guifg='#e76671'
+    -- Treesitter comment notes
+    -- TODO(scope):
+    -- NOTE(scope):
+    -- WARNING(scope):
+    -- FIXME(scope):
+    -- stylua: ignore start
+    vim.cmd (([[ highlight @text.note ctermbg=NONE guibg=NONE guifg='%s' ]]):format(require'user.config'.colors.information))
+    vim.cmd (([[ highlight @text.warning ctermbg=NONE guibg=NONE guifg='%s' ]]):format(require'user.config'.colors.warning))
+    vim.cmd (([[ highlight @text.danger ctermbg=NONE guibg=NONE guifg='%s' ]]):format(require'user.config'.colors.error))
+    vim.cmd (([[ highlight @text.todo ctermbg=NONE guibg=NONE guifg='%s' ]]):format(require'user.config'.colors.hint))
+    -- stylua: ignore end
 
-    autocmd ColorScheme * highlight Todo ctermbg=NONE guibg=NONE guifg='#e5c07b'
+    -- Gitsigns/Gitgutter
+    vim.cmd (([[ highlight GitGutterAdd guifg='%s' ]]):format(require'user.config'.colors.git.added))
+    vim.cmd (([[ highlight GitGutterChange guifg='%s' ]]):format(require'user.config'.colors.git.modified))
+    vim.cmd (([[ highlight GitGutterDelete guifg='%s' ]]):format(require'user.config'.colors.git.removed))
+    vim.cmd (([[ highlight GitSignsAdd guifg='%s' ]]):format(require'user.config'.colors.git.added))
+    vim.cmd (([[ highlight GitSignsChange guifg='%s' ]]):format(require'user.config'.colors.git.modified))
+    vim.cmd (([[ highlight GitSignsDelete guifg='%s' ]]):format(require'user.config'.colors.git.removed))
 
-    " Gitsigns/Gitgutter - always use red/green/yellow
-    autocmd ColorScheme * highlight GitGutterAdd guifg='#14a573'
-    autocmd ColorScheme * highlight GitGutterChange guifg='#deaf6c'
-    autocmd ColorScheme * highlight GitGutterDelete guifg='#af404a'
-    autocmd ColorScheme * highlight GitSignsAdd guifg='#14a573'
-    autocmd ColorScheme * highlight GitSignsChange guifg='#deaf6c'
-    autocmd ColorScheme * highlight GitSignsDelete guifg='#af404a'
+    -- Search (variants: #1da9f1 #4183c4)
+    vim.cmd [[ highlight Search ctermbg=NONE guibg='#4183c4' guifg='#21252b' ]] 
+    vim.cmd [[ highlight IncSearch ctermbg=NONE guibg='#ff9e64' guifg='#21252b' ]] 
 
-    " Search (variants: #1da9f1 #4183c4)
-    autocmd ColorScheme * highlight Search ctermbg=NONE guibg='#4183c4' guifg='#21252b'
-    autocmd ColorScheme * highlight IncSearch ctermbg=NONE guibg='#ff9e64' guifg='#21252b'
+    vim.cmd (([[ highlight DiagnosticsError guisp='%s' ]]):format(require'user.config'.colors.error))
+    vim.cmd (([[ highlight DiagnosticsWarning guisp='%s' ]]):format(require'user.config'.colors.warning))
+    vim.cmd (([[ highlight DiagnosticsInformation guisp='%s']]):format(require'user.config'.colors.information))
+    vim.cmd (([[ highlight DiagnosticsHint guisp='%s' ]]):format(require'user.config'.colors.hint))
 
-    " TODO: Refactor all colors with imports from single source
-    autocmd ColorScheme * highlight DiagnosticsError        guisp='#e86671'
-    autocmd ColorScheme * highlight DiagnosticsWarning      guisp='#e5c07b'
-    autocmd ColorScheme * highlight DiagnosticsInformation  guisp='#61afef'
-    autocmd ColorScheme * highlight DiagnosticsHint         guisp='#56b6c2'
+    vim.cmd (([[ highlight DiagnosticSignError guifg='%s' ]]):format(require'user.config'.colors.error))
+    vim.cmd (([[ highlight DiagnosticSignWarning guifg='%s' ]]):format(require'user.config'.colors.warning))
+    vim.cmd (([[ highlight DiagnosticSignInformation guifg='%s' ]]):format(require'user.config'.colors.information))
+    vim.cmd (([[ highlight DiagnosticSignHint guifg='%s' ]]):format(require'user.config'.colors.hint))
 
-    autocmd ColorScheme * highlight DiagnosticSignError        guifg='#e86671'
-    autocmd ColorScheme * highlight DiagnosticSignWarning      guifg='#e5c07b'
-    autocmd ColorScheme * highlight DiagnosticSignInformation  guifg='#61afef'
-    autocmd ColorScheme * highlight DiagnosticSignHint         guifg='#56b6c2'
+    vim.cmd (([[ highlight LspDiagnosticsUnderlineError cterm=undercurl gui=undercurl guisp='%s' ]]):format(require'user.config'.colors.error))
+    vim.cmd (([[ highlight LspDiagnosticsUnderlineWarning cterm=undercurl gui=undercurl guisp='%s' ]]):format(require'user.config'.colors.warning))
+    vim.cmd (([[ highlight LspDiagnosticsUnderlineInformation cterm=undercurl gui=undercurl guisp='%s' ]]):format(require'user.config'.colors.information))
+    vim.cmd (([[ highlight LspDiagnosticsUnderlineHint cterm=undercurl gui=undercurl guisp='%s' ]]):format(require'user.config'.colors.hint))
 
-    autocmd ColorScheme * highlight LspDiagnosticsUnderlineError        cterm=undercurl gui=undercurl guisp='#e86671'
-    autocmd ColorScheme * highlight LspDiagnosticsUnderlineWarning      cterm=undercurl gui=undercurl guisp='#e5c07b'
-    autocmd ColorScheme * highlight LspDiagnosticsUnderlineInformation  cterm=undercurl gui=undercurl guisp='#61afef'
-    autocmd ColorScheme * highlight LspDiagnosticsUnderlineHint         cterm=undercurl gui=undercurl guisp='#56b6c2'
-    " For some reason i need to specify this (non lsp variant) for
-    " undercurl to properly work on hints, replacing the default
-    " grey bg cyan text behavior
-    " Also, there seems to be two variants of LspDiagnnostic stuff, with -s, and without.
-    " The former (with s) only seems to work. Dunno why, this may break later.
-    autocmd ColorScheme * highlight DiagnosticUnderlineHint             cterm=undercurl gui=undercurl guisp='#56b6c2'
-  augroup END
-]]
+    -- For some reason i need to specify this (non lsp variant) for
+    -- undercurl to properly work on hints, replacing the default
+    -- grey bg cyan text behavior
+    -- Also, there seems to be two variants of LspDiagnnostic stuff, with -s, and without.
+    -- Only the former (with s) seems to work. Dunno why, this may break later.
+    vim.cmd (([[ highlight DiagnosticUnderlineHint cterm=undercurl gui=undercurl guisp='%s' ]]):format(require'user.config'.colors.hint)) 
+  end,
+})
 
 -- Compile latex on save
 vim.api.nvim_create_autocmd({ 'BufWritePost' }, {

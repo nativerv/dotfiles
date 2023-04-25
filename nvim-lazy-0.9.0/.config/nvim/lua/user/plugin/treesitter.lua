@@ -1,14 +1,5 @@
 local M = {}
 
-M.rainbow_colors = {
-  '#e06c75',
-  '#e5c07b',
-  '#98c379',
-  '#56b6c2',
-  '#61afef',
-  '#c678dd',
-}
-
 M.setup = function()
 
   local configs = {}
@@ -45,21 +36,14 @@ M.setup = function()
     extended_mode = true, -- also highlight non-bracket delimiters like html tags, boolean or table: lang -> boolean
     max_file_lines = 10000, -- do not enable for files with more than n lines, int
     hlgroups = {
-      'rainbowcol1',
-      'rainbowcol2',
-      'rainbowcol3',
-      'rainbowcol4',
-      'rainbowcol5',
-      'rainbowcol6',
+      'RainbowColor1',
+      'RainbowColor2',
+      'RainbowColor3',
+      'RainbowColor4',
+      'RainbowColor5',
+      'RainbowColor6',
     },
   }
-  -- Define hlgroups for nvim-ts-rainbow
-  for index, color in ipairs(M.rainbow_colors) do -- p00f/rainbow#81
-    vim.api.nvim_set_hl(0, ('rainbowcol%d'):format(index), {
-      fg = color,
-    })
-  end
-
 
   configs.context_commentstring = {
     enable = true,
