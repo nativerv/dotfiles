@@ -45,7 +45,7 @@ source <(
 
 ### Zsh history stuff ===========================
 
-HISTFILEDIR="${XDG_DATA_HOME}/zsh"
+HISTFILEDIR="${XDG_STATE_HOME}/zsh"
 export HISTFILE="${HISTFILEDIR}/history"
 ensure_dir "${HISTFILEDIR}"
 

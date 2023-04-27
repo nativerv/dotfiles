@@ -1,26 +1,21 @@
 #!/bin/bash
 
 # Functions necessary to run this config
-source "${ZDOTDIR}/zsh_functions"
+source "${ZDOTDIR}/functions"
 
 ### Source all config files
 
-# All of below depend on `zsh_functions`
-
-zsh_add_file "zsh_exports"
-
-################################################
-       ### PEEPOS, first of all...
- [[ -o login ]] && command -v random-pepe >/dev/null && random-pepe 2>/dev/null
-################################################
-
+# All of below depend on `functions`
+zsh_add_file "exports"
+### PEEPOS, first of all...
+[[ -o login ]] && command -v random-pepe >/dev/null && random-pepe 2>/dev/null
 # Continue normally with mundane stuff...
-zsh_add_file "zsh_options"
-zsh_add_file "zsh_aliases"
-zsh_add_file "zsh_prompt"
-zsh_add_file "zsh_vim_mode"
-zsh_add_file "zsh_keybindings"
-zsh_add_file "zsh_plugins"
+zsh_add_file "options"
+zsh_add_file "aliases"
+zsh_add_file "prompt"
+zsh_add_file "vim_mode"
+zsh_add_file "keybindings"
+zsh_add_file "plugins"
 
 ### Load zsh modules =================
 

@@ -28,13 +28,15 @@ alias nfj="firejail --noprofile "
 alias dfj="firejail --profile=default "
 alias pm="pulsemixer"
 alias tm="tmux"
-alias tma="tmux a"
 alias tmc="transmission-remote"
 alias tmd="transmission-daemon"
 alias ng="nvim +0G"
 alias sc="systemctl"
 alias scu="systemctl --user"
+alias jc="journalctl"
+alias jcu="journalctl --user"
 alias doc="docker"
+alias pod="podman"
 alias bj="bubblejail"
 alias dt="date +%F_%H-%M-%S | head -c-1"
 alias gr='grep --recursive --line-number'
@@ -79,8 +81,8 @@ alias mitmweb="mitmweb --set confdir=${XDG_CONFIG_HOME}/mitmproxy"
 # Aliases for Git
 alias git="git --no-pager "
 alias g="git"
-alias gs="git status"
-alias gl="git log"
+alias gs="env GIT_PAGER= unbuffer git status --untracked-files=all"
+alias gl="env GIT_PAGER= unbuffer git log"
 alias gll="env GIT_PAGER= unbuffer git log --pretty=oneline"
 alias gllg="env GIT_PAGER= unbuffer git log --graph --pretty=oneline"
 alias gd="git diff"
@@ -153,3 +155,4 @@ alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo
   # mv $1 $2;
 # }
 
+# vim:ft=zsh
