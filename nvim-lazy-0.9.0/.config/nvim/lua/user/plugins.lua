@@ -41,7 +41,6 @@ require("lazy").setup({
   },
   {
     'RRethy/vim-illuminate',
-    -- event = { "BufReadPost", "BufNewFile" },
     event = { "VeryLazy" },
     config = require('user.plugin.illuminate').setup,
   },
@@ -77,7 +76,6 @@ require("lazy").setup({
   }, -- Vimscript
   {
     'kylechui/nvim-surround',
-    -- event = 'VeryLazy',
     keys = require'user.lib.plugin-management'.extract_keys_from_module_mappings(require('user.plugin.nvim-surround').mappings, true),
     config = require('user.plugin.nvim-surround').setup,
   },
@@ -94,7 +92,6 @@ require("lazy").setup({
   {
     'numToStr/Comment.nvim',
     keys = require'user.lib.plugin-management'.extract_keys_from_module_mappings(require('user.plugin.comment').mappings, false),
-    -- event = 'VeryLazy',
     config = require('user.plugin.comment').setup,
   },
 
@@ -115,10 +112,9 @@ require("lazy").setup({
     'nvim-treesitter/nvim-treesitter',
     dependencies = {
       { 'nvim-treesitter/nvim-treesitter-textobjects', },
-      { 'HiPhish/nvim-ts-rainbow2', --[[event = 'VeryLazy',]] },
+      { 'HiPhish/nvim-ts-rainbow2' },
     },
     event = { "BufReadPost", "BufNewFile" },
-    -- event = { "UIEnter" },
     config = require('user.plugin.treesitter').setup,
   },
   {
@@ -173,6 +169,7 @@ require("lazy").setup({
   {
     'dstein64/nvim-scrollview',
     event = { "VeryLazy" },
+    config = require('user.plugin.nvim-scrollview').setup,
   },
   {
     'ghillb/cybu.nvim',
@@ -181,4 +178,42 @@ require("lazy").setup({
     init = require('user.plugin.cybu').init,
     config = require('user.plugin.cybu').setup,
   },
+
+  -- Features
+  { 
+    'TimUntersberger/neogit', 
+    dependencies = { 'nvim-lua/plenary.nvim' },
+    keys = require'user.lib.plugin-management'.extract_keys_from_module_mappings(require('user.plugin.neogit').mappings, true),
+    cmd = { 'Neogit' },
+    config = require('user.plugin.neogit').setup,
+  },
+  -- {
+  --   -- NOTE: the classic vimscript variant of neogit
+  --   'tpope/vim-fugitive',
+  --   keys = require'user.lib.plugin-management'.extract_keys_from_module_mappings(require('user.plugin.vim-fugitive').mappings, true),
+  --   cmd = { 'G' },
+  --   config = require('user.plugin.vim-fugitive').setup,
+  -- },
+  -- {
+  --   -- NOTE: this plugin caused too much of a hassle and adds too much code
+  --   -- into the config for what it does - just shows the git status and diff on
+  --   -- files. I can already get that from plugins like `neogit` or `fugitive`,
+  --   -- and i can view diff and stage/unstage/reset changes with `gitsigns`
+  --   -- (which `diffview` can't even do by itself and staging with `gitsigns` inside
+  --   -- it causes it to reset its view and/or go to the next hunk in a random file
+  --   -- which is pain in the ass and caused additional problems for me at the time)
+  --   'sindrets/diffview.nvim', 
+  --   dependencies = { 'nvim-lua/plenary.nvim' },
+  --   keys = require'user.lib.plugin-management'.extract_keys_from_module_mappings(require('user.plugin.diffview').mappings, true),
+  --   cmd = {  
+  --     'DiffviewClose',
+  --     'DiffviewFileHistory',
+  --     'DiffviewFocusFiles',
+  --     'DiffviewLog',
+  --     'DiffviewOpen',
+  --     'DiffviewRefresh',
+  --     'DiffviewToggleFiles', 
+  --   },
+  --   config = require('user.plugin.diffview').setup,
+  -- },
 }, require'user.plugin.lazy'.spec)

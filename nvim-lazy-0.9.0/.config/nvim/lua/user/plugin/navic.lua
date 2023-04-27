@@ -4,6 +4,30 @@ local M = {}
 
 M.separator = ' > '
 
+M.excluded_filetypes = {
+  -- 'help',
+  'DiffviewFiles',
+  'cybu',
+  'fugitive',
+  'startify',
+  'dashboard',
+  'packer',
+  'neogitstatus',
+  'NvimTree',
+  'Trouble',
+  'alpha',
+  'lir',
+  'Outline',
+  'spectre_panel',
+  'toggleterm',
+  'qf',
+}
+
+-- M.navic_get_location = function()
+--   local ok, location = pcall(require('nvim-navic').get_location)
+--   if not ok then return '' end
+-- end
+
 M.navic_filename = function()
   local filename = vim.fn.expand '%:t'
   local extension = vim.fn.expand '%:e'
@@ -20,7 +44,10 @@ M.navic_filename = function()
 
   local hl_group = 'FileIconColor' .. extension
 
-  vim.api.nvim_set_hl(0, hl_group, { fg = file_icon_color })
+  -- WARNING: this errors if file has invalid extension, like nvim-0.8.1-6
+  -- (extension .1-6, which produces FileIconColor1-6, which is invalid 🤦)
+  -- FIXME: still errors out in some cases because of above, even with pcall
+  pcall(vim.api.nvim_set_hl, 0, hl_group, { fg = file_icon_color })
   if util.is_empty(file_icon) then
     file_icon = ''
     file_icon_color = ''
@@ -30,7 +57,7 @@ M.navic_filename = function()
   vim.api.nvim_set_hl(0, 'Winbar', { fg = navic_text.foreground })
 
   local separator = ''
-  if not util.is_empty(require('nvim-navic').get_location()) then
+  if not util.is_empty(require'nvim-navic'.get_location()) then
     separator = M.separator
   end
 
@@ -131,9 +158,25 @@ M.setup = function()
     end
   )
 
-  -- Set the winbar to the navic stuff
-  vim.o.winbar =
-    "%{%v:lua.require'user.plugin.navic'.navic_filename()%}%{%v:lua.require'nvim-navic'.get_location()%}"
+  -- Autocmd to set winbar in buffers locally in normal buffers (not qf, etc)
+  -- (you cannot do the reverse)
+  vim.api.nvim_create_autocmd({ 'VimEnter', 'BufWinEnter' }, {
+    pattern = { '*' },
+    group = vim.api.nvim_create_augroup(
+      'nrv#winbar_ignore_list',
+      { clear = true }
+    ),
+    callback = function()
+      -- Guard on exclueed filetypes
+      -- DANGER: any small window that is not excluded can trigger error loop
+      -- (Navic: not enough room)
+      if vim.tbl_contains(M.excluded_filetypes, vim.bo.filetype) then return end
+
+      -- Set the winbar to navic
+      vim.wo.winbar 
+        = "%{%v:lua.require'user.plugin.navic'.navic_filename()%}%{%v:lua.require'nvim-navic'.get_location()%}"
+    end,
+  })
 end
 
 return M

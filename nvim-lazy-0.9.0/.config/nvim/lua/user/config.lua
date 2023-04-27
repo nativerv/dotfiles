@@ -21,7 +21,7 @@ M.colors.rainbow_colors = {
 
 M.colors.git = {}
 M.colors.git.added = '#14a573'
-M.colors.git.modified = '#deaf6c'
-M.colors.git.removed = '#af404a'
+M.colors.git.changed = '#deaf6c'
+M.colors.git.deleted = '#af404a'
 
 return M

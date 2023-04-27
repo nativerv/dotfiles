@@ -65,7 +65,7 @@ M.setup = function()
       full = true,
       ignore_whitespace = true,
     }
-  end, { desc = 'Preview hunk under cursor in a float' })
+  end, { desc = 'Open blame for the line under cursor in a float' })
 
   -- Textobjects
   -- Select hunk (if you try to translate it to lua it

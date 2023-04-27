@@ -36,6 +36,8 @@ vim.opt.shortmess:append 'I' -- Disable welcome message
 vim.g.netrw_browsex_viewer = 'cd %:h && xdg-open'
 vim.o.conceallevel = 2
 vim.o.scrolloff = 8
+vim.opt.fillchars:append { diff = "╱" }
+vim.opt.showtabline = 0
 
 vim.g.compile_tex = true -- Compile latex on save by default (i have autocmds for that)
 

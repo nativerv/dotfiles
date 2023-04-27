@@ -23,7 +23,12 @@ M.mappings = {
   {
     keys = { 'cs' },
     { 'n' },
-    opts = { desc = 'Change a surrounding pair' },
+    opts = { desc = 'Change the surrounding pair' },
+  },
+  {
+    keys = { 'ds' },
+    { 'n' },
+    opts = { desc = 'Delete the surrounding pair' },
   },
 }
 

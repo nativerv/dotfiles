@@ -67,8 +67,19 @@ vim.api.nvim_create_autocmd({ 'BufWinEnter' }, {
     { clear = true }
   ),
   callback = function()
-    if vim.tbl_contains({ 'commit', 'rebase', 'help' }, vim.o.ft) then return end
-    if not (vim.fn.line '\'"' <= vim.fn.line '$') then return end
+    if
+      vim.tbl_contains({
+        'commit',
+        'rebase',
+        'help',
+        'fugitive',
+      }, vim.o.ft)
+    then
+      return
+    end
+    if not (vim.fn.line '\'"' <= vim.fn.line '$') then
+      return
+    end
     vim.cmd [[ normal! g`"zz ]]
   end,
 })
@@ -94,6 +105,8 @@ vim.api.nvim_create_autocmd({ 'ColorScheme' }, {
     vim.cmd [[ highlight NormalNC ctermbg=NONE guibg=NONE ]] 
     vim.cmd [[ highlight NormalSB ctermbg=NONE guibg=NONE ]] 
     vim.cmd [[ highlight NormalFloat ctermbg=NONE guibg=NONE ]] 
+    vim.cmd [[ highlight TabLine ctermbg=NONE guibg=NONE ]] 
+    vim.cmd [[ highlight TabLineFill ctermbg=NONE guibg=NONE ]] 
 
     -- Floats
     vim.cmd [[ highlight FloatBorder ctermbg=NONE guibg=NONE ]] 
@@ -169,31 +182,12 @@ vim.api.nvim_create_autocmd({ 'ColorScheme' }, {
     vim.cmd [[ highlight TelescopeSelectionCaret          ctermbg=NONE guibg=NONE ]] 
     vim.cmd [[ highlight TelescopeTitle                   ctermbg=NONE guibg=NONE ]] 
 
-    --vim.cmd [[ highlight lCursor ctermbg=NONE guibg=NONE ]] 
-    --vim.cmd [[ highlight CursorIM ctermbg=NONE guibg=NONE ]] 
-
     -- Foldcolumn
     vim.cmd [[ highlight FoldColumn ctermbg=NONE guibg=NONE ]] 
-
-    -- Popup menu
-    --vim.cmd [[ highlight Pmenu ctermbg=NONE guibg=NONE ]]  -- Popup menu: normal item.
-    --vim.cmd [[ highlight PmenuSel ctermbg=NONE guibg=NONE ]]  -- Popup menu: selected item.at
-    --vim.cmd [[ highlight PmenuSbar ctermbg=NONE guibg=NONE ]]  -- Popup menu: scrollbar.
-    --vim.cmd [[ highlight PmenuThumb ctermbg=NONE guibg=NONE ]]  -- Popup menu: Thumb of the scrollbar.
 
     -- Status line
     vim.cmd [[ highlight StatusLine ctermbg=NONE guibg=NONE ]]  -- Status line of current window
     vim.cmd [[ highlight StatusLineNC ctermbg=NONE guibg=NONE ]]  -- Status line of noncurrent window
-
-    -- Popup windows
-    --vim.cmd [[ highlight debugPC ctermbg=NONE guibg=NONE ]]  -- used for highlighting the current line in terminal-debug
-    --vim.cmd [[ highlight BufferTabpageFill ctermbg=NONE guibg=NONE ]] 
-    --vim.cmd [[ highlight BufferInactive ctermbg=NONE guibg=NONE ]] 
-    --vim.cmd [[ highlight BufferInactiveIndex ctermbg=NONE guibg=NONE ]] 
-    --vim.cmd [[ highlight BufferInactiveMod ctermbg=NONE guibg=NONE ]] 
-    --vim.cmd [[ highlight BufferInactiveTarget ctermbg=NONE guibg=NONE ]] 
-    --vim.cmd [[ highlight LspTroubleNormal ctermbg=NONE guibg=NONE ]] 
-    --vim.cmd [[ highlight WhichKeyFloat ctermbg=NONE guibg=NONE ]] 
   end,
 })
 
@@ -213,44 +207,61 @@ vim.api.nvim_create_autocmd({ 'ColorScheme' }, {
       vim.api.nvim_set_hl(0, ('RainbowColor%d'):format(index), { fg = color, })
     end
 
+    -- Error, Warning, Information, Hint
+    vim.api.nvim_set_hl(0, 'Error', { fg = require'user.config'.colors.error })
+    vim.api.nvim_set_hl(0, 'Warning', { fg = require'user.config'.colors.warning })
+    vim.api.nvim_set_hl(0, 'Information', { fg =  require'user.config'.colors.information })
+    vim.api.nvim_set_hl(0, 'Hint', { fg = require'user.config'.colors.hint })
+
     -- Treesitter comment notes
     -- TODO(scope):
     -- NOTE(scope):
+    -- XXX(scope):
     -- WARNING(scope):
+    -- SAFETY(scope):
     -- FIXME(scope):
-    -- stylua: ignore start
-    vim.cmd (([[ highlight @text.note ctermbg=NONE guibg=NONE guifg='%s' ]]):format(require'user.config'.colors.information))
-    vim.cmd (([[ highlight @text.warning ctermbg=NONE guibg=NONE guifg='%s' ]]):format(require'user.config'.colors.warning))
-    vim.cmd (([[ highlight @text.danger ctermbg=NONE guibg=NONE guifg='%s' ]]):format(require'user.config'.colors.error))
-    vim.cmd (([[ highlight @text.todo ctermbg=NONE guibg=NONE guifg='%s' ]]):format(require'user.config'.colors.hint))
-    -- stylua: ignore end
+    -- BUG(scope):
+    vim.api.nvim_set_hl(0, '@text.note', { link = 'Information', fg = 'NONE', ctermbg = 'NONE' })
+    vim.api.nvim_set_hl(0, '@text.warning', { link = 'Warning', fg = 'NONE', ctermbg = 'NONE' })
+    vim.api.nvim_set_hl(0, '@text.danger', { link = 'Error', fg = 'NONE', ctermbg = 'NONE' })
+    vim.api.nvim_set_hl(0, '@text.todo', { link = 'Hint', fg = 'NONE', ctermbg = 'NONE' })
+
+    -- Diffs
+    vim.api.nvim_set_hl(0, 'diffAdded', { fg = require'user.config'.colors.git.added })
+    vim.api.nvim_set_hl(0, 'diffChanged', { fg = require'user.config'.colors.git.changed })
+    vim.api.nvim_set_hl(0, 'diffDeleted', { fg = require'user.config'.colors.git.deleted })
 
     -- Gitsigns/Gitgutter
-    vim.cmd (([[ highlight GitGutterAdd guifg='%s' ]]):format(require'user.config'.colors.git.added))
-    vim.cmd (([[ highlight GitGutterChange guifg='%s' ]]):format(require'user.config'.colors.git.modified))
-    vim.cmd (([[ highlight GitGutterDelete guifg='%s' ]]):format(require'user.config'.colors.git.removed))
-    vim.cmd (([[ highlight GitSignsAdd guifg='%s' ]]):format(require'user.config'.colors.git.added))
-    vim.cmd (([[ highlight GitSignsChange guifg='%s' ]]):format(require'user.config'.colors.git.modified))
-    vim.cmd (([[ highlight GitSignsDelete guifg='%s' ]]):format(require'user.config'.colors.git.removed))
+    vim.api.nvim_set_hl(0, 'GitGutterAdd', { link = 'diffAdded' })
+    vim.api.nvim_set_hl(0, 'GitGutterChange', { link = 'diffChanged' })
+    vim.api.nvim_set_hl(0, 'GitGutterDelete', { link = 'diffDeleted' })
+    vim.api.nvim_set_hl(0, 'GitSignsAdd', { link = 'diffAdded' })
+    vim.api.nvim_set_hl(0, 'GitSignsChange', { link = 'diffChanged' })
+    vim.api.nvim_set_hl(0, 'GitSignsDelete', { link = 'diffDeleted' })
+    
+    -- Fugitive
+    vim.api.nvim_set_hl(0, 'fugitiveUnstagedModifier', { link = 'diffChanged' })
+    vim.api.nvim_set_hl(0, 'fugitiveUntrackedModifier', { link = 'diffAdded' })
 
     -- Search (variants: #1da9f1 #4183c4)
     vim.cmd [[ highlight Search ctermbg=NONE guibg='#4183c4' guifg='#21252b' ]] 
     vim.cmd [[ highlight IncSearch ctermbg=NONE guibg='#ff9e64' guifg='#21252b' ]] 
 
-    vim.cmd (([[ highlight DiagnosticsError guisp='%s' ]]):format(require'user.config'.colors.error))
-    vim.cmd (([[ highlight DiagnosticsWarning guisp='%s' ]]):format(require'user.config'.colors.warning))
-    vim.cmd (([[ highlight DiagnosticsInformation guisp='%s']]):format(require'user.config'.colors.information))
-    vim.cmd (([[ highlight DiagnosticsHint guisp='%s' ]]):format(require'user.config'.colors.hint))
+    -- Diagnostics
+    vim.api.nvim_set_hl(0, 'DiagnosticsError', { link = 'Error' })
+    vim.api.nvim_set_hl(0, 'DiagnosticsWarning', { link = 'Warning' })
+    vim.api.nvim_set_hl(0, 'DiagnosticsInformation', { link = 'Information' })
+    vim.api.nvim_set_hl(0, 'DiagnosticsHint', { link = 'Hing' })
 
-    vim.cmd (([[ highlight DiagnosticSignError guifg='%s' ]]):format(require'user.config'.colors.error))
-    vim.cmd (([[ highlight DiagnosticSignWarning guifg='%s' ]]):format(require'user.config'.colors.warning))
-    vim.cmd (([[ highlight DiagnosticSignInformation guifg='%s' ]]):format(require'user.config'.colors.information))
-    vim.cmd (([[ highlight DiagnosticSignHint guifg='%s' ]]):format(require'user.config'.colors.hint))
+    vim.api.nvim_set_hl(0, 'DiagnosticSignError', { link = 'Error' })
+    vim.api.nvim_set_hl(0, 'DiagnosticSignWarning', { link = 'Warning' })
+    vim.api.nvim_set_hl(0, 'DiagnosticSignInformation', { link = 'Information' })
+    vim.api.nvim_set_hl(0, 'DiagnosticSignHint', { link = 'Hint' })
 
-    vim.cmd (([[ highlight LspDiagnosticsUnderlineError cterm=undercurl gui=undercurl guisp='%s' ]]):format(require'user.config'.colors.error))
-    vim.cmd (([[ highlight LspDiagnosticsUnderlineWarning cterm=undercurl gui=undercurl guisp='%s' ]]):format(require'user.config'.colors.warning))
-    vim.cmd (([[ highlight LspDiagnosticsUnderlineInformation cterm=undercurl gui=undercurl guisp='%s' ]]):format(require'user.config'.colors.information))
-    vim.cmd (([[ highlight LspDiagnosticsUnderlineHint cterm=undercurl gui=undercurl guisp='%s' ]]):format(require'user.config'.colors.hint))
+    vim.api.nvim_set_hl(0, 'LspDiagnosticsUnderlineError', { link = 'Error' })
+    vim.api.nvim_set_hl(0, 'LspDiagnosticsUnderlineWarning', { link = 'Warning' })
+    vim.api.nvim_set_hl(0, 'LspDiagnosticsUnderlineInformation', { link = 'Information' })
+    vim.api.nvim_set_hl(0, 'LspDiagnosticsUnderlineHint', { link = 'Hint' })
 
     -- For some reason i need to specify this (non lsp variant) for
     -- undercurl to properly work on hints, replacing the default

@@ -38,8 +38,8 @@ M.setup = function()
           diff_color = {
             -- Same color values as the general color option can be used here.
             added    = { fg = require'user.config'.colors.git.added, },
-            modified = { fg = require'user.config'.colors.git.modified, },
-            removed  = { fg = require'user.config'.colors.git.removed, },
+            modified = { fg = require'user.config'.colors.git.changed, },
+            removed  = { fg = require'user.config'.colors.git.deleted, },
           },
           symbols = { added = '+', modified = '~', removed = '-' }, -- Changes the symbols used by the diff.
           -- A function that works as a data source for diff.
