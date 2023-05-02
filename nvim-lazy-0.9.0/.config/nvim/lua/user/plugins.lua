@@ -178,6 +178,9 @@ require("lazy").setup({
     init = require('user.plugin.cybu').init,
     config = require('user.plugin.cybu').setup,
   },
+  {
+    'chentoast/live.nvim',
+  },
 
   -- Features
   {
