@@ -180,19 +180,20 @@ require("lazy").setup({
   },
 
   -- Features
-  { 
-    'TimUntersberger/neogit', 
-    dependencies = { 'nvim-lua/plenary.nvim' },
-    keys = require'user.lib.plugin-management'.extract_keys_from_module_mappings(require('user.plugin.neogit').mappings, true),
-    cmd = { 'Neogit' },
-    config = require('user.plugin.neogit').setup,
+  {
+    -- NOTE: the classic vimscript variant of neogit
+    'tpope/vim-fugitive',
+    keys = require'user.lib.plugin-management'.extract_keys_from_module_mappings(require('user.plugin.vim-fugitive').mappings, true),
+    cmd = { 'G' },
+    config = require('user.plugin.vim-fugitive').setup,
   },
-  -- {
-  --   -- NOTE: the classic vimscript variant of neogit
-  --   'tpope/vim-fugitive',
-  --   keys = require'user.lib.plugin-management'.extract_keys_from_module_mappings(require('user.plugin.vim-fugitive').mappings, true),
-  --   cmd = { 'G' },
-  --   config = require('user.plugin.vim-fugitive').setup,
+  -- { 
+  --  -- NOTE: lua variant of vim-fugitive
+  --   'TimUntersberger/neogit', 
+  --   dependencies = { 'nvim-lua/plenary.nvim' },
+  --   keys = require'user.lib.plugin-management'.extract_keys_from_module_mappings(require('user.plugin.neogit').mappings, true),
+  --   cmd = { 'Neogit' },
+  --   config = require('user.plugin.neogit').setup,
   -- },
   -- {
   --   -- NOTE: this plugin caused too much of a hassle and adds too much code
@@ -202,6 +203,7 @@ require("lazy").setup({
   --   -- (which `diffview` can't even do by itself and staging with `gitsigns` inside
   --   -- it causes it to reset its view and/or go to the next hunk in a random file
   --   -- which is pain in the ass and caused additional problems for me at the time)
+  --   -- "diffview.nvim": { "branch": "main", "commit": "f9ddbe798cb92854a383e2377482a49139a52c3d" },
   --   'sindrets/diffview.nvim', 
   --   dependencies = { 'nvim-lua/plenary.nvim' },
   --   keys = require'user.lib.plugin-management'.extract_keys_from_module_mappings(require('user.plugin.diffview').mappings, true),
