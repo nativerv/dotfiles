@@ -41,6 +41,7 @@ alias bj="bubblejail"
 alias dt="date +%F_%H-%M-%S | head -c-1"
 alias gr='grep --recursive --line-number'
 alias rtop='radeontop'
+alias open='xdg-open'
 
 # Noglobs
 alias tl='noglob tl'
@@ -52,6 +53,11 @@ alias ytmdl="noglob ytmdl"
 # Mkdir and touch; also flag mkdir create nonexistent dirs
 alias md="mkdir -p"
 alias mt="touch"
+
+# mkdir + cd; also change the mcd completion as mcd name is actually used by
+# the mtools package which has weird completion for it
+compdef '_mkdir' 'mcd' &&
+  mcd() { mkdir -p "$@" 2> >(sed s/mkdir/mcd/ 1>&2) && cd "$_"; }
 
 # Simulate plan9 `walk` util
 alias walk="find ."
