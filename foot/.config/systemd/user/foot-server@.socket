@@ -1,0 +1,8 @@
+[Unit]
+Requisite=wayland-session@%i.target
+
+[Socket]
+ListenStream=%t/foot-%i.sock
+
+[Install]
+WantedBy=wayland-session@%i.target

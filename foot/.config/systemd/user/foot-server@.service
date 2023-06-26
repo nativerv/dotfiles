@@ -1,0 +1,15 @@
+[Unit]
+Description=Foot terminal server mode for WAYLAND_DISPLAY=%i
+Documentation=man:foot(1)
+After=wayland-session@%i.target
+Requisite=wayland-session@%i.target
+Requires=%N.socket
+
+[Service]
+ExecStart=foot --server=3
+Environment=WAYLAND_DISPLAY=%i
+UnsetEnvironment=LISTEN_PID LISTEN_FDS LISTEN_FDNAMES
+NonBlocking=true
+
+[Install]
+WantedBy=wayland-session@%i.target
