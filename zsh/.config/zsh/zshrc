@@ -1,55 +1,42 @@
 #!/bin/bash
 
-# Functions necessary to run this config
-source "${ZDOTDIR}/functions"
+# Enable zsh's profiling module
+zmodload zsh/zprof
+
+# Create files by default with user permissions only (no group, no others)
+umask 077
+
+: "${XDG_DATA_HOME:="${HOME}/.local/share"}"
+: "${XDG_STATE_HOME:="${HOME}/.local/state"}"
+: "${XDG_CACHE_HOME:="${HOME}/.cache"}"
+: "${XDG_CONFIG_HOME:="${HOME}/.config"}"
+
+### PEEPOS, first of all... (byproduct: load XDG user dir location vars)
+[ -f "${XDG_CONFIG_HOME}/user-dirs.dirs" ] && . "${XDG_CONFIG_HOME}/user-dirs.dirs"
+: "${XDG_PICTURES_DIR:="${HOME}/Pictures"}"
+: "${PEEPOS_LOCATION:="${XDG_PICTURES_DIR}/pepes"}"
+[[ -o login ]] && random-pepe 2>/dev/null
 
 ### Source all config files
 
 # All of below depend on `functions`
+# Functions necessary to run this config
+source "${ZDOTDIR}/functions"
 zsh_add_file "exports"
-### PEEPOS, first of all...
-[[ -o login ]] && command -v random-pepe >/dev/null && random-pepe 2>/dev/null
-# Continue normally with mundane stuff...
 zsh_add_file "options"
 zsh_add_file "aliases"
 zsh_add_file "prompt"
 zsh_add_file "vim_mode"
 zsh_add_file "keybindings"
 zsh_add_file "plugins"
-
-### Load zsh modules =================
-
-# Enable zsh's profiling module
-zmodload zsh/zprof
-
-# Enable pywal colors in terminal by pasting 
-# it's escape sequences
-pywal_sequences_path="${XDG_CACHE_HOME:-$HOME/.cache}/wal/sequences"
-[ -s "${pywal_sequences_path}" ] && (cat ~/.cache/wal/sequences &)
-
-# Enable pywal colors in TTY by pasting 
-# it's escape sequences
-pywal_colors_path="${XDG_CACHE_HOME:-$HOME/.cache}/wal/colors-tty.sh"
-[ -s "${pywal_colors_path}" ] && source "${pywal_colors_path}"
-
-# Create files by default with 700 permissions
-umask 077
+zsh_add_file "hooks"
+zsh_add_file "colors"
 
 ### Start X on login
 
 RED='\033[0;31m' NC='\033[0m' # No Color 
 ERROR="${RED}ERROR${NC}"
 FATAL="${RED}FATAL${NC}"
-
-# Start/source ssh-agent
-if ! pgrep -u "${USER}" ssh-agent > /dev/null; then
-  [ ! -d "${XDG_RUNTIME_DIR}" ] && mkdir -p "${XDG_RUNTIME_DIR}"
-  ssh-agent -t 744h > "${XDG_RUNTIME_DIR}/ssh-agent.env"
-fi
-if [[ ! "$SSH_AUTH_SOCK" ]]; then
-  # shellcheck disable=1091
-  source "${XDG_RUNTIME_DIR}/ssh-agent.env" >/dev/null
-fi
 
 # Start X server if in tty1 and X server isn't running
 maybe_startx () {
@@ -93,12 +80,13 @@ maybe_startx () {
     return
   fi
 
-  LOGDIR="${XDG_DATA_HOME}/xinitrc"
+  LOGDIR="${XDG_STATE_HOME}/xinitrc"
 
-  [ ! -d "${LOGDIR}" ] && (mkdir "${LOGDIR}"; echo 'This is a custom `.xinitrc` log location. See `maybe_startx` in `~/.config/zsh/zshrc`' > "${LOGDIR}/README.md")
+  [ ! -d "${LOGDIR}" ] && (mkdir -p "${LOGDIR}"; echo 'This is a custom `.xinitrc` log location. See `maybe_startx` in `~/.config/zsh/zshrc`' > "${LOGDIR}/README.md")
   startx "${XDG_CONFIG_HOME}/x11/xinitrc" >>"${LOGDIR}/xinitrc.error.log" 2>>"${LOGDIR}/xinitrc.error.log"
 }
 
 # Only start if `DISPLAY == "" && tty == tty1 && startx`
 maybe_startx
 
+# vim:ft=zsh

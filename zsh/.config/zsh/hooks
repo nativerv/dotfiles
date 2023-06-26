@@ -1,0 +1,14 @@
+# OSC 7 (tell current working directory to the terminal)
+function send_ocs7 {
+  local LC_ALL=C
+  export LC_ALL
+
+  setopt localoptions extendedglob
+  input=( ${(s::)PWD} )
+  uri=${(j::)input/(#b)([^A-Za-z0-9_.\!~*\'\(\)-\/])/%${(l:2::0:)$(([##16]#match))}}
+  print -n "\e]7;file://${HOSTNAME}${uri}\e\\"
+}
+
+add-zsh-hook -Uz chpwd send_ocs7
+
+# vim:ft=zsh

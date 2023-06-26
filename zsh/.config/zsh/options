@@ -20,6 +20,7 @@ stty stop undef
 
 # Enable completions
 autoload -Uz compinit
+autoload -Uz bashcompinit && bashcompinit
 
 #zstyle ':completion:*' menu select
 zstyle ':completion:*' matcher-list '' \
