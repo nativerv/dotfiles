@@ -26,5 +26,12 @@
 # T    Current time*,
 # Z    Local timezone.
 
-curl -s 'http://wttr.in/?format=%t' | grep -oE '[\+\-]{1}[0-9]+' | tee -a "${HOME}/desk/sb-weather.log"
-date >> ~/desk/sb-weather.log
+: "${XDG_STATE_HOME:="${HOME}/.local/state"}"
+: "${XDG_DATA_HOME:="${HOME}/.local/share"}"
+
+mkdir -p "${XDG_STATE_HOME}/sb/weather"
+
+weather="$(curl -s "http://wttr.in/$(cat 2>/dev/null "${XDG_DATA_HOME}/sb/weather/location")?format=%t" | grep -oE '[\+\-]{1}[0-9]+')"
+printf "%s %s\n" "$(date +%Y%m%d%H%M%S)" "${weather}" >> "${XDG_STATE_HOME}/sb/weather/weather.log"
+
+printf "%s" "${weather}"

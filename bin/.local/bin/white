@@ -7,24 +7,33 @@
 
 set -eu
 
-pub_dir="$(xdg-user-dir PUBLICSHARE)/dnd"
-file_path="${1}"
-file_name="${file_path##*/}"
-hash="$(sha256sum "${file_path}" | cut -d' ' -f1)"
-pub_file_dir="${pub_dir}/${hash}"
-pub_file_path="${pub_file_dir}/${file_name}"
+PUBLIC_HOME="$(xdg-user-dir PUBLICSHARE)"
+: "${PUBLIC_HOME:="${HOME}/Public"}"
+: "${WHITE_HOME:="${PUBLIC_HOME}/dnd"}"
 
-pub_dir_drive="$(stat -c '%d' "${pub_dir}")"
-source_dir_drive="$(stat -c '%d' "${file_path}")"
+white_one() {
+	file_path="${1}"
+	file_name="${file_path##*/}"
+	hash="$(sha256sum "${file_path}" | cut -d' ' -f1)"
+	pub_file_dir="${PUBLIC_HOME}/${hash}"
+	pub_file_path="${pub_file_dir}/${file_name}"
 
-mkdir -p "${pub_file_dir}"
+	pub_dir_drive="$(stat -c '%d' "${PUBLIC_HOME}")"
+	source_dir_drive="$(stat -c '%d' "${file_path}")"
 
-if [ "${file_path}" = "${pub_file_path}" ]; then
-  printf '%s' "${pub_file_path}"
-elif [ "${pub_dir_drive}" = "${source_dir_drive}" ]; then
-  ln -f "${file_path}" "${pub_file_path}" &&
-    printf '%s' "${pub_file_path}"
-else
-  cp -f "${file_path}" "${pub_file_path}" &&
-    printf '%s' "${pub_file_path}"
-fi
+	mkdir -p "${pub_file_dir}"
+
+	if [ "${file_path}" = "${pub_file_path}" ]; then
+		printf '%s\n' "${pub_file_path}"
+	elif [ "${pub_dir_drive}" = "${source_dir_drive}" ]; then
+		ln -f "${file_path}" "${pub_file_path}" &&
+			printf '%s\n' "${pub_file_path}"
+	else
+		cp -f "${file_path}" "${pub_file_path}" &&
+			printf '%s\n' "${pub_file_path}"
+	fi
+}
+
+for file in "${@}"; do
+	white_one "${file}"
+done

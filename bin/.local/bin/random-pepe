@@ -4,15 +4,18 @@
 # chars='     /********,.@@@%'
 # chars='     /********,%#@&!!@#$%^&).@@@%'
 
-[ -f "${XDG_CONFIG_HOME}/user-dirs.dirs" ] && . "${XDG_CONFIG_HOME}/user-dirs.dirs"
+: "${XDG_CONFIG_HOME:="${HOME}/.config"}"
+: "${XDG_CACHE_HOME:="${HOME}/.cache"}"
+: "${XDG_DATA_HOME:="${HOME}/.local/share"}"
+: "${XDG_STATE_HOME:="${HOME}/.local/state"}"
+
+[ -z "${PEEPOS_LOCATION-}" ] && [ -f "${XDG_CONFIG_HOME}/user-dirs.dirs" ] && . "${XDG_CONFIG_HOME}/user-dirs.dirs"
+: "${XDG_PICTURES_DIR:="${HOME}/Pictures"}"
+: "${PEEPOS_LOCATION:="${XDG_PICTURES_DIR}/pepes"}"
 
 # Subsequent defaults
 # Ascending priority
-pepes_dir="${HOME}/Pictures/pepes"
-
-[ -n "${XDG_PICTURES_DIR}" ] && pepes_dir="${XDG_PICTURES_DIR}/pepes"
-[ -s "${XDG_DATA_HOME}/peepos_location" ] && pepes_dir=$(envsubst < "${XDG_DATA_HOME}/peepos_location")
-[ -n "${1}" ] && pepes_dir="${1}"
+pepes_dir="${PEEPOS_LOCATION}"
 
 # Exit if there is no place of peepos...
 if [ ! -d "${pepes_dir}" ]; then

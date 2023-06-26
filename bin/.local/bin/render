@@ -1,6 +1,6 @@
 #!/bin/sh
 
-set -ue
+set -uex
 
 do_open=
 while getopts 'o' name; do
@@ -25,8 +25,9 @@ rendered="${MD_TMP_DIR}/${prefix}-${filename%.*}.html"
 # exec closes stderr (suppress browser output)
 #--lua-filter pandoc-relative-paths-filter.lua \
 pandoc \
+  --embed-resources \
   --standalone \
-  --css 'github-markdown.css' \
+  --css "${HOME}/desk/github-markdown.css" \
   -f 'gfm+smart' \
   -t 'html' \
   -o "${rendered}" \

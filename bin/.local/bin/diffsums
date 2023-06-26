@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+# Author: nrv
+# Description: compare 2 dirs by checksums of their files
+
+set -ue
+
+diff \
+  <(find "${1}" -mindepth 1 -type f | xargs -d'\n' md5sum | cut -d' ' -f1 | sort) \
+  <(find "${2}" -mindepth 1 -type f | xargs -d'\n' md5sum | cut -d' ' -f1 | sort)

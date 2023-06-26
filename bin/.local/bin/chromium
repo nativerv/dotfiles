@@ -9,9 +9,12 @@
 #enabled_features="WebUIDarkMode,VaapiVideoDecoder"
 enabled_features="WebUIDarkMode"
 
+platform=x11
+[ -n "${WAYLAND_DISPLAY}" ] && platform=wayland
+
 if command -v 'firejail'; then
-  firejail --profile=chromium /usr/bin/chromium --enable-features="${enabled_features}" --force-dark-mode "${@}"
+  firejail --profile=chromium /usr/bin/chromium --ozone-platform=${platform} --enable-features="${enabled_features}" --force-dark-mode "${@}"
 else
-  /bin/chromium --enable-features="${enabled_features}" --force-dark-mode "${@}"
+  /usr/bin/chromium --ozone-platform=${platform} --enable-features="${enabled_features}" --force-dark-mode "${@}"
 fi
 

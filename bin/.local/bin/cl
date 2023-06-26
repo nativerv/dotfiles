@@ -1,3 +1,10 @@
 #!/bin/sh
 
-printf '%s\n' "${*}" | calc -dp | sed 's/^[[:space:]]*//'
+printf '%s' "${*}" | calc -dp | sed 's/^[[:space:]]*//'
+
+# thought of replacing it with more standard `bc`, but:
+# - bc is crap in time (3^123123 -> 0.066 for calc vs 0.393 for bc)
+# - bc is crap in it's defaults (low decimal precision, no leading zero, weird
+# behavior such as escapes of outputted newlines)
+#export BC_LINE_LENGTH=0
+#printf '%s\n' "${*}" | bc -lq | awk '{ printf "%f", $1 }'

@@ -1,0 +1,26 @@
+#!/bin/sh
+
+set -u
+
+: "${DICT_LOCALE:="en"}"
+
+vim='vim'
+command -v nvim 2>'/dev/null' >&2 && vim='nvim'
+
+curl \
+  --location \
+  --silent \
+  --data-urlencode 'action=query' \
+  --data-urlencode 'format=json' \
+  --data-urlencode 'prop=extracts' \
+  --data-urlencode 'origin=*' \
+  --data-urlencode "titles=${1}" \
+  "https://${DICT_LOCALE}.wiktionary.org/w/api.php" |
+  jq -r '.query.pages[] | .extract' |
+  pandoc -f 'html' -t 'gfm' -o '-' '-' |
+  sed 's/<span.*>\(.\+\)<\/span>/\1/g' |
+  "${vim}" \
+    -R \
+    +'set ft=markdown' \
+    +'norm! gg' \
+    '-'

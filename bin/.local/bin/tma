@@ -1,0 +1,9 @@
+#!/bin/sh
+
+[ -n "${TMUX}" ] && exit 1
+
+if tmux list-sessions 2>/dev/null; then
+  tmux attach
+else
+  tmux
+fi

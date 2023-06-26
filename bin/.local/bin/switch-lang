@@ -1,4 +1,14 @@
 #!/bin/sh
 
-xkblayout-state set +1
-ev emit xkblayout-state lang_change
+switch_lang() {
+  if printf '%s' "${XDG_CURRENT_DESKTOP}" | grep -iq 'hyprland'; then
+    hyprctl switchxkblayout -- usb-usb-keyboard next 
+    return 0
+  elif [ "${XDG_SESSION_TYPE}" = 'X11' ]; then
+    xkblayout-state set +1
+  else
+    printf 'switch-lang: your display server does not support switching languages programmatically or XDG_SESSION_TYPE is unset\n' && return 1
+  fi
+}
+
+switch_lang && ev emit lang_change lang_change
