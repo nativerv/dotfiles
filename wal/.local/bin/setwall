@@ -1,14 +1,16 @@
 #!/bin/sh
 
-set -e
+set -u
+n=0
+#echo $((n+=1))
 
 # This script does the following:
 #	setwall                ->  set the saved wallpaper (for use on X startup).
 #	setwall FILE           ->  set FILE as the new wallpaper.
 #	setwall DIRECTORY      ->  set random file from DIRECTORY as new wallpaper.
-#	[ wal is installed ? ] -+> also generate and set a `wal` colorscheme.
+#	[ wal is installed ? ] ->  also generate and reload a `wal` colorscheme.
 
-help() {
+usage() {
 	echo "usage: $(basename "${0}") [-l] [-s saturation] [FILE]"
   # shellcheck disable=SC2016
 	echo '  set FILE as wallpaper and generate `wal` colorscheme if `wal` is installed.'
@@ -28,17 +30,20 @@ help() {
 }
 
 die() {
-	echo "${0}: error: ${1}"
+	printf '%s: %s\n' "$(basename "${0}")" "${1}"
 	exit 1
 }
 
-XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-"${HOME}/.config"}"
-XDG_DATA_HOME="${XDG_DATA_HOME:-"${HOME}/.local/share"}"
+: "${XDG_CONFIG_HOME:="${HOME}/.config"}"
+: "${XDG_DATA_HOME:="${HOME}/.local/share"}"
+: "${XDG_STATE_HOME:="${HOME}/.local/state"}"
 POSTRUN_FILE="${XDG_CONFIG_HOME}/wal/postrun"
 
 saturation='0.5'
 backend='wal'
 is_backend_specified='false'
+
+#echo $((n+=1))
 
 while getopts 'hls:b:' option; do
 	case "${option}" in
@@ -47,21 +52,25 @@ while getopts 'hls:b:' option; do
   b) backend=${OPTARG}
      is_backend_specified='true'
      ;;
-		# --help) help "$@" ;;
+		# --help) usage "$@" ;;
 	[?]|h)
-		help "$@"
+		usage "$@"
 		exit 0
 		;;
 	esac
 done
 
+#echo $((n+=1))
+
 shift $((OPTIND - 1))
 
 # This scritp's XDG_DATA_HOME directory
 wall_data_dir="${XDG_DATA_HOME}/wall"
+wall_state_dir="${XDG_STATE_HOME}/wall"
 
-# Ensure wall folder exists in XDG_DATA_HOME
+# Ensure wall folders exists in XDG_DATA_HOME
 mkdir -p "${wall_data_dir}"
+mkdir -p "${wall_state_dir}"
 
 # Location of link to wallpaper
 wallpaper_link="${wall_data_dir}/wallpaper"
@@ -71,9 +80,11 @@ backend_file="${wall_data_dir}/backend"
 # Ensure backend_file exists and contains
 touch "${backend_file}"
 
+#echo $((n+=1))
+
 # Replace link with new image if provided; else just use the ond one behind link
 # shellcheck disable=2236
-if [ ! -z "${1}" ]; then
+if [ ! -z "${1-}" ]; then
 	# Readlink input location to ensure we can test its mime type
 	input_true_location="$(readlink -f "${1}")" || die 'could not readlink wallpaper location'
 
@@ -83,53 +94,76 @@ if [ ! -z "${1}" ]; then
 	# otherwise -> exit with error
 	case "$(file --mime-type -b "${input_true_location}")" in
 	image/*)
+    # do some logs
+    [ "${input_true_location}" != "$(readlink -f "${wallpaper_link}")" ] &&
+      printf '%s' "${input_true_location}" >> "${wall_state_dir}/wallpaper-history"
+
 		ln -sf "${input_true_location}" "${wallpaper_link}"
 		notify-send -a "setwall" -i "${wallpaper_link}" "Changing wallpaper..."
 		;;
 	inode/directory)
-		ln -sf "$(find "${input_true_location}" -iregex '.*.\(jpg\|jpeg\|png\|gif\)' -type f | shuf -n 1)" "${wallpaper_link}"
+    input_true_location="$(find "${input_true_location}" -iregex '.*.\(jpg\|jpeg\|png\|gif\)' -type f | shuf -n 1)"
+    # do some logs
+    [ "${input_true_location}" != "$(readlink -f "${wallpaper_link}")" ] &&
+      printf '%s' "${input_true_location}" >> "${wall_state_dir}/wallpaper-history"
+
+		ln -sf "${input_true_location}" "${wallpaper_link}"
 		notify-send -a "setwall" -i "${wallpaper_link}" "Random Wallpaper chosen."
 		;;
+	*'No such file'*)
+		notify-send -a "setwall" "Error setting wallpaper" "Not such file or directory: '${input_true_location}'"
+		die "ERROR: not such file or directory: '${input_true_location}'"
+		;;
 	*)
-		notify-send -a "setwall" "Error" "Not a valid image."
-		die 'not a valid image'
+		notify-send -a "setwall" "Error setting wallpaper" "Not a valid image: '${input_true_location}'"
+		die "not a valid image: '${input_true_location}'"
 		;;
 	esac
 fi
 
+#echo $((n+=1))
+
 # If we're called *without* pos args - in restore mode,
 # and backend not specified explicitly with -b,
 # reuse backend saved to ${backend_file}
-if [ -z "${1}" ] && [ ! "${is_backend_specified}" = 'true' ]; then
+[ "${#}" -eq 0 ] &&
+  [ ! "${is_backend_specified}" = 'true' ] &&
   backend=$(cat "${backend_file}")
-fi
 
+#echo $((n+=1))
 # If we're called *with* pos args - in set mode,
 # save new backend to the backend_file
 # shellcheck disable=2236
-if [ ! -z "${1}" ]; then
-  printf '%s' "${backend}" > "${backend_file}"
-fi
+[ "${#}" -gt 0 ] && printf '%s' "${backend}" > "${backend_file}"
 
+#echo $((n+=1))
 # Set the wallpaper
-xwallpaper --zoom "${wallpaper_link}"
+case "${XDG_SESSION_TYPE:-}" in
+  X11) 
+    xwallpaper --zoom "${wallpaper_link}" 
+    ;;
+  wayland) 
+    pkill swaybg
+    setsid 2>'/dev/null' -f swaybg --image "${wallpaper_link}" &
+    ;;
+  *) 
+    # shellcheck disable=2016
+    die 'ERROR: ${XDG_SEESION_TYPE} is invalid or unset' 
+    ;;
+esac
+#echo $((n+=1))
 
 # If pywal is installed, use it
 
 # Guard for pywal
-command -v wal >/dev/null 2>&1 || exit 0
+command -v 'wal' >/dev/null 2>&1 || exit 0
 
-wal \
+if ! wal \
   --backend "${backend}" \
 	--saturate "${saturation}" \
   ${light:+-l} \
 	-i "$(readlink -f "${wallpaper_link}")" \
-	-o "${POSTRUN_FILE}" ||
-	{
+	-o "${POSTRUN_FILE}"; then
 		# shellcheck disable=SC2016
-		die 'Error running `wal`'
-	}
-
-# Send signals/restart some programs that `wal`
-# doesn't restart automatically
-setwall-reload-all "${1}"
+		die 'WARNING: error running `wal`.'
+fi
