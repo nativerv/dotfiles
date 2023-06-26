@@ -1,0 +1,11 @@
+[options]
+upscaling_method = nearest_neighbour
+
+[binds]
+z = zoom 1
+<Shift-z> = zoom -1
+= = actual
+<Space> = toggle_playing
+<Shift+.> = next_frame
+<Meta+i> = prev 1
+<Meta+o> = next 1
