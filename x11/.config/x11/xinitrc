@@ -2,20 +2,7 @@
 
 ### Loads on X server start
 
-# Export DISPLAY to user's systemd
-#systemctl --user import-environment DISPLAY
-
-# Wallpaper
-#setwall &
-
-# Remaps: caps to escape, keyboard layout switch, etc
-#xinit-remaps &
-
-# Daemons: dunst, sxhkd, picom, etc
-#xinit-daemons &
-
-# Restart daemons on config change
-#xinit-config-hot-updaters &
+set -u
 
 # Load Xresources database
 xrdb -I"${HOME}" "${XDG_CONFIG_HOME:-${HOME}/.config}/x11/xresources"
@@ -24,8 +11,13 @@ xrdb -I"${HOME}" "${XDG_CONFIG_HOME:-${HOME}/.config}/x11/xresources"
 export XDG_SESSION_TYPE="X11"
 
 # Export DISPLAY and XAUTHORITY to systemd-user
-[ -x /etc/X11/xinit/xinitrc.d/50-systemd-user.sh ] \
-  && . /etc/X11/xinit/xinitrc.d/50-systemd-user.sh
+# [ -x /etc/X11/xinit/xinitrc.d/50-systemd-user.sh ] \
+#   && . /etc/X11/xinit/xinitrc.d/50-systemd-user.sh
+command -v systemctl >/dev/null 2>&1 &&
+  systemctl --user import-environment DISPLAY XAUTHORITY XDG_SESSION_TYPE
+command -v dbus-update-activation-environment >/dev/null 2>&1 &&
+  dbus-update-activation-environment DISPLAY XAUTHORITY XDG_SESSION_TYPE
+
 
 # Tell my systemd services that they can start
 command -v systemctl >/dev/null 2>&1 \
@@ -34,14 +26,11 @@ command -v systemctl >/dev/null 2>&1 \
 # Start WM
 # "${XDG_CACHE_DIR}/xmonad/xmonad-x86_64-linux"
 "${HOME}/.xmonad/xmonad-x86_64-linux"
-# xmonad
-# dwm
-# qtile start -b wayland
+#xmonad
+#dwm
+#qtile start -b wayland
 
-# Tell my systemd services that they no longer can start
+# Tell my systemd services that they no longer can run
 command -v systemctl >/dev/null 2>&1 \
   && systemctl --user stop "xsession@$(echo "${DISPLAY}" | tr -d ':').target" >/dev/null 2>&1 \
-  && systemctl --user unset-environment DISPLAY XAUTHORITY >/dev/null 2>&1
-
-
-#exec dwm 
+  && systemctl --user unset-environment DISPLAY XAUTHORITY XDG_SESSION_TYPE >/dev/null 2>&1
