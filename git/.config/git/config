@@ -2,9 +2,22 @@
   autocrlf = false
   filemode = false
   pager = delta --true-color always --color-only
+  find-renames = true
+
+[status]
+  showUntrackedFiles=all
 
 [interactive]
   diffFilter = delta --true-color always --color-only
+
+[user]
+  signingkey = 32280B2A55E8CD6F 
+
+[commit]
+  gpgsign = true
+
+[rebase]
+  gpgsign = true
 
 [diff]
   conflictstyle = diff3
