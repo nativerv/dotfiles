@@ -19,12 +19,14 @@ urgency="${5}"
 # Ignore list - play no sound for these
 [ "${appname}" = "Telegram Desktop" ] && exit
 [ "${appname}" = "flameshot" ] && exit
-[ "${appname}" = "setwall" ] && exit
 
 case "${urgency}" in
   "LOW") exit ;;
-  "NORMAL") paplay --volume=$((65535/2)) "${XDG_DATA_HOME}/dunst/sounds/Iapetus.ogg" ;;
-  "CRITICAL") paplay --volume=$((65535)) "${XDG_DATA_HOME}/dunst/sounds/Iapetus.ogg" ;;
+  # TODO: make this audio server-indepemdent (paplay has
+  # different volume controls - 0-65535 instead of 0-1 and does
+  # not work with pipewire nicely)
+  "NORMAL") pw-play --volume 0.3 "${XDG_DATA_HOME}/dunst/sounds/Iapetus.ogg" ;;
+  "CRITICAL") pw-play --volume 0.5 "${XDG_DATA_HOME}/dunst/sounds/Iapetus.ogg" ;;
   *) ;;
 esac
 
