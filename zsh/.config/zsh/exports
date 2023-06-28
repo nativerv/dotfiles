@@ -105,3 +105,4 @@ if_bin_exists 'calc' && ! [ -z "${CALCHISTFILE+false}" ] && ensure_dir "${CALCHI
 #export PATH="${PYENV_ROOT}/bin:${PATH}"
 # eval "$(pip completion --zsh)" # Enable zsh completion for pip 
 
+# vim:ft=zsh
