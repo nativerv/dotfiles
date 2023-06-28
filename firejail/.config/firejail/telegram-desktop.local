@@ -22,6 +22,11 @@ noblacklist ${DOWNLOADS}
 mkdir ${HOME}/dl/telegram
 whitelist ${HOME}/dl/telegram
 
+# Another download dir
+noblacklist /media
+noblacklist /media/win_d_drive
+whitelist /media/win_d_drive/Downloads/telegram
+
 # Allow `wal-telegram` folder
 ignore private-cache
 noblacklist ${HOME}/.cache/wal-telegram
@@ -36,5 +41,9 @@ include allow-ev.inc
 
 # Prevent unused directory creation
 ignore mkdir ${HOME}/.TelegramDesktop
+
+# Allow file picker
+dbus-user.talk org.freedesktop.portal.Desktop
+dbus-user.talk org.freedesktop.portal.FileChooser 
 
 # vim:syntax=firejail

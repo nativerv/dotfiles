@@ -1,0 +1,4 @@
+noblacklist ${VIDEOS}
+whitelist ${VIDEOS}
+
+include allow-hydrus.inc

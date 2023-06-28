@@ -1,2 +1,2 @@
-#quiet
+quiet
 include youtube-dl.profile 

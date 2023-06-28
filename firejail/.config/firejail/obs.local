@@ -15,4 +15,6 @@ include allow-vid-obs.inc
 private-bin bash,obs,obs-ffmpeg-mux,python*,sh,ls,tree,ranger
 #ignore shell none
 
+dbus-user.talk org.freedesktop.portal.Desktop
+
 # vim:syntax=firejail

@@ -1,4 +1,8 @@
 #include allow-steam.inc
+#include allow-java.inc
+#noblacklist ${HOME}/.tlauncher
+#mkdir ${HOME}/.tlauncher
+#whitelist ${HOME}/.tlauncher
 
 noblacklist /usr/share/zenity
 whitelist /usr/share/zenity

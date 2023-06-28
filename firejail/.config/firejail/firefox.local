@@ -9,6 +9,10 @@ ignore mkdir ${HOME}/.pki
 include allow-mpv.inc
 include allow-sxiv.inc
 
+# Allow cargo docs
+whitelist-ro /var/cache/cargo/target
+# whitelist-ro /var/cache/cargo/target/doc
+
 # Prevent crap creation
 ignore mkdir ${HOME}/.pki
 
@@ -74,6 +78,9 @@ dbus-user.own org.mozilla.Firefox.*
 dbus-user.own org.mozilla.firefox.*
 dbus-user.own org.mpris.MediaPlayer2.firefox.*
 dbus-user.talk org.freedesktop.Notifications
+dbus-user.talk org.freedesktop.ScreenSaver
+dbus-user.talk org.freedesktop.portal.Desktop
+dbus-user.talk org.freedesktop.portal.FileChooser 
 
 ignore private-tmp
 ignore protocol unix,inet,inet6,netlink
