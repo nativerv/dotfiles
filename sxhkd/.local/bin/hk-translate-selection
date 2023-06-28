@@ -3,7 +3,7 @@
 XDG_DATA_HOME="${XDG_DATA_HOME:-"${HOME}/.local/share"}"
 TL_DATA_HOME="${XDG_DATA_HOME}/tl"
 
-primary="$(xclip -out -selection primary)"
+primary="$(put -p)"
 translation="$(tl "${primary}")"
 
 # Guard for dictionary translation

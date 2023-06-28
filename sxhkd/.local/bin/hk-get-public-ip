@@ -9,5 +9,21 @@ XDG_DATA_HOME="${XDG_DATA_HOME:-"${HOME}/.local/share"}"
 #   | xargs notify-send \
 #     -i "${XDG_DATA_HOME}/icons/hicolor/256x256/notifications/ip-address-256x256.png" \
 #     'IP Address'
-body="$(curl -sL https://ifconfig.co/json | jq -r '"Address: " + .ip, "Country: " + .country_iso')"
-notify-send -i "${XDG_DATA_HOME}/icons/hicolor/256x256/notifications/ip-address-256x256.png" 'IP' "${body}"
+if body="$(
+	curl \
+		--connect-timeout 3 \
+		--silent \
+		--location \
+		'https://ifconfig.co/json' |
+		jq -r '"Address: " + .ip, "Country: " + .country_iso'
+)"; then
+	notify-send \
+   -u 'normal' \
+   -i "${XDG_DATA_HOME}/icons/hicolor/256x256/notifications/ip-address-256x256.png" \
+   'IP' "${body}"
+else
+	notify-send \
+   -u 'normal' \
+   -i "${XDG_DATA_HOME}/icons/hicolor/256x256/notifications/ip-address-256x256.png" \
+   'IP' "Could not connect to internet (time out)"
+fi
