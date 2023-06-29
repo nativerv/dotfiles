@@ -1,0 +1,13 @@
+[Unit]
+Description=SSH key agent
+Documentation=man:ssh-agent(1)
+;Requires=%N.socket
+
+[Service]
+Type=exec
+Environment=SSH_AUTH_SOCK=%t/ssh-agent
+ExecStart=ssh-agent -D -t 1d -a $SSH_AUTH_SOCK
+Restart=always
+
+[Install]
+WantedBy=default.target
