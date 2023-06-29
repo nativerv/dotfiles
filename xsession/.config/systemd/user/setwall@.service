@@ -1,0 +1,26 @@
+[Unit]
+Description=Setwall at DISPLAY=:%i - set wallpaper and make pywal color scheme based on it
+Documentation=setwall --help
+;PartOf=xorg@%i.target
+After=xsession@%i.target
+Requisite=xsession@%i.target
+
+[Service]
+Type=oneshot
+; ExecStart=sh -c 'pwd >> /home/nrv/desk/xmonad-systemd-test; echo $HOME >> /home/nrv/desk/xmonad-systemd-test; echo $USER >> /home/nrv/desk/xmonad-systemd-test; setwall'
+ExecStart=sh -c 'setwall'
+
+# Sandboxing
+NoNewPrivileges=yes
+ProtectKernelTunables=yes
+ProtectControlGroups=yes
+RestrictNamespaces=yes
+LockPersonality=true
+MemoryDenyWriteExecute=true
+PrivateUsers=true
+RestrictNamespaces=true
+SystemCallArchitectures=native
+#SystemCallFilter=@system-service
+
+[Install]
+WantedBy=xsession@%i.target

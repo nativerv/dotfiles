@@ -1,0 +1,14 @@
+[Unit]
+Description=Oneshot xodmap/setxkbmap config at DISPLAY=:%i
+Documentation=man:setxkbmap(1) man:xmodmap(1)
+#PartOf=xorg@%i.target
+After=xsession@%i.target
+Requisite=xsession@%i.target
+
+[Service]
+Type=oneshot
+ExecStart=sh -c 'xinit-remaps'
+; Restart=on-failure
+
+[Install]
+WantedBy=xsession@%i.target
