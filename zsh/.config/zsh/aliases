@@ -112,9 +112,6 @@ alias zshplug="find "${ZDOTDIR}/plugins" -type d -exec test -e '{}/.git' ';' -pr
 # Aliases for ls
 # alias ls='ls --time-style=long-iso --color=auto --group-directories-first' 
 ls() {
-  getopts 'l' o &&
-    [ "${o}" = "l" ] &&
-    long=true
   command 2>/dev/null >&2 -v unbuffer &&
     unbuffer=unbuffer
   ${unbuffer} exa \
@@ -122,20 +119,17 @@ ls() {
     --group-directories-first \
     --time-style=long-iso \
     --git \
-    ${long+"--tree"} \
-    --level=1 \
     --icons \
     --links \
     --group \
-    --classify \
     "${@}" |
     sed 's/^\./-/'
 }
-alias ll='ls -lF'    # Table with file type indicators
-alias lla='ls -alF'  # Table with all and file type indicators
-alias lld='ls -aldF' # Table with exact file (for looking at directories, not their contents)
-alias la='ls -A'     # Simple with all 
-alias l='ls -F'      # Simple with file type indicators
+alias ll='ls -l'    # Table with file type indicators
+alias lla='ls -la'  # Table with all and file type indicators
+alias lld='ls -lad' # Table with exact file (for looking at directories, not their contents)
+alias la='ls -a'     # Simple with all 
+#alias l='ls -F'      # Simple with file type indicators
 
 # Aliases for tree
 alias t='tree -aAcC --dirsfirst' # Sort by modtime, show all, enable colors, fix lines
