@@ -1,4 +1,9 @@
 
+/* hide the annoying microphone listening icon-window that sticks on top of everything */
+#webrtcIndicator {
+  display: none;
+}
+
 .tabbrowser-tab {
   min-width: 10px !important;
 }
