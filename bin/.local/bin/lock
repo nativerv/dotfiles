@@ -1,6 +1,17 @@
 #!/bin/sh
-# betterlockscreen --lock blur
 
-xkblayout-state set 0
-
-slock
+case "${XDG_SESSION_TYPE-}" in
+  wayland)
+    case "${XDG_CURRENT_DESKTOP-}" in
+      # FIXME: 'usb-usb-keyboard' is hardcoded
+      *Hyprland*) hyprctl switchxkblayout -- usb-usb-keyboard 0 ;;
+      #*sway*) swaymsg input "usb-usb-keyboard" xkb_switch_layout next ;;
+      *) ;;
+    esac
+    swaylock -f -c 000000
+    ;;
+  X11)
+    xkblayout-state set 0
+    slock
+    ;;
+esac

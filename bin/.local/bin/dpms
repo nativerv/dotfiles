@@ -1,0 +1,20 @@
+#!/bin/sh
+
+[ "${1}" = 'on' ] || [ "${1}" = 'off' ] || {
+  printf >&2 "dpms: argument must be either 'on' or 'off'"
+  exit 1
+}
+
+case "${XDG_SESSION_TYPE-}" in
+  wayland)
+    case "${XDG_CURRENT_DESKTOP-}" in
+      # FIXME: 'usb-usb-keyboard' is hardcoded
+      *Hyprland*) hyprctl dispatch dpms "${1}" ;;
+      *sway*) swaymsg "output * power ${1}" ;;
+      *) ;;
+    esac
+    ;;
+  X11)
+    printf >&2 'dpms: x11: unimplemented'
+    ;;
+esac

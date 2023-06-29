@@ -22,5 +22,6 @@ curl \
   "${vim}" \
     -R \
     +'set ft=markdown' \
+    +'set nospell' \
     +'norm! gg' \
     '-'
