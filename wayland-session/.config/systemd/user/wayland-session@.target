@@ -1,0 +1,2 @@
+[Unit]
+Description=Wayland graphical session on WAYLAND_DISPLAY=%i
