@@ -1,12 +1,12 @@
 [Unit]
 Description=File opening daemon; used to escape `firejail`-ed apps
-Documentation=
-After=ev.service xsession@%i.target
-Requisite=ev.service xsession@%i.target
+After=ev.service xsession@%i.target wayland-session@%i.target
+Requisite=ev.service wayland-session@%i.target
 
 [Service]
 Type=exec
-ExecStart=/usr/bin/env DISPLAY=:%i /bin/sh -c opend
+ExecStart=sh -c 'exec opend'
+Restart=always
 
 # Sandboxing
 ; NoNewPrivileges=yes
@@ -21,4 +21,4 @@ ExecStart=/usr/bin/env DISPLAY=:%i /bin/sh -c opend
 ; SystemCallFilter=@system-service 
 
 [Install]
-WantedBy=xsession@%i.target
+WantedBy=wayland-session@%i.target

@@ -1,5 +1,7 @@
 #!/bin/sh
 
+set -u
+
 XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-"${HOME}/.config"}"
 XDG_DATA_HOME="${XDG_DATA_HOME:-"${HOME}/.local/share"}"
 
@@ -15,11 +17,13 @@ TORRENT_HANDLER="${TORRENT_HANDLER:-transadd}"
 MAIL_HANDLER="${MAIL_HANDLER:-false}"
 # TORRENT_HANDLER=transadd
 
+[ -z "${MENU-}" ] && printf 'opend: ERROR: MENU environment variable is unset or empty\n' && exit 1
+
 ev listen | while read -r 'source' 'target' 'payload'; do
   # Guard - opend event
   [ ! "${source}" = 'opend' ] && continue
 
-  answer="$(printf 'Yes\nNo' | dmenu -l 2 -p "Do you want to open '${payload}' with a default program?")"
+  answer="$(printf 'Yes\nNo' | "${MENU}" -l 2 -p "Do you want to open '${payload}' with a default program?")"
 
   # Guard - user answer
   case "${answer}" in
@@ -33,7 +37,7 @@ ev listen | while read -r 'source' 'target' 'payload'; do
     torrent)  "${TORRENT_HANDLER}" "${payload}" & ;;
     web)      "${BROWSER}" "${payload}" & ;;
     telegram) telegram-desktop -workdir "${XDG_DATA_HOME}/TelegramDesktop/" -- "${payload}" & ;;
-    lbry)     zeniny --info --text "install lbry to open ${payload}" & ;;
+    lbry)     notify-send -u 'normal' "Opening '${payload}'" "Install Lbry to open ${payload}" & ;;
     image)    "${IMAGE_VIEWER}" -a "${payload}" & ;;
     video)    "${MEDIA_VIEWER}" "${payload}" & ;;
     rss)      "${TERMINAL}" -e "${RSS_HANDLER}" "${payload}" & ;;
