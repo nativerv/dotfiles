@@ -1,0 +1,8 @@
+#!/bin/sh
+
+hyprctl dispatch fullscreen 1 2>/dev/null 
+# case "$(hyprctl activeworkspace | grep 'hasfullscreen: ' | cut -d' ' -f2)" in
+#   0) hyprctl dispatch fullscreen 1 2>/dev/null ;;
+#   1) hyprctl dispatch fullscreen 1 2>/dev/null ;;
+#   *) ;;
+# esac

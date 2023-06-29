@@ -1,0 +1,10 @@
+#!/bin/sh
+
+socat -u "UNIX-CONNECT:/tmp/hypr/${HYPRLAND_INSTANCE_SIGNATURE}/.socket2.sock" '-' | while read -r _; do
+  case "$(hyprctl activeworkspace | grep 'hasfullscreen: ' | cut -d' ' -f2)" in
+    0) printf '[]=' ;;
+    1) printf '[ ]' ;;
+    *) printf '[ ERROR ]' ;;
+  esac
+  printf '\n'
+done

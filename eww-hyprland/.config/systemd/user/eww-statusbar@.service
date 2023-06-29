@@ -1,0 +1,26 @@
+[Unit]
+Description=Eww Statusbar
+Documentation=https://github.com/nativerv/dotfiles
+After=eww@%i.service
+#PartOf=eww@%i.service
+Requisite=eww@%i.service
+
+[Service]
+;Environment=WAYLAND_DISPLAY=%i
+Type=exec
+ExecStart=eww open statusbar
+
+# Sandboxing
+NoNewPrivileges=yes
+ProtectKernelTunables=yes
+ProtectControlGroups=yes
+RestrictNamespaces=yes
+LockPersonality=true
+MemoryDenyWriteExecute=true
+PrivateUsers=true
+RestrictNamespaces=true
+SystemCallArchitectures=native
+SystemCallFilter=@system-service
+
+[Install]
+WantedBy=eww@%i.service

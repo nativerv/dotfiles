@@ -1,0 +1,30 @@
+#!/bin/sh
+
+clamp() {
+	min="${1}"
+	max="${2}"
+	val="${3}"
+	python -c "print(max(${min}, min(${val}, ${max})))"
+}
+
+workspaces_count="$(hyprctl workspaces -j | jq 'length')"
+
+direction="$1"
+current="$2"
+
+case "${direction}" in
+  'down') ;;
+  'up') ;;
+esac
+
+if test "${direction}" = "down"
+then
+  target="$(( (current + 1) % workspaces_count ))"
+	echo "jumping to $target"
+	hyprctl dispatch workspace "${target}"
+elif test "${direction}" = "up"
+then
+	target="$(( (current + 1) % workspaces_count))"
+	echo "jumping to $target"
+	hyprctl dispatch workspace "${target}"
+fi

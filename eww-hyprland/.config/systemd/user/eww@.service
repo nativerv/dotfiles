@@ -1,0 +1,25 @@
+[Unit]
+Description=ElKowar Widgets daemon
+Documentation=https://github.com/elkowar/eww
+After=wayland-session@%i.target
+Requisite=wayland-session@%i.target
+
+[Service]
+;Environment=WAYLAND_DISPLAY=%i
+Type=exec
+ExecStart=eww daemon --no-daemonize
+
+# Sandboxing
+NoNewPrivileges=yes
+ProtectKernelTunables=yes
+ProtectControlGroups=yes
+RestrictNamespaces=yes
+LockPersonality=true
+MemoryDenyWriteExecute=true
+PrivateUsers=true
+RestrictNamespaces=true
+SystemCallArchitectures=native
+SystemCallFilter=@system-service
+
+[Install]
+WantedBy=wayland-session@%i.target

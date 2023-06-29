@@ -1,0 +1,188 @@
+; (deflisten memory "sh -c sb-memory used")
+(deflisten music "sb-mus-listen")
+
+;;(defpoll cpu :interval "2s" "${cpu}")
+;;(defvar cpu "${EWW_CPU}")
+(defpoll cpu-temperature :interval "2s" "sb-cpu-temp")
+(defpoll memory :interval "2s" "sb-memory used")
+(defpoll weather :interval "5m" "sb-weather")
+(defpoll network-rx :interval "2s" "sb-nettraf rx")
+(defpoll network-tx :interval "2s" "sb-nettraf tx")
+(defpoll updates :interval "5m" "pacman-get-updatable-count")
+(defpoll date :interval "1m" "sb-date")
+(deflisten language "sb-lang-listen")
+(deflisten source "sb-source-vol-listen-icon")
+(deflisten sink "sb-sink-vol-listen-icon")
+
+(deflisten workspaces :initial "[]" "sh \${XDG_CONFIG_HOME}/eww/scripts/get-workspaces")
+(deflisten current-workspace :initial "1" "sh \${XDG_CONFIG_HOME}/eww/scripts/get-active-workspace")
+(deflisten current-layout :initial "[]=" "sh \${XDG_CONFIG_HOME}/eww/scripts/get-current-layout")
+
+(defwidget workspace [id name]
+  (eventbox
+    :onclick "hyprctl dispatch workspace ${id}"
+    (box
+      :class "
+        workspace-entry \
+        ${id == current-workspace ? "current" : ""} \
+        ${(workspaces?.[id - 1]?.windows ?: 0) > 0 ? "occupied" : "empty"} \
+        occupied
+      "
+      (label
+          :text "${name}"
+      )
+    )
+  )
+)
+
+(defvar main-icon-size 16)
+(defwidget separator []
+  (raw-label :class 'separator' :text "|")
+)
+
+(defwidget workspaces-widget []
+  (eventbox
+    :onscroll "sh \${XDG_CONFIG_HOME}/eww/scripts/change-active-workspace {} ${current-workspace}"
+    (box
+      :space-evenly false
+      :width 0
+      :class "workspaces-widget"
+      (box
+        :class 'main-icon-container'
+        (transform
+          :translate-y -1
+          ;; :scale-x '1%'
+          ;; :scale-y '1%'
+          ;; :rotate 10
+          (image
+            :class 'main-icon'
+            :image-width {main-icon-size}
+            :image-height {main-icon-size} 
+            :path "/home/nrv/.cache/wal/nix-snowflake.svg"
+            ;; :path "/home/nrv/.local/share/icons/hicolor/scalable/emblems/nix-snowflake.svg"
+          )
+        )
+      )
+      ;; (separator)
+      (workspace :id "1" :name "www")
+      (workspace :id "2" :name ">_")
+      (workspace :id "3" :name "vid")
+      (workspace :id "4" :name "gam")
+      (workspace :id "5" :name "><")
+      (workspace :id "6" :name "wrk")
+      (workspace :id "7" :name "tool")
+      (workspace :id "8" :name "hyd")
+      (workspace :id "9" :name "gfx")
+      (workspace :id "10" :name "note")
+      (separator)
+      (button :onclick "sh -c \${XDG_CONFIG_HOME}/eww/scripts/toggle-monocle" (raw-label :class "layout-icon" :text "${current-layout}"))
+      (separator)
+      (window-title)
+      ;; (for workspace in workspaces
+      ;;   (eventbox
+      ;;     :onclick "hyprctl dispatch workspace ${workspace.id}"
+      ;;     (box
+      ;;       :class "
+      ;;         workspace-entry \
+      ;;         ${workspace.id == current-workspace ? "current" : ""} \
+      ;;         ${workspace.windows > 0 ? "occupied" : "empty"}
+      ;;       "
+      ;;       (label
+      ;;           :text "${workspace.id}")
+      ;;       )
+      ;;     )
+      ;; )
+    )
+  )
+)
+
+(defwidget raw-label [text ?class ?truncate-left ?show-truncated]
+  (label
+    :unindent false
+    :text "${text}"
+    :class {class}
+    :truncate-left {truncate-left ?: false}
+    :show-truncated {show-truncated ?: true}
+  )
+)
+
+(defwidget meters []
+  (box
+    :class "meters"
+    :halign "end"
+    :space-evenly false
+    (box :space-evenly false (label :text "") (raw-label :text "${round(EWW_CPU["avg"], 0)}%"))
+    (box :space-evenly false (label :text "") (raw-label :text "${cpu-temperature}"))
+    (box :space-evenly false (label :text "") (raw-label :text "${memory}"))
+    (box :space-evenly false (label :text "") (raw-label :text "${weather}"))
+    (box :space-evenly false (label :text "") (raw-label :text "${network-rx}"))
+    (box :space-evenly false (label :text "") (raw-label :text "${network-tx}"))
+    (box :space-evenly false (label :text "") (raw-label :text "${updates}"))
+    (box :space-evenly false (label :text "") (raw-label :text "${date}"))
+    (box :space-evenly false (label :text "") (raw-label :text "${language}"))
+    (box :space-evenly false (label :text "") (raw-label :text "${source}"))
+    (box :space-evenly false (label :text "") (raw-label :text "${sink}"))
+  )
+)
+
+(defwidget music []
+  (eventbox
+    (box
+      :halign "center"
+      :space-evenly false
+      (box
+        :class 'music-icon'
+        (label :text "")
+      )
+      (label
+        :text "${music}"
+      )
+    )
+  )
+)
+
+(defwidget statusbar []
+  (centerbox
+    :class "statusbar"
+    (workspaces-widget)
+    ;;(window-title)
+    (music)
+    (meters)
+  )
+)
+
+(defwindow statusbar
+  :monitor 0
+  :geometry (geometry
+    :x "18px"
+    :y "0px"
+    :width "100%"
+    :height "18px"
+    :anchor "top center"
+  )
+  :stacking "fg"
+  :reserve (struts
+    :distance "18px"
+    :side "top"
+  )
+  :windowtype "normal"
+  :exclusive true
+  :wm-ignore false
+  (statusbar)
+)
+
+(deflisten current-window-title
+  :initial "..."
+  "sh \${XDG_CONFIG_HOME}/eww/scripts/get-window-title"
+)
+
+(defwidget window-title []
+  (box
+    :halign "start"
+    :class "window-title"
+    (label
+      :limit-width 50
+      :text "${current-window-title}"
+    )
+  )
+)

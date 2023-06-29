@@ -1,0 +1,104 @@
+@import "wal.scss";
+
+* {
+  all: unset;
+}
+
+$debug: 0;
+
+$underline-width: 2px;
+
+.statusbar {
+  color: $foreground;
+  background: $background;
+  font-size: 10px;
+  font-family: monospace;
+  font-weight: bold;
+
+  .workspaces-widget {
+    border: $debug * 1px solid green;
+    //padding-right: 100px;
+
+    * {
+    }
+
+    .main-icon-container {
+      //border-left: $underline-width solid $color2;
+
+      .main-icon {
+        font-size: 14px;
+        // padding-top: 1px;
+        padding-left: 7px;
+        padding-right: 7px;
+      }
+    }
+
+    .separator:nth-child(2) {
+      padding-right: 7px;
+    }
+    
+    .layout-icon {
+      color: $color6;
+      padding-left: 5px;
+      padding-right: 5px;
+    }
+
+    .window-title {
+      padding-left: 5px;
+      padding-right: 5px;
+      color: $color1;
+    }
+    
+    .separator {
+      color: #666666;
+    }
+
+    .workspace-entry  {
+      border-bottom: $underline-width solid $background;
+      padding-left: 10px;
+      padding-right: 10px;
+      // color: $color1;
+
+      &:hover {
+        background: red;
+      }
+
+      &.current {
+        border-bottom: $underline-width solid $color2;
+      }
+
+      &.occupied {
+        color: $color1;
+      }
+    }
+  }
+  
+  .window-title {
+    border: $debug * 1px solid red;
+  }
+
+  .music-icon {
+    font-size: 14px;
+    font-family: monospace;
+    padding-right: 5px;
+    color: $color3;
+
+    * {
+      padding-left: 3px;
+      padding-right: 3px;
+    }
+  }
+
+  .meters {
+    label {
+      margin-right: 8px;
+
+      &:first-child {
+        font-family: 'Font Awesome 6 Free Solid';
+        font-size: 12px;
+        color: $color3;
+      }
+    }
+  }
+}
+
