@@ -1,0 +1,4 @@
+noblacklist ${HOME}/pr
+whitelist ${HOME}/pr
+
+include allow-nvim.inc
