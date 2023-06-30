@@ -14,10 +14,13 @@
   signingkey = 32280B2A55E8CD6F 
 
 [commit]
-  gpgsign = true
+  gpgSign = true
 
 [rebase]
-  gpgsign = true
+  gpgSign = true
+
+[tag]
+  gpgSign = true
 
 [diff]
   conflictstyle = diff3
