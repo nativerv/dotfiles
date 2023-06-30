@@ -28,6 +28,9 @@ vim.keymap.set(
 -- Unmap <space> so it don't interfere with the leader>
 vim.keymap.set('n', '<space>', '<nop>')
 
+-- Unmap <F1> (annoying when switching between TTY's)
+vim.keymap.set('n', '<F1>', '<nop>')
+
 -- Unmap the fucking stupid annoying ass Ex mode or whatever the
 -- q:, Q, gQ, c_CTRL-F, q:, q/, q?
 vim.keymap.set({ 'n', 'v', 'o', 'x' }, 'q:', '<nop>', { desc = 'NOTHING (ABSOLUTELY)' })

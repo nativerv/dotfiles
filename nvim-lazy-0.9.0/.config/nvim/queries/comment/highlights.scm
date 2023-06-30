@@ -22,10 +22,10 @@
   (name) @text.warning @nospell
   ("(" @punctuation.bracket (user) @constant ")" @punctuation.bracket)?
   ":" @punctuation.delimiter)
-  (#any-of? @text.warning "HACK" "WARNING" "SAFETY"))
+  (#any-of? @text.warning "HACK" "WARNING" "SAFETY" "PERF"))
 
 ("text" @text.warning @nospell
- (#any-of? @text.warning "HACK" "WARNING" "SAFETY"))
+ (#any-of? @text.warning "HACK" "WARNING" "SAFETY" "PERF"))
 
 ((tag
   (name) @text.danger @nospell
