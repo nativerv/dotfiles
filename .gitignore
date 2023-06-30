@@ -74,3 +74,5 @@ gtk/.config/gtk-2.0/gtkfilechooser.ini
 nvim/.config/nvim/plugin
 nvim/.config/nvim/spell
 tridactyl/.config/tridactyl/themes/wal.css
+
+**/spell/*.utf-8.*

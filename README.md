@@ -1,6 +1,7 @@
 # Dotfiles
 
 My [Stow](https://www.gnu.org/software/stow/) for packages which belong to `$HOME` directory.
+
 User-specific configs, custom desktop entries etc. go here.
 
 ## Things unique to this config
@@ -10,16 +11,16 @@ User-specific configs, custom desktop entries etc. go here.
 - Refresh `lualine` theme with `SIGUSR1`
 - `FlatColor` gtk theme from `wpgtk` and complete gtk theme live reload is integrated into vanilla `pywal` workflow
 - Custom `wal` theme for `tridactyl`
-- Custom `xmonad` and `xmobar` config assembled into a single haskell project with `pywal` (`Xresources`) colors integration
-- Custom `Listen` plugin/module for `xmobar`, which listens on stdout lines and displags them as it's text, which allows on-demand refresh instead of polling-based refresh for things like current music track, keyboard layout, sound&mic and more
-- Custom UNIX-socket based broadcast event system to power the above and more
+- Custom `xmonad` and `xmobar` config assembled into a single Haskell project with `pywal` (`Xresources`) colors integration
+- Custom `Listen` plugin/module for `xmobar`, which listens on stdout lines and displays them as it's text, which allows on-demand refresh instead of polling-based refresh for things like current music track, keyboard layout, sound&mic and more
+- Custom [minimalistic UNIX-socket based broadcast event system](https://github.com/nativerv/ev) to power the above and more
 
 ## Installation
 
 Clone the repository:
 ```bash
-git clone https://github.com/nativerv/dotfiles dot
-cd dot
+git clone 'https://github.com/nativerv/dotfiles' 'dot'
+cd 'dot'
 ```
 Then use GNU `stow` to install packages:
 ```bash
