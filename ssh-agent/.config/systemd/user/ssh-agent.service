@@ -5,8 +5,7 @@ Documentation=man:ssh-agent(1)
 
 [Service]
 Type=exec
-Environment=SSH_AUTH_SOCK=%t/ssh-agent
-ExecStart=ssh-agent -D -t 1d -a $SSH_AUTH_SOCK
+ExecStart=sh -c 'exec ssh-agent -D -t 1d -a "${SSH_AUTH_SOCK:-"${XDG_RUNTIME_DIR:-${TMPDIR:-"/tmp"}}/ssh-agent"}"'
 Restart=always
 
 [Install]
