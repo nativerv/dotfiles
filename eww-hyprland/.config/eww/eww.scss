@@ -1,5 +1,32 @@
-@import "wal.scss";
+/* Default colors */
 
+// Special
+$background: #06060f;
+$foreground: #a5a7b8;
+$cursor: #a5a7b8;
+
+// Colors
+$color0: #06060f;
+$color1: #4b2f8d;
+$color2: #812b72;
+$color3: #313196;
+$color4: #a03fbd;
+$color5: #8c56c6;
+$color6: #cc6696;
+$color7: #a5a7b8;
+$color8: #4b4f71;
+$color9: #4b2f8d;
+$color10: #812b72;
+$color11: #313196;
+$color12: #a03fbd;
+$color13: #8c56c6;
+$color14: #cc6696;
+$color15: #a5a7b8;
+
+// Override with wal
+@import "./wal.scss";
+
+/* The styles */
 * {
   all: unset;
 }

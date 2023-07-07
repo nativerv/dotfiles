@@ -145,7 +145,6 @@
   (centerbox
     :class "statusbar"
     (workspaces-widget)
-    ;;(window-title)
     (music)
     (meters)
   )
@@ -182,7 +181,7 @@
     :class "window-title"
     (label
       :limit-width 50
-      :text "${current-window-title}"
+      :text "${current-window-title ?: ""}"
     )
   )
 )

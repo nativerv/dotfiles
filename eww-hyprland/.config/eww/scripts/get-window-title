@@ -1,5 +1,9 @@
 #!/bin/sh
 
-hyprctl activewindow -j | jq --raw-output '.title'
+# FIXME: still leaves last window's title, even if all windows were closed.
+# FIXME: you should handle the initial no windows case (null shows in eww) here
+# instead of hardcoding it in eww with `?:`.
+
+hyprctl activewindow -j | gojq -r '.title'
 socat -u "UNIX-CONNECT:/tmp/hypr/${HYPRLAND_INSTANCE_SIGNATURE}/.socket2.sock" '-' |
   stdbuf -o0 awk -F '>>|,' '/^activewindow>>/{print $3}'

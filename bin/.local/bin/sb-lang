@@ -1,4 +1,30 @@
 #!/bin/sh
 
-# xkblayout-state print %s | tr a-z A-Z
-xkblayout-state print '%n' | cut -c 1-2 | tr a-z A-Z
+info() {
+  printf >&2 'switch-lang: %s\n' "${1}"
+}
+
+get_lang_hyprland() {
+  hyprctl devices -j |
+    gojq -r '.keyboards[] | .active_keymap' |
+    head -n1 |
+    cut -c1-2 |
+    tr 'a-z' 'A-Z'
+}
+
+case "${XDG_SESSION_TYPE}" in
+  wayland)
+    case "${XDG_CURRENT_DESKTOP}" in
+      *Hyprland* | *hyprland*) get_lang_hyprland ;;
+      *) info "'${XDG_CURRENT_DESKTOP}': not implemented" ;;
+    esac
+    ;;
+  X11)
+    xkblayout-state print '%n' | cut -c 1-2 | tr a-z A-Z
+    ;;
+  *)
+		info 'sb-lang: your display server does not support getting input language programmatically or XDG_SESSION_TYPE is unset'
+    exit 1
+    ;;
+esac
+

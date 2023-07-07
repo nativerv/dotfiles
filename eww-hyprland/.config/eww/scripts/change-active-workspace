@@ -4,10 +4,11 @@ clamp() {
 	min="${1}"
 	max="${2}"
 	val="${3}"
-	python -c "print(max(${min}, min(${val}, ${max})))"
+  [ $(cl "${val} > ${max}") ] && val="${max}"
+  [ $(cl "${val} < ${min}") ] && val="${min}"
 }
 
-workspaces_count="$(hyprctl workspaces -j | jq 'length')"
+workspaces_count="$(hyprctl workspaces -j | gojq 'length')"
 
 direction="$1"
 current="$2"

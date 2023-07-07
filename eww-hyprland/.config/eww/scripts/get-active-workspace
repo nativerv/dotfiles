@@ -1,6 +1,6 @@
 #!/bin/sh
 
-hyprctl monitors -j | jq '.[] | select(.focused) | .activeWorkspace.id'
+hyprctl monitors -j | gojq '.[] | select(.focused) | .activeWorkspace.id'
 
 # shellcheck disable=2016
 socat -u "UNIX-CONNECT:/tmp/hypr/${HYPRLAND_INSTANCE_SIGNATURE}/.socket2.sock" '-' | 
