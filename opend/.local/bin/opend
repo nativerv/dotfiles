@@ -26,10 +26,7 @@ ev listen | while read -r 'source' 'target' 'payload'; do
   answer="$(printf 'Yes\nNo' | "${MENU}" -l 2 -p "Do you want to open '${payload}' with a default program?")"
 
   # Guard - user answer
-  case "${answer}" in
-    ''|'No') continue ;;
-    *) ;;
-  esac
+  [ "${answer}" = 'Yes' ] || continue
 
   # Match and start the subject
   case "${target}" in
