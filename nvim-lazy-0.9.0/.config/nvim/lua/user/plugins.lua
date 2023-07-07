@@ -1,4 +1,4 @@
--- Lazy.git init file
+-- Lazy.nvim init file
 
 require("lazy").setup({
   -- Navigation,
@@ -55,7 +55,7 @@ require("lazy").setup({
         event = 'VeryLazy',
       },
     },
-    event = "VeryLazy",
+    lazy = false,
     config = require('user.plugin.lualine').setup,
   },
   {
@@ -151,13 +151,6 @@ require("lazy").setup({
 
   -- Quality of Life
   {
-    'lewis6991/gitsigns.nvim',
-    dependencies = { 'nvim-lua/plenary.nvim' },
-    event = { "BufReadPre", "BufNewFile" },
-    tag = 'release',
-    config = require('user.plugin.gitsigns').setup,
-  },
-  {
     'NvChad/nvim-colorizer.lua',
     cmd = { 'ColorizerToggle', },
     config = require('user.plugin.colorizer').setup,
@@ -178,8 +171,18 @@ require("lazy").setup({
     init = require('user.plugin.cybu').init,
     config = require('user.plugin.cybu').setup,
   },
+  -- {
+  --   -- live-updated :g, etc. (errors out, unmaintained)
+  --   'chentoast/live.nvim',
+  -- },
   {
-    'chentoast/live.nvim',
+    'nativerv/cyrillic.nvim',
+    event = { 'VeryLazy' },
+    config = require('user.plugin.cyrillic').setup,
+  },
+  {
+    'bronson/vim-visual-star-search',
+    event = 'VeryLazy',
   },
 
   -- Features
@@ -221,4 +224,21 @@ require("lazy").setup({
   --   },
   --   config = require('user.plugin.diffview').setup,
   -- },
+  {
+    'mbbill/undotree',
+    config = require('user.plugin.undotree').setup,
+    keys = require'user.lib.plugin-management'.extract_keys_from_module_mappings(require('user.plugin.undotree').mappings, true),
+  },
+  {
+    -- KILL KILL KILL 
+    'seandewar/killersheep.nvim',
+    cmd = 'KillKillKill',
+  },
+  {
+    'lewis6991/gitsigns.nvim',
+    dependencies = { 'nvim-lua/plenary.nvim' },
+    event = { "BufReadPre", "BufNewFile" },
+    tag = 'release',
+    config = require('user.plugin.gitsigns').setup,
+  },
 }, require'user.plugin.lazy'.spec)

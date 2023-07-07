@@ -2,9 +2,6 @@
 
 -- TODO: refactor mappings
 
--- FIX RUSSIAN ;->$
-vim.keymap.set('n', ';', '$'--[[ , { unique = true } ]], { desc = 'which_key_ignore' })
-
 -- Open with xdg-open
 -- vim.keymap.set('n', 'gx', '<cmd>silent :execute "!xdg-open " .. shellescape("%:p:h/<cfile>")<cr>', { noremap = true, silent = true, });
 
@@ -156,3 +153,6 @@ vim.keymap.set('v', '*', '*zzzv', { desc = 'Search selected forward' })
 
 vim.keymap.set('n', '#', '#zzzv', { desc = 'Search word backward' })
 vim.keymap.set('v', '#', '#zzzv', { desc = 'Search selected backward' })
+
+-- Select pasted
+vim.keymap.set('n', 'gV', '`[v`]', { desc = 'Switch to VISUAL selecting last change' })

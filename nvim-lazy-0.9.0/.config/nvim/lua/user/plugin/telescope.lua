@@ -114,10 +114,8 @@ M.setup = function()
   config.extensions = {}
   config.defaults = {
     file_ignore_patterns = {
-      -- Be careful as it's a regex pattern!
-      -- Got cught on plaing '.git' pattern
-      -- Ignoring fugitive and gitsigns
-      [[^\.git$]],
+      [[^%.git/]],
+      [[/%.git/]],
     },
     -- prompt_prefix = ' ',
     -- prompt_prefix = ' ',

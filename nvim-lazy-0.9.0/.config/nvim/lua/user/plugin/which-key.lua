@@ -30,6 +30,9 @@ M.setup = function()
       border = 'single', -- none, single, double, shadow
       padding = { 0, 1, 0, 1 }, -- extra window padding [top, right, bottom, left]
     },
+    presets = {
+      windows = false,
+    }
   }
 
   -- TODO: migrate these to their places when they're implemented:
@@ -60,14 +63,15 @@ M.setup = function()
 
   -- Default descriptions
   require('which-key').register {
-    z = 'Folds, screen, spelling and more...',
+    z = { name = 'Folds, screen, spelling and more...' },
     p = 'Put (after cursor)',
     P = 'Put (before cursor)',
     y = 'Yank',
     Y = 'Yank to the end of the line',
+    g = { name = 'Go to and tranform...' },
 
     ['<C-l>'] = 'Clear search highlight',
-    ['<C-w>'] = 'Window...',
+    ["<C-w>"] = { name = 'Windows...' },
     ['`'] = 'Marks...',
     ['\''] = 'Marks...',
     ['@'] = 'Execute register...',

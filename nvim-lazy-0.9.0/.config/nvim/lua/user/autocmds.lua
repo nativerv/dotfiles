@@ -13,21 +13,43 @@ vim.api.nvim_create_autocmd({ 'BufWritePre' }, {
 })
 
 local function get_visual_text()
+  -- guard -- nothing selected
+  if vim.fn.mode():lower() ~= 'v' then return '' end
+
   local line_start, col_start = (vim.fn.getpos 'v')[2], (vim.fn.getpos 'v')[3]
   local line_end, col_end = (vim.fn.getpos '.')[2], (vim.fn.getpos '.')[3]
 
-  local lines = vim.fn.getline(line_start, line_end)
-  if #lines == 0 then
-    return ''
+  -- validate the range
+  if line_start > line_end then
+    line_end, line_start = line_start, line_end 
+    col_end, col_start = col_start, col_end 
   end
 
-  lines[1] = string.sub(lines[1], col_start, #lines[1])
-  lines[#lines] = string.sub(lines[#lines], 1, col_end)
+  -- get line range
+  local lines = vim.fn.getline(line_start, line_end)
+
+  -- case: `visual line` -- don't crop
+  if vim.fn.mode() == 'V' then return table.concat(lines, '\n') end
+
+  -- case: `visual`, same line -- crop ends
+  if line_start == line_end then
+    -- validate the range
+    if col_start > col_end then
+      col_end, col_start = col_start, col_end 
+    end
+    lines[1] = lines[1]:sub(col_start, col_end)
+  end
+
+  -- case: `visual`, different lines -- crop ends
+  if line_start ~= line_end then
+    lines[1] = lines[1]:sub(col_start, #lines[1])
+    lines[#lines] = lines[#lines]:sub(1, col_end)
+  end
 
   return table.concat(lines, '\n')
 end
 
--- Put visual selection to OS's `primary` selection
+-- Yank visual selection to OS's `primary` selection
 vim.api.nvim_create_autocmd({ 'CursorMoved', 'ModeChanged' }, {
   pattern = '*',
   group = vim.api.nvim_create_augroup(
@@ -35,14 +57,8 @@ vim.api.nvim_create_autocmd({ 'CursorMoved', 'ModeChanged' }, {
     { clear = true }
   ),
   callback = function()
-    if string.lower(vim.fn.mode()) == 'v' then
-      vim.fn.system {
-        'sh',
-        '-c',
-        "printf '%s' '"
-        .. get_visual_text()
-        .. "' | xclip -in -selection primary",
-      }
+    if vim.fn.mode():lower() == 'v' then 
+      vim.fn.setreg('*', get_visual_text())
     end
   end,
 })
@@ -219,6 +235,7 @@ vim.api.nvim_create_autocmd({ 'ColorScheme' }, {
     -- XXX(scope):
     -- WARNING(scope):
     -- SAFETY(scope):
+    -- PERF(scope):
     -- FIXME(scope):
     -- BUG(scope):
     vim.api.nvim_set_hl(0, '@text.note', { link = 'Information', fg = 'NONE', ctermbg = 'NONE' })
@@ -323,12 +340,12 @@ vim.api.nvim_create_autocmd({ 'FileType' }, {
     { clear = true }
   ),
   callback = function()
-    vim.opt.wrap = true -- set wrap
-    vim.opt.shiftwidth = 4 -- ? something with setting spaces/tabs to 4 spaces
-    vim.opt.tabstop = 4 -- ? something with setting spaces/tabs to 4 spaces
-    vim.opt.softtabstop = 4 -- ? something with setting spaces/tabs to 4 spaces
-    vim.opt.spell = true -- enable spellcheck
-    vim.opt.spelllang = 'en,ru' -- spellcheck languages
+    vim.opt_local.wrap = true -- set wrap
+    vim.opt_local.shiftwidth = 4 -- ? something with setting spaces/tabs to 4 spaces
+    vim.opt_local.tabstop = 4 -- ? something with setting spaces/tabs to 4 spaces
+    vim.opt_local.softtabstop = 4 -- ? something with setting spaces/tabs to 4 spaces
+    vim.opt_local.spell = true -- enable spellcheck
+    vim.opt_local.spelllang = 'en,ru' -- spellcheck languages
   end,
 })
 
