@@ -1,0 +1,27 @@
+#!/bin/sh
+
+clamp() {
+	min="${1}"
+	max="${2}"
+	val="${3}"
+  [ $(cl "${val} > ${max}") = 1 ] && val="${max}"
+  [ $(cl "${val} < ${min}") = 1 ] && val="${min}"
+  printf '%s' "${val}"
+}
+
+MAX_ZOOM='5.0'
+ZOOM_STEP='0.5'
+
+file="${XDG_RUNTIME_DIR}/zoom-level"
+! [ -f "${file}" ] && printf "${MIN_ZOOM}" > "${file}"
+zoom_level="$(cat "${file}")"
+
+
+case "${1}" in
+  in) new_zoom_level="$(clamp "${MIN_ZOOM}" "${MAX_ZOOM}" "$(cl "${zoom_level}" + "${ZOOM_STEP}")")" ;;
+  out) new_zoom_level="$(clamp "${MIN_ZOOM}" "${MAX_ZOOM}" "$(cl "${zoom_level}" - "${ZOOM_STEP}")")" ;;
+  *) new_zoom_level="${1}" ;;
+esac
+
+printf '%s' "${new_zoom_level}" > "${file}"
+hyprctl keyword 'misc:cursor_zoom_factor' "${new_zoom_level}"

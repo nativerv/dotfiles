@@ -1,7 +1,6 @@
 #!/bin/sh
 
 set -u
-
 : "${DICT_LOCALE:="en"}"
 
 vim='vim'
@@ -24,4 +23,5 @@ curl \
     +'set ft=markdown' \
     +'set nospell' \
     +'norm! gg' \
+    +"file ${1} - Dictionary" \
     '-'

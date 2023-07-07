@@ -1,0 +1,9 @@
+#!/bin/sh
+
+file="$(mktemp)"
+
+"${EDITOR}" "${file}"
+
+[ "$(cat "${file}")" = '' ] && printf >&2 'Empty file. Aborting.\n' && exit 1
+
+curl -F"file=@${file}" 'https://0x0.st'
