@@ -1,0 +1,78 @@
+#!/bin/sh
+# shellcheck disable=2227,2030,2031
+
+# Author: nrv
+# Description:
+#   Open a tmux session inside a directory from a list
+#   works from outside, inside, and with tmux killed.
+#   Either specify the dir, or fzf will be spawned for
+#   you to find it.
+#   Env vars to specify dirs are listed below.
+# Credit: <https://github.com/ThePrimeagen/.dotfiles/blob/master/bin/.local/scripts/tmux-sessionizer>
+
+set -u
+
+# colon-separated list like PATh
+: "${TMUX_SESSIONIZER_PATH:="${HOME}/pr"}"
+# colon-separated list of dirs to include, but not lookup in
+: "${TMUX_SESSIONIZER_ADDITIONAL_DIRS:="${HOME}/dot"}"
+
+info() {
+  printf >&2 'tmux-sessionizer: %s\n' "${1}"
+}
+
+get_all_dirs() {
+  dirs="$(
+    IFS=':'
+    for directory in $(printf '%s' "${TMUX_SESSIONIZER_PATH}"); do
+      [ -n "${DEBUG-}" ] && info "directory='${directory}'"
+      [ -d "${directory}" ] || continue
+      find 2>/dev/null "${directory}" -mindepth 1 -maxdepth 1 -type 'd'
+    done
+  )"
+  additional_dirs="$(
+    printf '%s' "${TMUX_SESSIONIZER_ADDITIONAL_DIRS}" | tr ':' '\n'
+  )"
+
+  ## guard - no dirs
+  [ -z "${dirs}" ] && [ -z "${additional_dirs}" ] && return 1                  
+
+  # print dirs
+  printf '%s' "${dirs}"
+  [ -n "${dirs}" ] && printf '\n'
+  printf '%s' "${additional_dirs}"
+}
+
+
+# guard - no dirs
+all_dirs="$(get_all_dirs)" || exit 1
+
+[ -n "${DEBUG-}" ] && info "alldirs: ${all_dirs}"
+
+# select
+if [ "${#}" -eq 1 ]; then
+  selected="$(
+      for directory in ${all_dirs}; do
+        [ -n "${DEBUG-}" ] && info "basename='$(basename "${directory}")'"
+        [ "$(basename "${directory}")" = "${1}" ] &&
+          printf '%s' "${directory}" &&
+          break
+      done
+  )"
+  [ -z "${selected}" ] && info "ERROR: no such project in your dirs: '${1}'" && exit 1
+else
+  selected=$(get_all_dirs | fzf) || exit 1
+fi
+
+[ -n "${DEBUG-}" ] && info "selected='${selected}'"
+
+selected_name=$(basename "${selected}" | tr . -)
+
+# ensure desired session exists
+if ! tmux has-session -t="${selected_name}" 2> /dev/null; then
+  tmux new-session -ds "${selected_name}" -c "${selected}"
+fi
+
+# switch
+[ -z "${TMUX-}" ] && tmux attach -t "${selected_name}"
+[ -n "${TMUX-}" ] && tmux switch-client -t "${selected_name}"

@@ -42,6 +42,7 @@ alias dt="date +%F_%H-%M-%S | head -c-1"
 alias gr='grep --recursive --line-number'
 alias rtop='radeontop'
 alias open='xdg-open'
+alias tms='tmux-sessionizer'
 
 # Noglobs
 alias tl='noglob tl'
