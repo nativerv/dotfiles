@@ -123,6 +123,7 @@ ls() {
     --icons \
     --links \
     --group \
+    --ignore-glob ".git" \
     "${@}" |
     sed 's/^\./-/'
 }

@@ -39,54 +39,54 @@ ERROR="${RED}ERROR${NC}"
 FATAL="${RED}FATAL${NC}"
 
 # Start X server if in tty1 and X server isn't running
-# maybe_startx () {
-#
-#   # Continue to the terminal if in the pseudo terminal, not TTY
-#   tty | grep -q '^/dev/pts' && return
-#
-#   DISPLAY_TRIMMED="$(printf '%s' "$DISPLAY" | tr -d ':')"
-#
-#   # If running under systemd, try to start X only if xorg@.target is enabled for current screen (base 0, so -1 from vt/tty number)
-#   #command -v systemctl >/dev/null 2>&1 \
-#   #  && ! systemctl --user is-enabled "xorg@$((${XDG_VTNR:-$(tty | tail -c2)} - 1)).target" >/dev/null 2>&1 \
-#   #  && return
-#   
-#   if [ ! -d "/usr/lib/modules/$(uname -r)" ]; then
-#     echo "${FATAL}: /usr/lib/modules/$(uname -r) not found! Dropping you to the shell." \
-#     return
-#   fi
-#
-#   echo "Starting X server...";
-#
-#   # Trow to shell if not on first TTY
-#   if [ ! "$(tty)" = '/dev/tty1' ]; then
-#     echo "${ERROR}: You are not in the first TTY. X server won't start."
-#     echo "Leaving you in the shell."
-#     return;
-#   fi
-#
-#   # Throw to shell if `DISPLAY` is already set
-#   # shellcheck disable=2237
-#   if ! [ -z "${DISPLAY}" ]; then
-#     echo "${ERROR}: \`DISPLAY\` is already set. X server already running on this TTY and you seeng this message. Something wrong."
-#     echo "Leaving you in the shell."
-#     return
-#   fi
-#
-#   # Throw to shell if `startx` is missing
-#   if [ ! -x /bin/startx ]; then
-#     echo "${ERROR}: Seems like the X server is not installed or not properly installed: \`startx\` is not in your \`PATH\`. X server won't start."
-#     echo "Leaving you in the shell."
-#     return
-#   fi
-#
-#   LOGDIR="${XDG_STATE_HOME}/xinitrc"
-#
-#   [ ! -d "${LOGDIR}" ] && (mkdir -p "${LOGDIR}"; echo 'This is a custom `.xinitrc` log location. See `maybe_startx` in `~/.config/zsh/zshrc`' > "${LOGDIR}/README.md")
-#   startx "${XDG_CONFIG_HOME}/x11/xinitrc" >>"${LOGDIR}/xinitrc.error.log" 2>>"${LOGDIR}/xinitrc.error.log"
-# }
-#
-# # Only start if `DISPLAY == "" && tty == tty1 && startx`
-# maybe_startx
-#
-# # vim:ft=zsh
+maybe_startx () {
+
+  # Continue to the terminal if in the pseudo terminal, not TTY
+  tty | grep -q '^/dev/pts' && return
+
+  DISPLAY_TRIMMED="$(printf '%s' "$DISPLAY" | tr -d ':')"
+
+  # If running under systemd, try to start X only if xorg@.target is enabled for current screen (base 0, so -1 from vt/tty number)
+  #command -v systemctl >/dev/null 2>&1 \
+  #  && ! systemctl --user is-enabled "xorg@$((${XDG_VTNR:-$(tty | tail -c2)} - 1)).target" >/dev/null 2>&1 \
+  #  && return
+  
+  if [ ! -d "/usr/lib/modules/$(uname -r)" ]; then
+    echo "${FATAL}: /usr/lib/modules/$(uname -r) not found! Dropping you to the shell." \
+    return
+  fi
+
+  echo "Starting X server...";
+
+  # Trow to shell if not on first TTY
+  if [ ! "$(tty)" = '/dev/tty1' ]; then
+    echo "${ERROR}: You are not in the first TTY. X server won't start."
+    echo "Leaving you in the shell."
+    return;
+  fi
+
+  # Throw to shell if `DISPLAY` is already set
+  # shellcheck disable=2237
+  if ! [ -z "${DISPLAY}" ]; then
+    echo "${ERROR}: \`DISPLAY\` is already set. X server already running on this TTY and you seeng this message. Something wrong."
+    echo "Leaving you in the shell."
+    return
+  fi
+
+  # Throw to shell if `startx` is missing
+  if [ ! -x /bin/startx ]; then
+    echo "${ERROR}: Seems like the X server is not installed or not properly installed: \`startx\` is not in your \`PATH\`. X server won't start."
+    echo "Leaving you in the shell."
+    return
+  fi
+
+  LOGDIR="${XDG_STATE_HOME}/xinitrc"
+
+  [ ! -d "${LOGDIR}" ] && (mkdir -p "${LOGDIR}"; echo 'This is a custom `.xinitrc` log location. See `maybe_startx` in `~/.config/zsh/zshrc`' > "${LOGDIR}/README.md")
+  startx "${XDG_CONFIG_HOME}/x11/xinitrc" >>"${LOGDIR}/xinitrc.error.log" 2>>"${LOGDIR}/xinitrc.error.log"
+}
+
+# Only start if `DISPLAY == "" && tty == tty1 && startx`
+#maybe_startx
+
+# vim:ft=zsh
