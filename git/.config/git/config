@@ -11,7 +11,7 @@
   diffFilter = delta --true-color always --color-only
 
 [user]
-  signingkey = 32280B2A55E8CD6F 
+  signingKey = 32280B2A55E8CD6F 
 
 [commit]
   gpgSign = true
