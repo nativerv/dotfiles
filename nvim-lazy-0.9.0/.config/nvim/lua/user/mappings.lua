@@ -47,7 +47,11 @@ vim.keymap.set('n', 'X', '"_X', { desc = 'Delete char to the left of the cursor'
 vim.keymap.set('', '<C-a>', '<esc>ggVG', { desc = 'Select all' })
 
 -- Remap Ctrl-A functionality to something else then:
+vim.keymap.set('n', '<C-x>', '<C-x>', { desc = 'Decrement number' })
+vim.keymap.set('v', 'g<C-x>', 'g<C-x>', { desc = 'Decrement numbers' })
 vim.keymap.set('n', '<C-c>', '<C-a>', { desc = 'Increment number' })
+-- FIXME: doesn't work for some reason
+vim.keymap.set('v', 'g<C-c>', 'g<C-a>', { desc = 'Increment numbers' })
 
 -- Reload config
 vim.keymap.set('n', '<leader><leader>s', '<cmd>so %<cr>', { desc = 'Source current file' })

@@ -230,7 +230,7 @@ require("lazy").setup({
     keys = require'user.lib.plugin-management'.extract_keys_from_module_mappings(require('user.plugin.undotree').mappings, true),
   },
   {
-    -- KILL KILL KILL 
+    -- XXX: KILL KILL KILL 
     'seandewar/killersheep.nvim',
     cmd = 'KillKillKill',
   },
@@ -241,4 +241,12 @@ require("lazy").setup({
     tag = 'release',
     config = require('user.plugin.gitsigns').setup,
   },
+  {
+    'vhyrro/hologram.nvim',
+    dependencies = { { 'nativerv/magick', branch = 'nrv' } },
+    ft = 'markdown',
+    -- NOTE: `hollogram.nvim` is not working as of right now
+    enabled = false,
+    config = require('user.plugin.hologram').setup,
+  }
 }, require'user.plugin.lazy'.spec)

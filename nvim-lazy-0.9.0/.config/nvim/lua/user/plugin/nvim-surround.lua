@@ -33,7 +33,9 @@ M.mappings = {
 }
 
 M.setup = function()
-  require('nvim-surround').setup {}
+  require('nvim-surround').setup {
+    move_cursor = false,
+  }
   require('user.lib.plugin-management').apply_module_mappings(M.mappings)
 end
 
