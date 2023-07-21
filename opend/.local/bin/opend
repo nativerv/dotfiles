@@ -20,6 +20,7 @@ MAIL_HANDLER="${MAIL_HANDLER:-false}"
 [ -z "${MENU-}" ] && printf 'opend: ERROR: MENU environment variable is unset or empty\n' && exit 1
 
 ev listen | while read -r 'source' 'target' 'payload'; do
+  [ -n "${DEBUG-}" ] && printf "opend: INFO: requested ${target} ${payload}\n"
   # Guard - opend event
   [ ! "${source}" = 'opend' ] && continue
 
@@ -41,6 +42,6 @@ ev listen | while read -r 'source' 'target' 'payload'; do
     file)     "${TERMINAL}" -e "${EXPLORER}" "${payload}" & ;;
     text)     "${TERMINAL}" -e "${EDITOR}" "${payload}" & ;;
     mail)     "${TERMINAL}" -e "${MAIL_HANDLER}" "${payload}" & ;;
-    *) printf 'opend: no default program category: "%s"' "${target}" >&2 && exit 1;
+    *) printf 'opend: no default program category: "%s"\n' "${target}" >&2 && exit 1;
   esac
 done
