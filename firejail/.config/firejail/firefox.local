@@ -1,3 +1,5 @@
+quiet
+
 # Set private folder -- unclutter ${HOME} from .mozilla
 #mkdir ${HOME}/.local/share/firefox
 #private ${HOME}/.local/share/firefox
