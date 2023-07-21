@@ -1,0 +1,35 @@
+#!/bin/sh
+
+# Author: nrv
+# License: https://www.gnu.org/licenses/gpl-3.0.en.html
+# Description: 
+#   Select password from password-store, 
+#   write it to ${MENU_PASS_CURRENT} record and run `menu-pass-current`
+
+set -u
+
+PASSWORD_STORE_DIR="${PASSWORD_STORE_DIR:-"${HOME}/.local/share/pass"}"
+DENU_PASS_CURRENT="${MENU_PASS_CURRENT:-"menu-pass-current"}"
+
+# guard: no MENU specified
+if [ -z "${MENU-}" ]; then
+  printf >&2 'menu-pass-select: MENU environment variable is empty or unset\n'
+  exit 1
+fi
+
+cut_pass_dir="$(printf 's|^%s/||g; s|.gpg$||g' "${PASSWORD_STORE_DIR}")"
+filter_menu_pass_current="${MENU_PASS_CURRENT}"
+
+# Find desired password container
+pass_file="$(
+  find "${PASSWORD_STORE_DIR}" -iname "*.gpg" \
+    | sed "${cut_pass_dir}" \
+    | grep -v "${filter_menu_pass_current}" \
+    | "${MENU}" -l 10 -p "Select field: "
+)"
+
+# Symlink it - so it is "currently selected"
+ln -sf "${PASSWORD_STORE_DIR}/${pass_file}.gpg" "${PASSWORD_STORE_DIR}/${MENU_PASS_CURRENT}.gpg"
+
+# The menu-pass-current will handle currently selected container
+menu-pass-current "${@}"

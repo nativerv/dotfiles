@@ -9,26 +9,36 @@
 #     key: value
 #     key: value
 #     secret key*: value
-#   1. Prompt user to select an entry in dmenu, replacing password and 
-#      keys with * at the end with password_placeholder;
+#   1. Prompt user to select an entry in menu (such as dmenu), replacing password
+#      and keys with * at the end with password_placeholder;
 #   2. Prompt the user to select whether to yank it's value to clipboard
 #      or type it
 
-set -ex
+set -u
+
+info() {
+  printf >&2 'menu-pass-current: %s\n' "${*}"
+}
 
 self="${$}"
 
-PASSWORD_PLACEHOLDER='****************'
-DMENU_PASS_CURRENT="${DMENU_PASS_CURRENT:-'dmenu_pass_current'}"
+# guard: no MENU specified
+if [ -z "${MENU-}" ]; then
+  info 'ERROR: MENU environment variable is empty or unset\n'
+  exit 1
+fi
 
-entries="$(pass show "${DMENU_PASS_CURRENT}")"
+PASSWORD_PLACEHOLDER='****************'
+MENU_PASS_CURRENT="${MENU_PASS_CURRENT:-'menu-pass-current'}"
+
+entries="$(pass show "${MENU_PASS_CURRENT}")"
 
 # Select value from password-store record
 selected_key="$(
   printf '%s' "${entries}" |
     sed "1 s/.*/password*: ${PASSWORD_PLACEHOLDER}/" |       # add password key to the first line (does not have it by convention) and replace value with `PASSWORD_PLACEHOLDER`
     sed "s/\*: .*/*: ${PASSWORD_PLACEHOLDER}/" |             # replace every value which key is marked with * symbol at the end with password placeholder with `PASSWORD_PLACEHOLDER`
-    { dmenu -l 10 -p 'Select field: ' || kill "${self}"; } | # select entry with dmenu
+    { "${MENU}" -l 10 -p 'Select field: ' || kill "${self}"; } | # select entry with menu
     sed 's/: /\t/' |                                         # replace first ': ' (human-readable key-value separator with tab character)
     cut -f1                                                  # cut the key for further processing. it should be in the form of 'key' or 'key*' at this point
 )"
@@ -47,14 +57,22 @@ selected_value="$(
 
 action="$(
   printf 'Type\nYank' |
-    dmenu -l 2 -p 'Choose an antion: '
+    "${MENU}" -l 2 -p 'Choose an antion: '
 )"
+
+yank() {
+  case "${XDG_SESSION_TYPE-}" in
+    wayland) wl-copy || { info 'ERROR: cannot yank\n'; exit 1; } ;;
+    X11) xclip -in -sel 'clipboard' || { printf >&2 'menu-pass-current: ERROR: cannot yank\n'; exit 1; } ;;
+    *) info 'ERROR: unsupported display server or XDG_SESSION_TYPE is unset' ;;
+  esac
+}
 
 # Perform action - type or copy
 if [ "${action}" = 'Type' ]; then
-  xdotool type "${selected_value}"
+  ydotool type "${selected_value}"
 elif [ "${action}" = 'Yank' ]; then
-  printf '%s' "${selected_value}" | xclip -in -sel clipboard
+  printf '%s' "${selected_value}" | yank
 else
   printf '%s' "${selected_value}"
 fi
