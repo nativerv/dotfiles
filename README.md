@@ -14,6 +14,7 @@ User-specific configs, custom desktop entries etc. go here.
 - Custom `xmonad` and `xmobar` config assembled into a single Haskell project with `pywal` (`Xresources`) colors integration
 - Custom `Listen` plugin/module for `xmobar`, which listens on stdout lines and displays them as it's text, which allows on-demand refresh instead of polling-based refresh for things like current music track, keyboard layout, sound&mic and more
 - Custom [minimalistic UNIX-socket based broadcast event system](https://github.com/nativerv/ev) to power the above and more
+- Custom [minimalistic session manager](https://github.com/nativerv/session) to have multiple sessions with their own instances of the same services open at the same time
 
 ## Installation
 
