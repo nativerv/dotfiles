@@ -1,13 +1,13 @@
 [Unit]
-Description=Provides settings to X11 applications
+Description=Provides settings to X11 applications at graphical session '%i'
 Documentation=man:xsettingsd(1)
-#PartOf=xsession@%i.target
-After=xsession@%i.target
-Requisite=xsession@%i.target
+#PartOf=graphical-session@%i.target
+After=graphical-session@%i.target
+Requisite=graphical-session@%i.target
 
 [Service]
 Type=exec
-ExecStart=/usr/bin/xsettingsd
+ExecStart=sh -c 'session -s "%i" run "xsettingsd"'
 Restart="on-abort"
 
 # Sandboxing
@@ -23,4 +23,4 @@ SystemCallArchitectures=native
 SystemCallFilter=@system-service 
 
 [Install]
-WantedBy=xsession@%i.target
+WantedBy=graphical-session@%i.target

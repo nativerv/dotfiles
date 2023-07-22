@@ -1,15 +1,14 @@
 [Unit]
-Description=Foot terminal server mode for WAYLAND_DISPLAY=%i
+Description=Foot terminal server at graphical session '%i'  
 Documentation=man:foot(1)
-After=wayland-session@%i.target
-Requisite=wayland-session@%i.target
+After=graphical-session@%i.target
+Requisite=graphical-session@%i.target
 Requires=%N.socket
 
 [Service]
-ExecStart=foot --server=3
-Environment=WAYLAND_DISPLAY=%i
+ExecStart=sh -c 'session -s "%i" run "foot --server=3"'
 UnsetEnvironment=LISTEN_PID LISTEN_FDS LISTEN_FDNAMES
 NonBlocking=true
 
 [Install]
-WantedBy=wayland-session@%i.target
+WantedBy=graphical-session@%i.target

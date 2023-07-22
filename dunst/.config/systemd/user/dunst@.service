@@ -1,14 +1,15 @@
 [Unit]
-Description=Dunst notification daemon at DISPLAY=:%i
+Description=Dunst notification daemon at graphical session '%i'
 Documentation=man:dunst(1)
-#PartOf=xsession.target
-After=xsession@%i.target
-Requisite=xsession@%i.target
+#PartOf=graphical-session.target
+After=graphical-session@%i.target
+Requisite=graphical-session@%i.target
 
 [Service]
 Type=dbus
 BusName=org.freedesktop.Notifications
-ExecStart=/usr/bin/dunst
+#ExecStart=/usr/bin/dunst
+ExecStart=sh -c 'session -s "%i" run "dunst"'
 ; ExecStart=sh -c '/usr/bin/dunst -lb "$(cat "${XDG_CACHE_HOME:-"${HOME}/.cache"}/wal/background")" -nb "$(cat "${XDG_CACHE_HOME:-"${HOME}/.cache"}/wal/background")"'
 Restart=always
 
@@ -25,4 +26,4 @@ SystemCallArchitectures=native
 SystemCallFilter=@system-service 
 
 [Install]
-WantedBy=xsession@%i.target
+WantedBy=graphical-session@%i.target

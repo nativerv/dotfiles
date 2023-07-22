@@ -1,14 +1,14 @@
 [Unit]
-Description=Oneshot xrandr TearFree to 'on' at X11 DISPLAY=:%i
+Description=Oneshot xrandr TearFree to 'on' at graphical session '%i' 
 Documentation=man:xrandr(1)
 #PartOf=xorg@%i.target
-After=xsession@%i.target
-Requisite=xsession@%i.target
+After=graphical-session@%i.target
+Requisite=graphical-session@%i.target
 
 [Service]
 Type=oneshot
-ExecStart=xrandr --output HDMI-A-1 --set "TearFree" on
+ExecStart=sh -c 'session -s "%i" run "xrandr --output HDMI-A-1 --set TearFree on"'
 ; Restart=on-failure
 
 [Install]
-WantedBy=xsession@%i.target
+WantedBy=graphical-session@%i.target

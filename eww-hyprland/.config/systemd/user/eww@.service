@@ -1,13 +1,12 @@
 [Unit]
-Description=ElKowar Widgets daemon
+Description=ElKowar Widgets daemon at graphical session '%i'
 Documentation=https://github.com/elkowar/eww
-After=wayland-session@%i.target
-Requisite=wayland-session@%i.target
+After=graphical-session@%i.target
+Requisite=graphical-session@%i.target
 
 [Service]
-;Environment=WAYLAND_DISPLAY=%i
 Type=exec
-ExecStart=eww daemon --no-daemonize
+ExecStart=sh -c 'session -s "%i" run "eww daemon --no-daemonize"'
 
 # Sandboxing
 NoNewPrivileges=yes
@@ -22,4 +21,4 @@ SystemCallArchitectures=native
 SystemCallFilter=@system-service
 
 [Install]
-WantedBy=wayland-session@%i.target
+WantedBy=graphical-session@%i.target

@@ -1,13 +1,13 @@
 [Unit]
-Description=Swaybg at WAYLAND_DISPLAY=:%i ;- set wallpaper and make pywal color scheme based on it
+;- set wallpaper and make pywal color scheme based on it
+Description=Swaybg at graphical session '%i'
 Documentation=man:swaybg(1)
-After=wayland-session@%i.target
-Requisite=wayland-session@%i.target
+After=graphical-session@%i.target
+Requisite=graphical-session@%i.target
 
 [Service]
-;Environment=WAYLAND_DISPLAY=%i
 Type=exec
-ExecStart=swaybg --image ${XDG_DATA_HOME}/wall/wallpaper
+ExecStart=sh -c 'session -s "%i" run "swaybg --image \"${XDG_DATA_HOME}/wall/wallpaper\""'
 
 # Sandboxing
 NoNewPrivileges=yes
@@ -22,4 +22,4 @@ SystemCallArchitectures=native
 #SystemCallFilter=@system-service
 
 [Install]
-WantedBy=wayland-session@%i.target
+WantedBy=graphical-session@%i.target

@@ -1,13 +1,13 @@
 [Unit]
-Description=Flameshot screenshotting tool on DISPLAY=:%i
+Description=Flameshot screenshotting tool at graphical session '%i'
 Documentation=man:flameshot(1)
-#PartOf=xsession@%i.target
-After=xsession@%i.target
-Requisite=xsession@%i.target
+#PartOf=graphical-session@%i.target
+After=graphical-session@%i.target
+Requisite=graphical-session@%i.target
 
 [Service]
 Type=exec
-ExecStart=/usr/bin/flameshot
+ExecStart=sh -c 'session -s "%i" run "flameshot"'
 Restart="on-abort"
 
 # Sandboxing
@@ -23,4 +23,4 @@ SystemCallArchitectures=native
 SystemCallFilter=@system-service 
 
 [Install]
-WantedBy=xsession@%i.target
+WantedBy=graphical-session@%i.target

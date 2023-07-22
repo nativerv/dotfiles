@@ -1,13 +1,13 @@
 [Unit]
-Description=Lock screen after a few minutes of inactivity at DISPLAY=:%i
+Description=Lock screen after a few minutes of inactivity at graphical session '%i'  
 Documentation=man:xautolock(1)
 #PartOf=xorg.target
-After=xsession@%i.target
-Requisite=xsession@%i.target
+After=graphical-session@%i.target
+Requisite=graphical-session@%i.target
 
 [Service]
 Type=exec
-ExecStart=/usr/bin/xautolock -time 10 -locker 'lock'
+ExecStart=sh -c 'session -s "%i" run "xautolock -time 10 -locker lock"'
 
 # Sandboxing
 ; NoNewPrivileges=yes
@@ -22,4 +22,4 @@ ExecStart=/usr/bin/xautolock -time 10 -locker 'lock'
 ; SystemCallFilter=@system-service 
 
 [Install]
-WantedBy=xsession@%i.target
+WantedBy=graphical-session@%i.target

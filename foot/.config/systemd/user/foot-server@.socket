@@ -1,8 +1,9 @@
 [Unit]
-Requisite=wayland-session@%i.target
+Requisite=graphical-session@%i.target
 
 [Socket]
-ListenStream=%t/foot-%i.sock
+# FIXME: hardcoded value
+ListenStream=%t/foot-wayland-1.sock
 
 [Install]
-WantedBy=wayland-session@%i.target
+WantedBy=graphical-session@%i.target

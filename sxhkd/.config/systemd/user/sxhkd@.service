@@ -1,18 +1,17 @@
 [Unit]
-Description=Simple X hotkey daemon at DISPLAY=:%i
+Description=Simple X hotkey daemon at graphical session '%i'  
 Documentation=man:sxhkd(1)
 #PartOf=xorg@%i.target
-After=xsession@%i.target
-Requisite=xsession@%i.target
+After=graphical-session@%i.target
+Requisite=graphical-session@%i.target
 # Try to restart up to 3 times
 StartLimitBurst=3
 # Don't try to restart after 60 seconds
 StartLimitIntervalSec=60
 
 [Service]
-ExecStart=sh -c 'sxhkd'
+ExecStart=sh -c 'session -s "%i" run "sxhkd"'
 ExecReload=/usr/bin/kill -SIGUSR1 $MAINPID
-Environment=XDG_SESSION_TYPE=X11
 # Try to restart no matter how the process ended
 Restart=always
 # Restart in 5 second intervals
@@ -32,5 +31,5 @@ RestartSec=5
 ; SystemCallFilter=@system-service 
 
 [Install]
-WantedBy=xsession@%i.target
+WantedBy=graphical-session@%i.target
 

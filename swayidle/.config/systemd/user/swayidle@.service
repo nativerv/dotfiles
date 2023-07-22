@@ -1,13 +1,13 @@
 [Unit]
-Description=Lock screen after a few minutes of inactivity at WAYLAND_DISPLAY=%i
+Description=Lock screen after a few minutes of inactivity at graphical session '%i'  
 Documentation=man:swayidle(1)
 #PartOf=xorg.target
-After=wayland-session@%i.target
-Requisite=wayland-session@%i.target
+After=graphical-session@%i.target
+Requisite=graphical-session@%i.target
 
 [Service]
 Type=exec
-ExecStart=swayidle timeout 600 'lock' resume 'hyprctl dispatch dpms on' timeout 600 'hyprctl dispatch dpms off'  
+ExecStart=sh -c 'session -s "%i" run swayidle timeout 600 "lock" resume "hyprctl dispatch dpms on" timeout 600 "hyprctl dispatch dpms off"'
 
 # Sandboxing
 ; NoNewPrivileges=yes
@@ -22,4 +22,4 @@ ExecStart=swayidle timeout 600 'lock' resume 'hyprctl dispatch dpms on' timeout 
 ; SystemCallFilter=@system-service 
 
 [Install]
-WantedBy=wayland-session@%i.target
+WantedBy=graphical-session@%i.target
