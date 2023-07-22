@@ -1,0 +1,54 @@
+#!/bin/sh
+
+# Author: nrv
+# Description: select and type unicode symbol/emoji with menu
+#              (like dmenu, requires -p, -l and -i flags for prompt,
+#               line count and case insensitiveness)
+
+# The famous "get a menu of symbols to copy" script.
+
+UNICODE_FILE="${XDG_DATA_HOME:-"${HOME}/.local/share"}/menu-unicode/unicode"
+
+prompt='Copy symbol:'
+type_mode=false
+
+while getopts t option; do
+  case "${option}" in
+	  t)	prompt="Paste symbol:"
+        type_mode='true'
+        ;;
+	[?])	print >&2 "usage: $0 [-t]"; exit 1 ;;
+	esac
+done
+shift $((OPTIND - 1))
+
+# Get user selection via menu from `unicode` file.
+chosen=$(cut -d ';' -f1 "${UNICODE_FILE}" | "${MENU}" -p "${prompt:-'Symbol:'}" -i -l 30 | sed 's/          .*$//')
+
+# Exit if none chosen.
+[ -z "$chosen" ] && exit
+
+# case "${XDG_SESSION_TYPE}" in
+info() {
+  printf >&2 'menu-unicode: %s\n' "${*}"
+}
+
+yank() {
+  case "${XDG_SESSION_TYPE-}" in
+    wayland) wl-copy || { info 'ERROR: cannot yank\n'; exit 1; } ;;
+    X11) xclip -in -sel 'clipboard' || { info 'menu-pass-current: ERROR: cannot yank\n'; exit 1; } ;;
+    *) info 'ERROR: unsupported display server or XDG_SESSION_TYPE is unset' ;;
+  esac
+}
+
+# If you run this command with an argument, it will automatically insert the
+# character. Otherwise, show a message that the symbol has been copied.
+printf '%s' "${chosen}" | yank
+# NOTE: unfortunately had to ditch auto-typing because wayland does not have a nice way to type unicode/emojis.
+# The following is the actual code that should be here:
+#    if [ "${type_mode}" = true ]; then
+#    	ydotool type "${chosen}"
+#    else
+#    	printf '%s' "${chosen}" | yank
+#    	notify-send "'${chosen}' copied to clipboard." &
+#    fi
