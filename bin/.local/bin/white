@@ -15,10 +15,10 @@ white_one() {
 	file_path="${1}"
 	file_name="${file_path##*/}"
 	hash="$(sha256sum "${file_path}" | cut -d' ' -f1)"
-	pub_file_dir="${PUBLIC_HOME}/${hash}"
+	pub_file_dir="${WHITE_HOME}/${hash}"
 	pub_file_path="${pub_file_dir}/${file_name}"
 
-	pub_dir_drive="$(stat -c '%d' "${PUBLIC_HOME}")"
+	pub_dir_drive="$(stat -c '%d' "${WHITE_HOME}")"
 	source_dir_drive="$(stat -c '%d' "${file_path}")"
 
 	mkdir -p "${pub_file_dir}"

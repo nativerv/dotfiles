@@ -1,0 +1,38 @@
+#!/bin/sh
+
+set -u
+
+: "${XDG_RUNTIME_DIR:="/tmp"}"
+
+# TODO: also use this umask in all other scripts that use /tmp
+umask 077
+
+: "${SHOWKEYS_PIDFILE:="${XDG_RUNTIME_DIR}/showkeys.pid"}"
+
+[ -s "${SHOWKEYS_PIDFILE}" ] &&
+  kill "$(cat "${SHOWKEYS_PIDFILE}")" &&
+  rm "${SHOWKEYS_PIDFILE}" &&
+  exit
+
+case "${XDG_SESSION_TYPE}" in
+  wayland)
+   if ! {
+     printf '%s' "${XDG_CURRENT_DESKTOP}" | grep -q 'wlroots'
+   }; then
+      printf >&2 'hk-toggle-showkeys: unsupported compositor: %s\n' "${XDG_CURRENT_DESKTOP}" &&
+      exit 1
+   fi
+    wshowkeys -a 'top' -a 'right' &
+    printf '%s' "${!}" > "${SHOWKEYS_PIDFILE}"
+    wait
+    ;;
+  X11)
+    screenkey --position 'fixed' --geometry '332x57+1557+69' &
+    printf '%s' "${!}" > "${SHOWKEYS_PIDFILE}"
+    wait
+    ;;
+  *)
+    printf >&2 'hk-toggle-showkeys: unsupported display server or XDG_SESSION_TYPE is unset'
+    exit 1
+    ;;
+esac

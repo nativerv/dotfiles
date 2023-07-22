@@ -1,0 +1,3 @@
+#!/bin/sh
+
+lastscr | xargs gimp --no-data --no-splash

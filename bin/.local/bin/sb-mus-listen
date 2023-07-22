@@ -1,6 +1,14 @@
 #!/bin/sh
 
+counter=0
 mpc current
-mpc idleloop | while read -r _; do
+while :; do
+  { mpc idleloop || continue; } | while read -r _; do
+    mpc current
+  done
+  : $((counter += 1))
+  sleep 0.01
+  printf 'LOADING...\n'
   mpc current
+  [ "${counter}" -eq 100 ] && printf 'ERROR\n' && break
 done

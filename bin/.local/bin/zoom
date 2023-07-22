@@ -9,7 +9,7 @@ clamp() {
   printf '%s' "${val}"
 }
 
-MAX_ZOOM='5.0'
+MAX_ZOOM='50.0'
 ZOOM_STEP='0.5'
 
 file="${XDG_RUNTIME_DIR}/zoom-level"
