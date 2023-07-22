@@ -63,7 +63,7 @@ action="$(
 yank() {
   case "${XDG_SESSION_TYPE-}" in
     wayland) wl-copy || { info 'ERROR: cannot yank\n'; exit 1; } ;;
-    X11) xclip -in -sel 'clipboard' || { printf >&2 'menu-pass-current: ERROR: cannot yank\n'; exit 1; } ;;
+    X11) xclip -in -sel 'clipboard' || { info 'menu-pass-current: ERROR: cannot yank\n'; exit 1; } ;;
     *) info 'ERROR: unsupported display server or XDG_SESSION_TYPE is unset' ;;
   esac
 }
