@@ -59,11 +59,11 @@ maybe_startx () {
   echo "Starting X server...";
 
   # Trow to shell if not on first TTY
-  if [ ! "$(tty)" = '/dev/tty1' ]; then
-    echo "${ERROR}: You are not in the first TTY. X server won't start."
-    echo "Leaving you in the shell."
-    return;
-  fi
+  #if [ ! "$(tty)" = '/dev/tty1' ]; then
+  #  echo "${ERROR}: You are not in the first TTY. X server won't start."
+  #  echo "Leaving you in the shell."
+  #  return;
+  #fi
 
   # Throw to shell if `DISPLAY` is already set
   # shellcheck disable=2237

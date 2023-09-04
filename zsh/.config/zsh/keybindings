@@ -10,3 +10,4 @@
 bindkey '^[[P' delete-char
 bindkey -r "^u" up-history
 bindkey -r "^d" down-history
+bindkey '^[[Z' reverse-menu-complete
