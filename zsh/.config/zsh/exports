@@ -16,7 +16,7 @@ XDG_BIN_HOME="${XDG_BIN_HOME:-"${HOME}/.local/bin"}"
 
 # Export environment.d env vars to zsh the hacky way
 source <(
-  find -L "${XDG_CONFIG_HOME}/environment.d/" -mindepth 1 -maxdepth 1 -type f -o -type l |
+  find 2>/dev/null -L "${XDG_CONFIG_HOME}/environment.d/" -mindepth 1 -maxdepth 1 -type f -o -type l |
     sort |
     xargs cat |
     sed -E "s/^([a-zA-Z])/export \1/g"
