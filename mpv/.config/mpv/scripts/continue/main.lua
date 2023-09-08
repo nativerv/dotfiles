@@ -10,6 +10,10 @@ function log_error(message)
   msg.error(("ERROR: %s"):format(message))
 end
 
+function log_warn(message)
+  msg.warning(("WARNING: %s"):format(message))
+end
+
 function log_info(message)
   msg.info(("INFO: %s"):format(message))
 end
@@ -54,9 +58,9 @@ function write_timing_to_file()
       return
     end
 
-    local file_name = utils.split_path(current_file)
-    local hash = md5(file_name):upper()
-    local timing_file_path = continue_dir .. "/" .. hash
+    local _, file_name = utils.split_path(current_file)
+    local hash = md5(file_name)
+    local timing_file_path = ("%s/%s"):format(continue_dir, hash:upper())
     local current_time = mp.get_property("time-pos")
 
     if not current_file then
@@ -82,13 +86,14 @@ function read_timing_from_file()
     return
   end
 
-  local file_name = utils.split_path(current_file)
+  local _, file_name = utils.split_path(current_file)
+  log_info(file_name)
   local hash = md5(file_name)
-  local timing_file_path = continue_dir .. "/" .. hash:upper()
+  local timing_file_path = ("%s/%s"):format(continue_dir, hash:upper())
 
   local file = io.open(timing_file_path, "r")
   if not file then
-    log_error("could not open file for reading")
+    log_warn("could not open file for reading")
     return
   end
 
