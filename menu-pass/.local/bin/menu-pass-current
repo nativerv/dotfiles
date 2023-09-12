@@ -31,7 +31,10 @@ fi
 PASSWORD_PLACEHOLDER='****************'
 MENU_PASS_CURRENT="${MENU_PASS_CURRENT:-'menu-pass-current'}"
 
-entries="$(pass show "${MENU_PASS_CURRENT}")"
+entries="$(pass show "${MENU_PASS_CURRENT}")" || {
+  info "failed to decrypt an entry (probably wrong GPG passphrase or pinentry was closed)"
+  exit 1
+}
 
 # Select value from password-store record
 selected_key="$(

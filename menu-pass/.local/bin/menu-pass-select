@@ -25,8 +25,11 @@ pass_file="$(
   find "${PASSWORD_STORE_DIR}" -iname "*.gpg" \
     | sed "${cut_pass_dir}" \
     | grep -v "${filter_menu_pass_current}" \
-    | "${MENU}" -l 10 -p "Select field: "
-)"
+    | "${MENU}" -l 10 -p "Select entry: "
+)" || {
+  printf >&2 'menu-pass-current: selection canceled\n'
+  exit 1
+}
 
 # Symlink it - so it is "currently selected"
 ln -sf "${PASSWORD_STORE_DIR}/${pass_file}.gpg" "${PASSWORD_STORE_DIR}/${MENU_PASS_CURRENT}.gpg"
