@@ -11,7 +11,7 @@ function log_error(message)
 end
 
 function log_warn(message)
-  msg.warning(("WARNING: %s"):format(message))
+  msg.warn(("WARNING: %s"):format(message))
 end
 
 function log_info(message)
@@ -52,6 +52,10 @@ end
 
 -- Write the current timing to a file
 function write_timing_to_file()
+    local is_paused = mp.get_property_bool("pause")
+    if is_paused == nil then log_error("cound not get property 'pause' from mpv") end
+    if is_paused == true then return end
+
     local current_file = mp.get_property("path")
     if not current_file then
       log_error("could not get file path for writing")
@@ -63,7 +67,7 @@ function write_timing_to_file()
     local timing_file_path = ("%s/%s"):format(continue_dir, hash:upper())
     local current_time = mp.get_property("time-pos")
 
-    if not current_file then
+    if not current_time then
       log_error("could not get time pos for writing")
       return
     end
