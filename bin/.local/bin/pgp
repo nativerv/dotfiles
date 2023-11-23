@@ -1,0 +1,37 @@
+#!/bin/sh
+
+set -u
+
+info() {
+  printf >&2 'pgp: %s\n' "${1}" 
+}
+
+[ -z "${1-}" ] && info 'ERROR: subcommand not spefified' && exit 1
+
+case "${1}" in
+  keyid)
+    [ -z "${2}" ] && info 'ERROR: no keyfile specified' && exit 1
+    gpg --verbose --dry-run --import "${2}" 2>&1 | sed '2q;d' | sed -E 's|.*\s\w+/([[:digit:]A-Z]{16}).*|\1|'
+    ;;
+  info)
+    [ -z "${2}" ] && info 'ERROR: no keyfile specified' && exit 1
+    gpg --verbose --dry-run --import "${2}" 2>&1 | sed '2q;d' | sed 's/gpg: //'
+    ;;
+  fingerprint)
+    [ -z "${2}" ] && info 'ERROR: no keyfile specified' && exit 1
+    gpg --show-keys "${2}" 2>&1 | sed '2q;d' | tr -d ' '
+    ;;
+  pubkey)
+    [ -z "${2}" ] && info 'ERROR: no keyfile specified' && exit 1
+    (
+      temp_dir="$(mktemp -d)"
+      export GNUPGHOME="${temp_dir}"
+      [ -z "${DEBUG-}" ] && info "TRACE: GNUPGHOME: '${GNUPGHOME}'"
+      [ -z "${GNUPGHOME}" ] && info 'ERROR: unexpected error, is `mktemp` in PATH?' && exit 1
+      gpg --quiet --import "${2}"
+      gpg --quiet --armor --export "$(pgp keyid "${2}")"
+      [ -z "${DEBUG-}" ] && info "TRACE: removing GNUPGHOME: '${GNUPGHOME}'"
+      rm -rf "${temp_dir}"
+    )
+    ;;
+esac
