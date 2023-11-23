@@ -2,36 +2,104 @@
 
 set -u
 
+[ -n "${DEBUG-}" ] && set -x
+
+SELF_PID="${$}"
+trap 'exit 1' USR1
+
 info() {
   printf >&2 'pgp: %s\n' "${1}" 
 }
 
+# is_file,is_gpg
+check_input() {
+  emails() {
+    gpg 2>/dev/null --list-keys --with-colons --keyid-format LONG | grep '^uid' | sed -E 's/.*<(.*)>.*/\1/'
+  }
+
+  ids() {
+    gpg 2>/dev/null --list-keys --with-colons --keyid-format LONG | grep '^pub' | cut -d':' -f5
+  }
+
+  is_file=false
+  [ "$(file --brief --mime-type "${1}")" = 'application/pgp-keys' ] &&
+    [ -f "${1}" ] &&
+    is_file=true
+  is_gpg=false
+  printf '%s\n%s' "$(emails)" "$(ids)" |
+    grep -q "${1}" &&
+    is_gpg=true
+
+  [ "${flag_file}" = true ] && printf 'true,false' && return
+  [ "${flag_gpg}" = true ] && printf 'false,true' && return
+
+  result="${is_file},${is_gpg}"
+
+  [ "${result}" = "true,true" ] &&
+    info "ERROR: ambiguous input. Did you mean gpg keyid '${1}' of the keyring '${GNUPGHOME}' or file '$(realpath "${1}")'? Specify -g or -f to disambiguate" &&
+    kill -USR1 "${SELF_PID}"
+
+  printf '%s' "${result}"
+}
+
 [ -z "${1-}" ] && info 'ERROR: subcommand not spefified' && exit 1
+
+is_file=false
+is_gpg=false
+
+flag_file=false
+flag_gpg=false
+
+process_flags() {
+  [ "${2-}" = '-f' ] && flag_file=true && return
+  [ "${2-}" = '-g' ] && flag_gpg=true && return
+  return 1
+}
 
 case "${1}" in
   keyid)
-    [ -z "${2}" ] && info 'ERROR: no keyfile specified' && exit 1
+    [ -z "${2-}" ] && info 'ERROR: no keyfile specified' && exit 1
     gpg --verbose --dry-run --import "${2}" 2>&1 | sed '2q;d' | sed -E 's|.*\s\w+/([[:digit:]A-Z]{16}).*|\1|'
     ;;
   info)
-    [ -z "${2}" ] && info 'ERROR: no keyfile specified' && exit 1
-    gpg --verbose --dry-run --import "${2}" 2>&1 | sed '2q;d' | sed 's/gpg: //'
+    process_flags "${@}" && shift
+    [ -z "${2-}" ] && gpg --list-keys && exit 0
+    case "$(check_input "${2}")" in
+      'false,false') info "ERROR: no such keyid or file: '${2}'" ;;
+      'false,true') gpg --list-keys "${2}" ;;
+      'true,false') gpg --show-keys "${2}" ;;
+    esac
     ;;
   fingerprint)
-    [ -z "${2}" ] && info 'ERROR: no keyfile specified' && exit 1
-    gpg --show-keys "${2}" 2>&1 | sed '2q;d' | tr -d ' '
+    process_flags "${@}" && shift
+    [ -z "${2-}" ] && info 'ERROR: no keyfile specified' && exit 1
+    case "$(check_input "${2}")" in
+      'false,false') info "ERROR: no such keyid or file: '${2}'" ;;
+      'false,true') gpg --list-keys "${2}" | sed '2q;d' | tr -d ' ' ;;
+      'true,false') gpg --show-keys "${2}" | sed '2q;d' | tr -d ' ' ;;
+    esac
     ;;
   pubkey)
-    [ -z "${2}" ] && info 'ERROR: no keyfile specified' && exit 1
-    (
-      temp_dir="$(mktemp -d)"
-      export GNUPGHOME="${temp_dir}"
-      [ -z "${DEBUG-}" ] && info "TRACE: GNUPGHOME: '${GNUPGHOME}'"
-      [ -z "${GNUPGHOME}" ] && info 'ERROR: unexpected error, is `mktemp` in PATH?' && exit 1
-      gpg --quiet --import "${2}"
-      gpg --quiet --armor --export "$(pgp keyid "${2}")"
-      [ -z "${DEBUG-}" ] && info "TRACE: removing GNUPGHOME: '${GNUPGHOME}'"
-      rm -rf "${temp_dir}"
-    )
+    process_flags "${@}" && shift
+    [ -z "${2-}" ] && info 'ERROR: no keyfile specified' && exit 1
+    case "$(check_input "${2}")" in
+      'false,false') info "ERROR: no such keyid or file: '${2}'" ;;
+      'false,true') gpg --quiet --armor --export "${2}" ;;
+      'true,false')
+        (
+          temp_dir="$(mktemp -d)"
+          export GNUPGHOME="${temp_dir}"
+          [ -n "${DEBUG-}" ] && info "DEBUG: GNUPGHOME: '${GNUPGHOME}'"
+          [ -z "${GNUPGHOME}" ] && info 'ERROR: unexpected error, is `mktemp` in PATH?' && exit 1
+          gpg --quiet --import "${2}"
+          gpg --quiet --armor --export "$(pgp keyid "${2}")"
+          [ -n "${DEBUG-}" ] && info "DEBUG: removing GNUPGHOME: '${GNUPGHOME}'"
+          rm -rf "${temp_dir}"
+        )
+        ;;
+    esac
+    ;;
+  privkey)
+    gpg --armor --export-secret-keys --export-options backup
     ;;
 esac
