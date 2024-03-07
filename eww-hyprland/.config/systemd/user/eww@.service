@@ -7,6 +7,10 @@ Requisite=graphical-session@%i.target
 [Service]
 Type=exec
 ExecStart=sh -c 'session -s "%i" run "eww daemon --no-daemonize"'
+Nice=-10
+
+# Prevent swapping
+MemorySwapMax=0
 
 # Sandboxing
 NoNewPrivileges=yes

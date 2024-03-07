@@ -8,6 +8,7 @@ Requisite=eww@%i.service
 [Service]
 Type=exec
 ExecStart=sh -c 'session -s "%i" run "eww open statusbar"'
+ExecStop=sh -c 'session -s "%i" run "eww close statusbar; sleep 1"'
 
 # Sandboxing
 NoNewPrivileges=yes

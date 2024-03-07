@@ -171,7 +171,7 @@
 )
 
 (deflisten current-window-title
-  :initial "..."
+  :initial ""
   "sh \${XDG_CONFIG_HOME}/eww/scripts/get-window-title"
 )
 
@@ -180,7 +180,7 @@
     :halign "start"
     :class "window-title"
     (label
-      :limit-width 50
+      :limit-width 46
       :text "${current-window-title ?: ""}"
     )
   )
