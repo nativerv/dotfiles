@@ -248,5 +248,30 @@ require("lazy").setup({
     -- NOTE: `hollogram.nvim` is not working as of right now
     enabled = false,
     config = require('user.plugin.hologram').setup,
-  }
+  },
+
+  -- Language support
+  -- APL
+  {
+    'https://github.com/zoomlogo/vim-apl',
+    ft = 'apl',
+    config = require('user.plugin.vim-apl').setup,
+  },
+  {
+    'https://github.com/baruchel/vim-notebook',
+    ft = 'apl',
+    keys = require'user.lib.plugin-management'.extract_keys_from_module_mappings(require('user.plugin.vim-notebook').mappings, true),
+    config = require('user.plugin.vim-notebook').setup,
+  },
+  -- BQN
+  {
+    'nativerv/vim-bqn',
+    ft = 'bqn',
+    config = require('user.plugin.vim-bqn').setup,
+  },
+  {
+    'https://git.sr.ht/~detegr/nvim-bqn',
+    ft = 'bqn',
+    config = require('user.plugin.nvim-bqn').setup,
+  },
 }, require'user.plugin.lazy'.spec)
