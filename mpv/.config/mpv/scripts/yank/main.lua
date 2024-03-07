@@ -17,7 +17,7 @@ mp.add_key_binding(nil, 'yank', function ()
   end
 
   -- Construct xclip command that gets filepath into clipboard
-  local xclip_cmd = { 'sh', '-c', 'echo ' .. filepath .. '| xclip -in -selection clipboard' }
+  local xclip_cmd = { 'sh', '-c', 'echo ' .. filepath .. '| yank' }
 
   local result = utils.subprocess({ args = xclip_cmd, cancellable = false })
   if result.status == 0 then

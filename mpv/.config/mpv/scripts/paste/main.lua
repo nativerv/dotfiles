@@ -5,14 +5,14 @@ local mp = require'mp'
 local utils = require'mp.utils'
 local msg = require'mp.msg'
 
-local xclip_cmd = { 'xclip', '-out', '-selection', 'clipboard' }
+local xclip_cmd = { 'put' }
 
 mp.add_key_binding(nil, 'paste', function ()
   local result = utils.subprocess({ args = xclip_cmd, cancellable = false })
 
   -- | Pop a message on fail to read clipboard
   if result.status ~= 0 then
-    local error_message = 'error running xclip: "' .. result.error .. '"'
+    local error_message = 'error running "put": "' .. result.error .. '"'
     msg.error(error_message)
     mp.osd_message('[paste] ' .. error_message)
     return

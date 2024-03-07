@@ -106,11 +106,15 @@ function read_timing_from_file()
   mp.commandv("seek", timing, "absolute")
 end
 
+function write_timing_to_file_timer()
+  -- Every second, write the current timing to a file
+  mp.add_periodic_timer(1, write_timing_to_file)
+end
+
 -- Make sure the state directory exists
 ensure_dir(continue_dir)
 
--- Every second, write the current timing to a file
-mp.add_periodic_timer(1, write_timing_to_file)
-
 -- When a new file is loaded, check for an existing timing file and seek to that time if it exists
 mp.register_event("file-loaded", read_timing_from_file)
+mp.register_event("file-loaded", write_timing_to_file_timer)
+mp.register_event("seek", write_timing_to_file)
