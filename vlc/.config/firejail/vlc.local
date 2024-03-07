@@ -1,0 +1,3 @@
+noblacklist /usr/lib/vlc
+#whitelist /usr/lib/vlc
+whitelist-ro /media/win_d_drive/Downloads
