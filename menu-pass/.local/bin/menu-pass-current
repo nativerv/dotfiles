@@ -28,8 +28,15 @@ if [ -z "${MENU-}" ]; then
   exit 1
 fi
 
+: "${PASSWORD_STORE_DIR:="${HOME}/.password-store"}"
 PASSWORD_PLACEHOLDER='****************'
+# Name of symlink to currently selected pass file
 MENU_PASS_CURRENT="${MENU_PASS_CURRENT:-'menu-pass-current'}"
+
+# Get password-store name for the selected for displaying it to the user
+current_realpath="$(readlink -f "${PASSWORD_STORE_DIR}/${MENU_PASS_CURRENT}.gpg")"
+current_realpath="${current_realpath#"${PASSWORD_STORE_DIR}/"}"
+current_realpath="${current_realpath%'.gpg'}"
 
 entries="$(pass show "${MENU_PASS_CURRENT}")" || {
   info "failed to decrypt an entry (probably wrong GPG passphrase or pinentry was closed)"
@@ -41,7 +48,7 @@ selected_key="$(
   printf '%s' "${entries}" |
     sed "1 s/.*/password*: ${PASSWORD_PLACEHOLDER}/" |       # add password key to the first line (does not have it by convention) and replace value with `PASSWORD_PLACEHOLDER`
     sed "s/\*: .*/*: ${PASSWORD_PLACEHOLDER}/" |             # replace every value which key is marked with * symbol at the end with password placeholder with `PASSWORD_PLACEHOLDER`
-    { "${MENU}" -l 10 -p 'Select field: ' || kill "${self}"; } | # select entry with menu
+    { "${MENU}" -l 10 -p "Select field (${current_realpath}):" || kill "${self}"; } | # select entry with menu
     sed 's/: /\t/' |                                         # replace first ': ' (human-readable key-value separator with tab character)
     cut -f1                                                  # cut the key for further processing. it should be in the form of 'key' or 'key*' at this point
 )"
