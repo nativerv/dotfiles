@@ -1,0 +1,11 @@
+#!/bin/sh
+
+set -u
+
+: "${XDG_DATA_HOME:="${HOME}/.local/share"}"
+: "${WHATTHECOMMIT_TXT:="${XDG_DATA_HOME}/whatthecommit/commit-messages.txt"}"
+
+< "${WHATTHECOMMIT_TXT}" \
+  sed 's/<br\/>/\n/g ; s/&gt;/>/g ; s/&lt;/</g' |
+  shuf |
+  head -n1
