@@ -1,0 +1,17 @@
+#!/bin/sh
+
+set -u
+
+: "${ORIG_COMMAND:="/usr/bin/mpc"}"
+: "${XDG_DATA_HOME:="${HOME}/.local/share"}"
+
+info() {
+  printf >&2 'mpc: %s\n' "${1}"
+}
+
+case "${1-}" in
+  lyrics)
+    cat "${XDG_DATA_HOME}/lyrics/$("${ORIG_COMMAND}" current).txt"
+  ;;
+  *) "${ORIG_COMMAND}" "${@}" ;;
+esac
