@@ -1,13 +1,15 @@
 #!/bin/sh
 
 : "${XDG_CACHE_HOME:="${HOME}/.cache"}"
-: "${ORIG_COMMAND:="/usr/bin/bemenu"}"
+: "${ORIG_COMMAND_DIR:="/usr/bin"}"
 colors_sh="${XDG_CACHE_HOME}/wal/colors.sh"
 
+name="${0##*'/'}"
+command="${ORIG_COMMAND_DIR}/${name}"
 
 if [ -f "${colors_sh}" ]; then
   . "${colors_sh}"
-  "${ORIG_COMMAND}" \
+  "${command}" \
     --tb "${color2}" \
     --tf "${background}" \
     \
@@ -40,4 +42,4 @@ if [ -f "${colors_sh}" ]; then
   exit
 fi
 
-"${ORIG_COMMAND}" "${@}"
+"${command}" "${@}"
