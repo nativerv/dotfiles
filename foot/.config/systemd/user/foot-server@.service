@@ -6,9 +6,17 @@ Requisite=graphical-session@%i.target
 Requires=%N.socket
 
 [Service]
-ExecStart=sh -c 'session -s "%i" run "foot --server=3"'
+; Slice=user-1000.slice
+; Delegate=yes
+; PAMName=systemd-user
+# FIXME: disabled this service because window swallowing does not work with systemd because of indirection, cgroups and stuff
+ExecStart=sh -c 'session -s "%i" run "envrun foot --server=3 --print-pid ${XDG_RUNTIME_DIR}/foot-%i.pid"'
+ExecStop=sh -c 'kill "${XDG_RUNTIME_DIR}/foot-%i.pid"'
 UnsetEnvironment=LISTEN_PID LISTEN_FDS LISTEN_FDNAMES
 NonBlocking=true
+; RemainAfterExit=true
+; KillMode=mixed
+; Delegate=yes
 
 [Install]
 WantedBy=graphical-session@%i.target
