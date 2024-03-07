@@ -148,7 +148,7 @@ case "${XDG_SESSION_TYPE:-}" in
     ;;
   *) 
     # shellcheck disable=2016
-    die 'ERROR: ${XDG_SEESION_TYPE} is invalid or unset' 
+    die 'ERROR: ${XDG_SESSION_TYPE} is invalid or unset' 
     ;;
 esac
 #echo $((n+=1))
