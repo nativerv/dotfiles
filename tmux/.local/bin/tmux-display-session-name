@@ -2,7 +2,8 @@
 
 session_name="$(tmux display-message -p '#S')"
 
-session_banner="$(figlet "${session_name}")"
+session_banner="$(figlet "${session_name}")" ||
+  session_banner='PLEASE INSTALL `figlet` BINARY'
 
 # shellcheck disable=2016
 #max_width="$(echo "${session_banner}" | awk '{ print length }' | sort -r | head -c1)"
