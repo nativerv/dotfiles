@@ -7,7 +7,7 @@ Requisite=graphical-session@%i.target
 
 [Service]
 Type=exec
-ExecStart=sh -c 'session -s "%i" run swayidle timeout 600 "lock" resume "hyprctl dispatch dpms on" timeout 600 "hyprctl dispatch dpms off"'
+ExecStart=sh -c 'session -s "%i" run "swayidle-lock"'
 
 # Sandboxing
 ; NoNewPrivileges=yes
