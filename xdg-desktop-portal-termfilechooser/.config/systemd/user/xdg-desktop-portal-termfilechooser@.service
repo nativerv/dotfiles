@@ -1,0 +1,27 @@
+[Unit]
+Description=Portal service (terminal file chooser implementation) at graphical session '%i'  
+Documentation=man:xdg-desktop-portal-termfilechooser(5)
+After=graphical-session@%i.target
+Requisite=graphical-session@%i.target
+
+[Service]
+Type=exec
+;BusName=org.freedesktop.impl.portal.desktop.termfilechooser
+# TODO: fix nix path
+ExecStart=sh -c 'session -s "%i" run "/usr/lib/xdg-desktop-portal-termfilechooser"'
+Restart=on-failure
+
+# Sandboxing
+; NoNewPrivileges=yes
+; ProtectKernelTunables=yes
+; ProtectControlGroups=yes
+; RestrictNamespaces=yes
+; LockPersonality=true
+; MemoryDenyWriteExecute=true
+; PrivateUsers=true
+; RestrictNamespaces=true
+; SystemCallArchitectures=native
+; SystemCallFilter=@system-service 
+
+[Install]
+WantedBy=graphical-session@%i.target

@@ -1,0 +1,2 @@
+[filechooser]
+cmd=${XDG_CONFIG_HOME:-$HOME/.config}/xdg-desktop-portal-termfilechooser/ranger-wrapper.sh
