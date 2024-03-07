@@ -30,6 +30,8 @@
   )
 )
 
+; (tag_name (attribute) @nospell) @nospell
+
 ; todos/notes/etc
 
 ; ; ((tag

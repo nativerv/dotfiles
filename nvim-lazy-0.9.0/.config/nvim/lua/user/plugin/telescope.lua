@@ -114,8 +114,13 @@ M.setup = function()
   config.extensions = {}
   config.defaults = {
     file_ignore_patterns = {
+      -- you need two variants for each, there's no simple way of doing them in one (afaik)
       [[^%.git/]],
       [[/%.git/]],
+
+      -- rust, etc.
+      [[/target/]],
+      [[^target/]],
     },
     -- prompt_prefix = ' ',
     -- prompt_prefix = ' ',

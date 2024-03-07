@@ -76,12 +76,18 @@ vim.keymap.set('v', '<M-S-J>', ":t '<-1<cr>gv=gv", { desc = 'Clone line down' })
 -- vim.keymap.set('v', '<M-S-о>', ":t '<-1<cr>gv=gv", { desc = 'Clone line down' })
 
 -- Move cursor on wrapped lines with j/k
-vim.keymap.set({ 'n', 'v' }, 'j', function() 
-  return vim.v.count == 0 and 'gj' or 'j'
-end, { desc = 'Down', expr = true, silent = true, })
-vim.keymap.set({ 'n', 'v' }, 'k', function() 
-  return vim.v.count == 0 and 'gk' or 'k'
-end, { desc = 'Up', expr = true, silent = true, })
+vim.defer_fn(function() 
+  for _, key in ipairs({ 'j', 'о' }) do
+    vim.keymap.set({ 'n', 'v' }, key, function() 
+      return vim.v.count == 0 and 'gj' or 'j'
+    end, { desc = 'Down', expr = true, silent = true, })
+  end
+  for _, key in ipairs({ 'k', 'л' }) do
+    vim.keymap.set({ 'n', 'v' }, key, function() 
+      return vim.v.count == 0 and 'gk' or 'k'
+    end, { desc = 'Up', expr = true, silent = true, })
+  end
+end, 1000)
 
 -- Close current buffer instead of window
 -- TODO: move this to it's plugin file

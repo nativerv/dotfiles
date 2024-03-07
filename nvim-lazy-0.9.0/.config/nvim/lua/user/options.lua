@@ -38,6 +38,7 @@ vim.o.conceallevel = 2
 vim.o.scrolloff = 8
 vim.opt.fillchars:append { diff = "╱" }
 vim.opt.showtabline = 0
+--vim.opt.fixendofline = false
 
 vim.g.compile_tex = true -- Compile latex on save by default (i have autocmds for that)
 

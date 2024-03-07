@@ -176,7 +176,9 @@ require("lazy").setup({
   --   'chentoast/live.nvim',
   -- },
   {
+    -- 'powerman/vim-plugin-ruscmd',
     'nativerv/cyrillic.nvim',
+    dir = '~/pr/cyrillic.nvim',
     event = { 'VeryLazy' },
     config = require('user.plugin.cyrillic').setup,
   },

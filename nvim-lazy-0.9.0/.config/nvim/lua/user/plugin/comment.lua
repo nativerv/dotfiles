@@ -14,12 +14,12 @@ M.mappings = {
   opleader_line = {
     keys = { 'gc', },
     opts = { desc = 'Comment linewise...' },
-    { { 'o', 'v', 'n' } },
+    { { 'o', 'v', 'n', 'x' } },
   },
   opleader_block = {
     keys = { 'gC', },
     opts = { desc = 'Comment blockwise...' },
-    { { 'o', 'v', 'n' } },
+    { { 'o', 'v', 'n', 'x' } },
   },
 }
 

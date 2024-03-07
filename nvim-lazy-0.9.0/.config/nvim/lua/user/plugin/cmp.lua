@@ -37,7 +37,7 @@ M.setup = function()
     { name = 'nvim_lsp', keyword_length = 2, priority = 100 },
     { name = 'nvim_lua', keyword_length = 2, priority = 99 },
     { name = 'path', keyword_length = 3, priority = 95 },
-    { name = 'buffer', keyword_length = 5, priority = 94 },
+    { name = 'buffer', keyword_length = 4, priority = 94 },
   }
   config.experimental = {
     native_menu = false,

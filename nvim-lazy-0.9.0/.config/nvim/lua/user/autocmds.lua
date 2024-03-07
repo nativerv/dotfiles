@@ -285,7 +285,7 @@ vim.api.nvim_create_autocmd({ 'ColorScheme' }, {
     -- grey bg cyan text behavior
     -- Also, there seems to be two variants of LspDiagnnostic stuff, with -s, and without.
     -- Only the former (with s) seems to work. Dunno why, this may break later.
-    vim.cmd (([[ highlight DiagnosticUnderlineHint cterm=undercurl gui=undercurl guisp='%s' ]]):format(require'user.config'.colors.hint)) 
+    vim.cmd ([[ highlight DiagnosticUnderlineHint cterm=undercurl gui=undercurl guisp='%s' ]]):format(require'user.config'.colors.hint) 
   end,
 })
 

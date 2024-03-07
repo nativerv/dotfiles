@@ -33,10 +33,32 @@ M.mappings = {
 }
 
 M.setup = function()
-  require('nvim-surround').setup {
-    move_cursor = false,
-  }
-  require('user.lib.plugin-management').apply_module_mappings(M.mappings)
+	local strong = {
+		add = { "**", "**" },
+		find = "%*%*.-%*%*",
+		delete = "^(%*%*?)().-(%*%*?)()$",
+		change = {
+			target = "^(%*%*?)().-(%*%*?)()$",
+		},
+	}
+	local emphasis = {
+		add = { "*", "*" },
+		find = "%*.-%*",
+		delete = "^(%*?)().-(%*?)()$",
+		change = {
+			target = "^(%*?)().-(%*?)()$",
+		},
+	}
+	require("nvim-surround").setup({
+		move_cursor = false,
+		surrounds = {
+			["s"] = strong,
+			["S"] = strong,
+			["e"] = emphasis,
+			["E"] = emphasis,
+		},
+	})
+	require("user.lib.plugin-management").apply_module_mappings(M.mappings)
 end
 
 return M

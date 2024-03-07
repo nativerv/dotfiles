@@ -13,7 +13,7 @@ M.setup = function()
   vim.api.nvim_create_autocmd({ 'FileType' }, {
     pattern = { 'fugitive' },
     group = vim.api.nvim_create_augroup(
-      'nrv#fugitive_reverse_mapping',
+      'nrv#fugitive_mappings',
       { clear = true }
     ),
     callback = function(event)
@@ -22,6 +22,12 @@ M.setup = function()
         M.mappings.open.keys[1],
         function() vim.api.nvim_buf_delete(event.buf, {}) end,
         { buffer = event.buf, desc = 'Close Fugitive' }
+      )
+      vim.keymap.set(
+        { 'n' },
+        'i',
+        '=',
+        { buffer = event.buf, remap = true, desc = 'Toggle an inline diff of the file under the cursor' }
       )
     end,
   })
