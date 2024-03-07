@@ -4,6 +4,9 @@
   pager = delta --true-color always --color-only
   find-renames = true
 
+[alias]
+	yolo = !command -v whatthecommit 2>/dev/null >&2 && git commit -m \"$(whatthecommit)\"
+
 [status]
   showUntrackedFiles=all
 
@@ -59,3 +62,9 @@
   syntax-theme = OneHalfDark
   zero-style = "#a5a7b8"
   color-only = true
+[mergetool "fugitive"]
+	cmd = nvim -f -c \"G diff\" \"$MERGED\"
+[merge]
+	tool = fugitive
+[rerere]
+	enabled = true
