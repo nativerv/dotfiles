@@ -53,6 +53,7 @@ alias ytmdl="noglob ytmdl"
 
 # Mkdir and touch; also flag mkdir create nonexistent dirs
 alias md="mkdir -p"
+alias rd="rmdir"
 alias mt="touch"
 
 # mkdir + cd; also change the mcd completion as mcd name is actually used by
@@ -65,6 +66,7 @@ alias walk="find ."
 
 # Passthroughs
 alias sudo="sudo "
+alias watch="watch "
 
 # Fix lolcat to always output truecolor
 alias lolcat="lolcat --truecolor"
@@ -78,6 +80,9 @@ alias ncdu="ncdu -q --color dark --confirm-quit --exclude-kernfs"
 # Configure du
 alias du="du -h"
 
+# Configure free
+alias free="free -h"
+
 # Configure df
 alias df="df -h"
 
@@ -89,9 +94,9 @@ alias mitmweb="mitmweb --set confdir=${XDG_CONFIG_HOME}/mitmproxy"
 alias git="git --no-pager "
 alias g="git"
 alias gs="env GIT_PAGER= unbuffer git status --untracked-files=all"
-alias gl="env GIT_PAGER= unbuffer git log"
-alias gll="env GIT_PAGER= unbuffer git log --pretty=oneline --abbrev-commit"
-alias gllg="env GIT_PAGER= unbuffer git log --graph --pretty=oneline --abbrev-commit"
+alias gl="env GIT_PAGER= unbuffer git log --show-signature"
+alias gll="env GIT_PAGER= unbuffer git log --pretty=oneline --abbrev-commit --all"
+alias gllg="env GIT_PAGER= unbuffer git log --graph --pretty=oneline --abbrev-commit --all"
 alias gd="git diff"
 alias ga="git add"
 alias gc="git commit"
@@ -123,7 +128,7 @@ ls() {
     --icons \
     --links \
     --group \
-    --ignore-glob ".git" \
+    --ignore-glob ".git|target|node_modules" \
     "${@}" |
     sed 's/^\./-/'
 }
