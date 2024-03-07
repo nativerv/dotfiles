@@ -6,8 +6,8 @@ After=graphical-session@%i.target
 Requisite=graphical-session@%i.target
 
 [Service]
-Type=dbus
-BusName=org.freedesktop.Notifications
+Type=exec
+#BusName=org.freedesktop.Notifications
 #ExecStart=/usr/bin/dunst
 ExecStart=sh -c 'session -s "%i" run "dunst"'
 ; ExecStart=sh -c '/usr/bin/dunst -lb "$(cat "${XDG_CACHE_HOME:-"${HOME}/.cache"}/wal/background")" -nb "$(cat "${XDG_CACHE_HOME:-"${HOME}/.cache"}/wal/background")"'

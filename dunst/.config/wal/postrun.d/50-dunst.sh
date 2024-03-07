@@ -12,7 +12,8 @@ cp -f "${XDG_CACHE_HOME}/wal/dunstrc" "${XDG_CONFIG_HOME}/dunst/dunstrc.d/50-wal
 # command -v systemctl >/dev/null 2>&1 && \
 #   systemctl --user restart "dunst@${DISPLAY#:*}.service"
 (
+  # Sleep a bit cuz it shows a notification about changing theme.
   sleep 2 &&
     command -v 'systemctl' >/dev/null 2>&1 &&
-    systemctl --user restart "dunst.service"
+    systemctl --user restart "dunst@${SESSION_SESSION_NAME:-"tty1"}.service"
 ) &
