@@ -1,8 +1,13 @@
 #!/bin/sh
 
-set -eux
+set -u
 
-secrets="$(pass show api/telegram/notify-tg 2>/dev/null)"
+[ -n "${DEBUG-}" ] && set -x
+[ "${1-}" = '-v' ] && verbose=true && shift
+
+: "${NOTIFY_TG_SECRETS_COMMAND:="pass show api/telegram/notify-tg"}"
+
+secrets="$(sh -c "${NOTIFY_TG_SECRETS_COMMAND}" 2>/dev/null)"
 
 token="$(printf '%s' "${secrets}" | head -n1)"
 user_id="$(printf '%s' "${secrets}" | cut -d' ' -f2 | tail -n1)"
@@ -10,8 +15,14 @@ user_id="$(printf '%s' "${secrets}" | cut -d' ' -f2 | tail -n1)"
 json=$(printf '{ "text": "%s", "chat_id": "%s" }' "${1}" "${user_id}")
 content_type="Content-Type: application/json"
 
-curl \
-  -X POST \
-  -H "${content_type}" \
-  -d "${json}" \
-  "https://api.telegram.org/bot${token}/sendMessage"
+response="$(
+  curl \
+    --silent \
+    -X POST \
+    -H "${content_type}" \
+    -d "${json}" \
+    "https://api.telegram.org/bot${token}/sendMessage"
+)"
+
+# Print response when -v
+[ "${verbose-}" = true ] && printf '%s' "${response}"
