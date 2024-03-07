@@ -10,6 +10,11 @@ printf 'Enter a url: ' >&2
 read -r 'url'
 
 yt-dlp \
+  --concurrent-fragments 10 \
+  --embed-metadata \
+  --embed-thumbnail \
+  --embed-chapters \
+  --embed-subs \
   -o "%(extractor)s:%(id)s:%(title)s.%(ext)s" \
   "${@}" \
   "${url}"

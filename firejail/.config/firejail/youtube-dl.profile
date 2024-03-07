@@ -14,6 +14,9 @@ whitelist ${PICTURES}
 noblacklist ${MUSIC}
 whitelist ${MUSIC}
 
+noblacklist ${DESKTOP}
+whitelist ${DESKTOP}
+
 include allow-bin-sh.inc
 
 # Copied & Modified /etc/firejail/youtube-dl.profile, becouse .local file
