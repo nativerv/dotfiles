@@ -1,0 +1,69 @@
+#!/bin/sh
+
+set -u
+
+exclude=
+verbose=
+while :; do
+  case "${1}" in
+    -v|--verbose) verbose=true ;;
+    --exclude)       # Takes an option argument, ensuring it has been specified.
+        if [ -n "${2}" ]; then
+            exclude="${2}"
+            shift
+        else
+            printf 'ERROR: "--exclude" requires a non-empty option argument.\n' >&2
+            exit 1
+        fi
+        ;;
+    --exclude=?*)
+        exclude=${1#*=} # Delete everything up to "=" and assign the remainder.
+        ;;
+    --exclude=)         # Handle the case of an empty --exclude=
+        printf 'ERROR: "--exclude" requires a non-empty option argument.\n' >&2
+        exit 1
+        ;;
+    *)               # Default case: If no more options then break out of the loop.
+        break
+  esac
+
+  shift
+done
+
+maybe_exclude() {
+  if [ -n "${exclude}" ]; then
+    grep -Ev "${exclude}"
+  else
+    cat
+  fi
+}
+
+debug_files() {
+  if [ -n "${DEBUG-}" ] || [ "${verbose}" = true ]; then
+    tee '/dev/stderr'
+  else
+    cat
+  fi
+}
+
+case "${1}" in
+  clike)
+    find "${2}" -type f |
+      grep -Ei '\.(rs|c|cpp|cs|cc|h|js|ts|tsx|jsx)$' |
+      maybe_exclude |
+      debug_files |
+      xargs -d'\n' -I{} cat '{}' |
+      grep -Ev \
+        -e '^[[:space:]]*//' \
+        -e '^[[:space:]]*$' \
+        -e '^[][[:space:]{}();,]*$' |
+      wc -l
+    ;;
+  *)
+    printf >&2 'sloc: usage: sloc LANG ROOT\n'
+    printf >&2 '  counts sloc of language LANG in directory ROOT\n'
+    printf >&2 '  languages: clike, (todo more)\n'
+    ;;
+esac
+
+
