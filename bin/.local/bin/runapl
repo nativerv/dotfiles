@@ -1,0 +1,3 @@
+#!/bin/sh
+
+printf "%s\n)OFF" "$(cat "${1}")" | apl --noSV --rawCIN --noColor -q
