@@ -1,0 +1,30 @@
+#!/bin/sh
+
+set -u
+
+: "${ORIG_COMMAND:="/usr/bin/nix"}"
+
+info() {
+  printf >&2 'nix: %s\n' "${1}"
+}
+
+store() {
+  case "${1-}" in
+    gc-roots)
+      find '/nix/var/nix/gcroots/' -type 'l' |
+        xargs -I{} sh -c 'printf "%s %s\n" "{}" "$(readlink "{}")"' |
+        column -t
+      ;;
+    *) "${ORIG_COMMAND}" store "${@}" ;;
+  esac
+}
+
+case "${1-}" in
+  vm)
+    [ -z "${2-}" ] && info 'ERROR: no NixOS configuration name specified' && exit 1
+    name="${2}" && shift 2
+    "${ORIG_COMMAND}" build ".#nixosConfigurations.${name}.config.system.build.vm" && "./result/bin/run-${name}-vm" "${@}" && reset
+  ;;
+  store) shift && store "${@}" ;;
+  *) "${ORIG_COMMAND}" "${@}" ;;
+esac
