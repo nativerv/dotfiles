@@ -17,23 +17,36 @@ TORRENT_HANDLER="${TORRENT_HANDLER:-transadd}"
 MAIL_HANDLER="${MAIL_HANDLER:-false}"
 # TORRENT_HANDLER=transadd
 
+debug() {
+  [ -n "${DEBUG-}" ] && printf 'opend: DEBUG: %s\n' "${1}"
+}
+
+info() {
+  printf 'opend: INFO: %s\n' "${1}"
+}
+
 [ -z "${MENU-}" ] && printf 'opend: ERROR: MENU environment variable is unset or empty\n' && exit 1
 
 ev listen | while read -r 'source' 'target' 'payload'; do
-  [ -n "${DEBUG-}" ] && printf "opend: INFO: requested ${target} ${payload}\n"
   # Guard - opend event
   [ ! "${source}" = 'opend' ] && continue
+  info "requested '${target}': '${payload}'"
 
   answer="$(printf 'Yes\nNo' | "${MENU}" -l 2 -p "Do you want to open '${payload}' with a default program?")"
 
   # Guard - user answer
-  [ "${answer}" = 'Yes' ] || continue
+  [ "${answer}" = 'Yes' ] || { info "cancelled '${target}': '${payload}'"; continue; }
+  info "accepted  '${target}': '${payload}'"
 
   # Match and start the subject
   case "${target}" in
     pdf)      "${READER}" "${payload}" & ;;
     torrent)  "${TORRENT_HANDLER}" "${payload}" & ;;
-    web)      "${BROWSER}" "${payload}" & ;;
+    web)      
+      { printf '%s' "${payload}" | grep -Eq 'https://(www.)?(youtu.be|youtube.com|twitch.tv|yewtu.be)/'; } &&
+        { "${MEDIA_VIEWER}" "${payload}" & exit; }
+      "${BROWSER}" "${payload}" &
+      ;;
     telegram) telegram-desktop -workdir "${XDG_DATA_HOME}/TelegramDesktop/" -- "${payload}" & ;;
     lbry)     notify-send -u 'normal' "Opening '${payload}'" "Install Lbry to open ${payload}" & ;;
     image)    "${IMAGE_VIEWER}" -a "${payload}" & ;;
