@@ -1,0 +1,16 @@
+[Unit]
+Description=Portal service (Hyprland implementation) at graphical session '%i'
+PartOf=graphical-session@%i.target
+After=graphical-session@%i.target
+;ConditionEnvironment=WAYLAND_DISPLAY
+
+[Service]
+Type=exec
+;BusName=org.freedesktop.impl.portal.desktop.hyprland
+# TODO: fix nix path
+ExecStart=sh -c 'session -s "%i" run "/usr/lib/xdg-desktop-portal-hyprland"'
+Restart=on-failure
+Slice=session.slice
+
+[Install]
+WantedBy=graphical-session@%i.target
