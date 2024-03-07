@@ -1,0 +1,43 @@
+#!/bin/sh
+
+: "${XDG_CACHE_HOME:="${HOME}/.cache"}"
+: "${ORIG_COMMAND:="/usr/bin/bemenu"}"
+colors_sh="${XDG_CACHE_HOME}/wal/colors.sh"
+
+
+if [ -f "${colors_sh}" ]; then
+  . "${colors_sh}"
+  "${ORIG_COMMAND}" \
+    --tb "${color2}" \
+    --tf "${background}" \
+    \
+    --fb "${background}" \
+    --ff "${foreground}" \
+    \
+    --cb "${background}" \
+    --cf "${foreground}" \
+    \
+    --nb "${background}" \
+    --nf "${foreground}" \
+    \
+    --hb "${color2}" \
+    --hf "${background}" \
+    \
+    --fbb "${background}" \
+    --fbf "${foreground}" \
+    \
+    --sb "${background}" \
+    --sf "${foreground}" \
+    \
+    --ab "${background}" \
+    --af "${foreground}" \
+    \
+    --scb "${color2}" \
+    --scf "${background}" \
+    \
+    --line-height 18 \
+    "${@}"
+  exit
+fi
+
+"${ORIG_COMMAND}" "${@}"
