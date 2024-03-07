@@ -20,10 +20,14 @@ sb-source-vol-listen | while read -r 'volume'; do
     env printf 'L'
   elif [ "$((volume < 100))" = '1' ]; then
     # volume-2-solid
-    env printf '\ue902'
+    #env printf '\ue902'
+    env printf 'L'
   elif [ "$((volume < 150))" = '1' ]; then
     # volume-3-solid
-    env printf '\ue903'
+    #env printf '\ue903'
+    env printf 'L'
+  else
+    env printf 'L'
   fi
   # Updates separated by newline
   printf '\n'
