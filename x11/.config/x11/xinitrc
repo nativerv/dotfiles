@@ -7,30 +7,50 @@ set -u
 # Load Xresources database
 xrdb -I"${HOME}" "${XDG_CONFIG_HOME:-${HOME}/.config}/x11/xresources"
 
-# Export session type environment variable
+# Export environment variables to session
 export XDG_SESSION_TYPE="X11"
+export QT_QPA_PLATFORM=wayland
+export MOZ_ENABLE_WAYLAND=0
+export XDG_CURRENT_DESKTOP=xmonad:gnome
+export XDG_SESSION_TYPE=X11
+export TERMCMD=st
+export TERMINAL=st
+export MENU=dmenu
+export BEMENU_BACKEND=x11
+export ENVRUND_HOME="${XDG_RUNTIME_DIR}/envrund/tty2"
 
-# Export DISPLAY and XAUTHORITY to systemd-user
-# [ -x /etc/X11/xinit/xinitrc.d/50-systemd-user.sh ] \
-#   && . /etc/X11/xinit/xinitrc.d/50-systemd-user.sh
-command -v systemctl >/dev/null 2>&1 &&
-  systemctl --user import-environment DISPLAY XAUTHORITY XDG_SESSION_TYPE
-command -v dbus-update-activation-environment >/dev/null 2>&1 &&
-  dbus-update-activation-environment DISPLAY XAUTHORITY XDG_SESSION_TYPE
-
+session -s "tty2" \
+  import \
+  'ENVRUND_HOME' \
+  'DISPLAY' \
+  'QT_QPA_PLATFORM' \
+  'MOZ_ENABLE_WAYLAND' \
+  'XDG_CURRENT_DESKTOP' \
+  'XDG_SESSION_TYPE' \
+  'TERMCMD' \
+  'TERMINAL' \
+  'MENU' \
+  'BEMENU_BACKEND'
 
 # Tell my systemd services that they can start
 command -v systemctl >/dev/null 2>&1 \
-  && systemctl --user start "xsession@$(echo "${DISPLAY}" | tr -d ':').target" >/dev/null 2>&1
+  && systemctl --user start "graphical-session@tty2.target" >/dev/null 2>&1
 
 # Start WM
-# "${XDG_CACHE_DIR}/xmonad/xmonad-x86_64-linux"
 "${HOME}/.xmonad/xmonad-x86_64-linux"
-#xmonad
-#dwm
-#qtile start -b wayland
+
+session -s "tty2" \
+  unset \
+  'DISPLAY' \
+  'QT_QPA_PLATFORM' \
+  'MOZ_ENABLE_WAYLAND' \
+  'XDG_CURRENT_DESKTOP' \
+  'XDG_SESSION_TYPE' \
+  'TERMCMD' \
+  'TERMINAL' \
+  'MENU' \
+  'BEMENU_BACKEND'
 
 # Tell my systemd services that they no longer can run
 command -v systemctl >/dev/null 2>&1 \
-  && systemctl --user stop "xsession@$(echo "${DISPLAY}" | tr -d ':').target" >/dev/null 2>&1 \
-  && systemctl --user unset-environment DISPLAY XAUTHORITY XDG_SESSION_TYPE >/dev/null 2>&1
+  && systemctl --user stop "graphical-session@tty2.target" >/dev/null 2>&1

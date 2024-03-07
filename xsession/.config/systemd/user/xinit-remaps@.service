@@ -1,5 +1,5 @@
 [Unit]
-Description=Oneshot xodmap/setxkbmap config at graphical session '%i' 
+Description=Run xodmap/setxkbmap config at graphical session '%i' 
 Documentation=man:setxkbmap(1) man:xmodmap(1)
 #PartOf=xorg@%i.target
 After=graphical-session@%i.target
