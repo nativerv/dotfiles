@@ -4,7 +4,7 @@ XDG_DATA_HOME="${XDG_DATA_HOME:-"${HOME}/.local/share"}"
 TL_DATA_HOME="${XDG_DATA_HOME}/tl"
 
 primary="$(put -p)"
-translation="$(tl "${primary}")"
+translation="$(tl -- "${primary}")"
 
 # Guard for dictionary translation
 [ "$(printf '%s' "${translation}" | wc -l)" -gt 1 ] \
@@ -12,5 +12,6 @@ translation="$(tl "${primary}")"
 
 notify-send \
   -i "${TL_DATA_HOME}/tl_icon.png" \
+  -- \
   "Translation" \
   "\n\"${translation}\""

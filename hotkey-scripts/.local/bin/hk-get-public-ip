@@ -14,8 +14,8 @@ if body="$(
 		--connect-timeout 3 \
 		--silent \
 		--location \
-		'https://ifconfig.co/json' |
-		jq -r '"Address: " + .ip, "Country: " + .country_iso'
+		'https://ipinfo.io' |
+		jq -r '"Address: " + .ip, "Country: " + .country'
 )"; then
 	notify-send \
    -u 'normal' \
@@ -27,3 +27,43 @@ else
    -i "${XDG_DATA_HOME}/icons/hicolor/256x256/notifications/ip-address-256x256.png" \
    'IP' "Could not connect to internet (time out)"
 fi
+
+# #!/usr/bin/env bash
+#
+# set -uo pipefail
+#
+# XDG_DATA_HOME="${XDG_DATA_HOME:-"${HOME}/.local/share"}"
+#
+# notify() {
+# 	notify-send \
+#    -u 'normal' \
+#    -i "${XDG_DATA_HOME}/icons/hicolor/256x256/notifications/ip-address-256x256.png" \
+#    'IP' "${1}"
+# }
+#
+# counter=0
+# { printf "${1-}" | grep -Eq '[[:digit:]]+'; } && counter="${1}"
+#
+# url=
+# case "${counter}" in
+#   0) url='https://ifconfig.co/json' ;;
+#   1) url='https://ifconfig.me/json' ;;
+#   *) notify 'JSON parse error (site returned garbage, try curl-ing manually)'; exit 1 ;;
+# esac
+#
+# if body="$(
+# 	curl \
+# 		--connect-timeout 3 \
+# 		--silent \
+# 		--location \
+# 		"${url}" |
+# 		{
+#       if ! jq -r '"Address: " + .ip, "Country: " + .country_iso'; then
+#         "${0}" "$((counter + 1))"
+#       fi
+#     }
+# )"; then
+#   notify "${body}"
+# else
+# 	notify "Could not connect to internet (time out)"
+# fi
