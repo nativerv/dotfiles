@@ -21,10 +21,10 @@
 ### Open a program 
 
 super + shift + o ; h
-  {QT_QPA_PLATFORMTHEME=qt5ct hydrus-client}
+  {hydrus-client}
 
 super + shift + o ; t ; {p}
-  {QT_QPA_PLATFORMTHEME=qt5ct keepassxc}
+  {keepassxc}
 
 super + shift + o ; m ; {t}
   {telegram-desktop}
