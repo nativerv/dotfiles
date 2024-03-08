@@ -4,7 +4,7 @@
 for i = 0, 6 do
   vim.api.nvim_set_hl(
     0,
-    string.format('@text.h%d', i),
+    string.format('@markup.heading.%d.markdown', i),
     { link = string.format('RainbowColor%d', i) }
   )
 end
@@ -24,7 +24,7 @@ end
 
 -- Define RenderMarkdown command to render current file with pandoc
 vim.api.nvim_create_user_command('Zet', function()
-  local cmd = 'silent !xdg-open http://localhost:12000/' .. (vim.fn.expand '%:t'):gsub('%.md', '.html')
+  local cmd = 'silent !xdg-open http://zet.local/' .. (vim.fn.expand '%:t'):gsub('%.md', '.html')
   vim.cmd(cmd)
 end, {
   nargs = 0,

@@ -221,6 +221,7 @@ vim.api.nvim_create_autocmd({ 'ColorScheme' }, {
       vim.api.nvim_set_hl(0, hlgroup, { fg = color, })
       vim.api.nvim_set_hl(0, ('rainbowcol%d'):format(index), { fg = color, })
       vim.api.nvim_set_hl(0, ('RainbowColor%d'):format(index), { fg = color, })
+      vim.api.nvim_set_hl(0, ('@markup.heading.%d.markdown'):format(index), { fg = color, bold = true, })
     end
 
     -- Error, Warning, Information, Hint
@@ -238,10 +239,10 @@ vim.api.nvim_create_autocmd({ 'ColorScheme' }, {
     -- PERF(scope):
     -- FIXME(scope):
     -- BUG(scope):
-    vim.api.nvim_set_hl(0, '@text.note', { link = 'Information', fg = 'NONE', ctermbg = 'NONE' })
-    vim.api.nvim_set_hl(0, '@text.warning', { link = 'Warning', fg = 'NONE', ctermbg = 'NONE' })
-    vim.api.nvim_set_hl(0, '@text.danger', { link = 'Error', fg = 'NONE', ctermbg = 'NONE' })
-    vim.api.nvim_set_hl(0, '@text.todo', { link = 'Hint', fg = 'NONE', ctermbg = 'NONE' })
+    vim.api.nvim_set_hl(0, '@text.note.comment', { link = 'Information', fg = 'NONE', ctermbg = 'NONE' })
+    vim.api.nvim_set_hl(0, '@text.warning.comment', { link = 'Warning', fg = 'NONE', ctermbg = 'NONE' })
+    vim.api.nvim_set_hl(0, '@text.danger.comment', { link = 'Error', fg = 'NONE', ctermbg = 'NONE' })
+    vim.api.nvim_set_hl(0, '@text.todo.comment', { link = 'Hint', fg = 'NONE', ctermbg = 'NONE' })
 
     -- Diffs
     vim.api.nvim_set_hl(0, 'diffAdded', { fg = require'user.config'.colors.git.added })
