@@ -1,0 +1,23 @@
+[Unit]
+Description="Informs you about junk in your HOME"
+Documentation=man:inotifywait(1)
+
+[Service]
+Type=exec
+ExecStart=sh -c 'exec homemaid'
+Restart=always
+
+# Sandboxing
+NoNewPrivileges=yes
+ProtectKernelTunables=yes
+ProtectControlGroups=yes
+RestrictNamespaces=yes
+LockPersonality=true
+MemoryDenyWriteExecute=true
+PrivateUsers=true
+RestrictNamespaces=true
+SystemCallArchitectures=native
+; SystemCallFilter=@system-service 
+
+[Install]
+WantedBy=default.target
