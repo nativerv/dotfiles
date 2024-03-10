@@ -221,7 +221,11 @@ vim.api.nvim_create_autocmd({ 'ColorScheme' }, {
       vim.api.nvim_set_hl(0, hlgroup, { fg = color, })
       vim.api.nvim_set_hl(0, ('rainbowcol%d'):format(index), { fg = color, })
       vim.api.nvim_set_hl(0, ('RainbowColor%d'):format(index), { fg = color, })
+      -- vim.api.nvim_set_hl(0, ('@markup.heading.%d.markdown.markdown'):format(index), { fg = color, bold = true, })
+
+      local delimiter_color = vim.api.nvim_get_hl_by_name('markdownHeadingDelimiter', true).foreground
       vim.api.nvim_set_hl(0, ('@markup.heading.%d.markdown'):format(index), { fg = color, bold = true, })
+      vim.api.nvim_set_hl(0, ('@markup.heading.%d.markdown.markdown'):format(index), { fg = color, bold = false, })
     end
 
     -- Error, Warning, Information, Hint

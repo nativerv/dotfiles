@@ -22,7 +22,7 @@ end
 --   }
 -- )
 
--- Define RenderMarkdown command to render current file with pandoc
+-- Define Zet command to open current markdown file rendered and hosted with `zet` script
 vim.api.nvim_create_user_command('Zet', function()
   local cmd = 'silent !xdg-open http://zet.local/' .. (vim.fn.expand '%:t'):gsub('%.md', '.html')
   vim.cmd(cmd)

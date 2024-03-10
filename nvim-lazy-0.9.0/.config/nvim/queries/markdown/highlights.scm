@@ -2,28 +2,28 @@
 
 ; Different captures for different heading levels
 (atx_heading 
-  (atx_h1_marker) 
-  (inline) @markup.heading.1.markdown)
+  (atx_h1_marker) @markup.heading.1.delimiter 
+  (inline) @markup.heading.1)
 
 (atx_heading 
-  (atx_h2_marker) 
-  (inline) @markup.heading.2.markdown)
+  (atx_h2_marker) @markup.heading.2.delimiter 
+  (inline) @markup.heading.2)
 
 (atx_heading 
-  (atx_h3_marker) 
-  (inline) @markup.heading.3.markdown)
+  (atx_h3_marker) @markup.heading.3.delimiter 
+  (inline) @markup.heading.3)
 
 (atx_heading 
-  (atx_h4_marker) 
-  (inline) @markup.heading.4.markdown)
+  (atx_h4_marker) @markup.heading.4.delimiter 
+  (inline) @markup.heading.4)
 
 (atx_heading 
-  (atx_h5_marker) 
-  (inline) @markup.heading.5.markdown)
+  (atx_h5_marker) @markup.heading.5.delimiter 
+  (inline) @markup.heading.5)
 
 (atx_heading 
-  (atx_h6_marker) 
-  (inline) @markup.heading.6.markdown)
+  (atx_h6_marker) @markup.heading.6.delimiter 
+  (inline) @markup.heading.6)
 
 ([
   (fenced_code_block)
