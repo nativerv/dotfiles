@@ -1,5 +1,7 @@
 #!/bin/sh
 
+set -ux
+
 # Author: nrv
 # Description: Get local weather from https://wttr.in in +/-N°C format,
 # then strip the +/-N with grep
@@ -29,9 +31,22 @@
 : "${XDG_STATE_HOME:="${HOME}/.local/state"}"
 : "${XDG_DATA_HOME:="${HOME}/.local/share"}"
 
-mkdir -p "${XDG_STATE_HOME}/sb/weather"
+data_dir="${XDG_DATA_HOME}/sb/weather"
+state_dir="${XDG_STATE_HOME}/sb/weather"
 
-weather="$(curl -s "http://wttr.in/$(cat 2>/dev/null "${XDG_DATA_HOME}/sb/weather/location")?format=%t" | grep -oE '[\+\-]{1}[0-9]+')"
-printf "%s %s\n" "$(date +%Y%m%d%H%M%S)" "${weather}" >> "${XDG_STATE_HOME}/sb/weather/weather.log"
+location_file="${data_dir}/location" 
+log_file="${state_dir}/weather.log"
 
+mkdir -p "${state_dir}"
+mkdir -p "${data_dir}"
+
+location=Unknown
+[ -f "${location_file}" ] && location="$(cat 2>/dev/null "${location_file}")"
+
+weather="$(curl -s "http://wttr.in/${location}?format=%t" | grep -oE '[\+\-]{1}[0-9]+')"
+
+# Save logs
+printf "%s %s %s\n" "$(date +%Y%m%d%H%M%S)" "${weather}" "${location}" >> "${log_file}"
+
+# Output
 printf "%s" "${weather}"
