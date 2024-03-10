@@ -1,0 +1,6 @@
+#!/bin/sh
+
+tmp_file="$(mktemp "/tmp/nvim.$(whoami)/qf.XXXXXXXXXXXXXXXX")"
+
+cat '/dev/stdin' > "${tmp_file}" &&
+  nvim +"cfile ${tmp_file} | copen"
